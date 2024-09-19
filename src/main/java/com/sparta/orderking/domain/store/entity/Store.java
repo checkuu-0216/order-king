@@ -1,10 +1,13 @@
 package com.sparta.orderking.domain.store.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -29,10 +32,12 @@ public class Store {
     private int minPrice;
 
     @Column(name = "open_time")
-    private int openTime;
+    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+    private LocalTime openTime;
 
     @Column(name = "close_time")
-    private int closeTime;
+    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+    private LocalTime closeTime;
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)

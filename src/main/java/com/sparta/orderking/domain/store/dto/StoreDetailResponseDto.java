@@ -4,6 +4,7 @@ import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import lombok.Getter;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -13,8 +14,8 @@ public class StoreDetailResponseDto {
     private final String storeAddress;
     private final String storeNumber;
     private final int minPrice;
-    private final int openTime;
-    private final int closeTime;
+    private final LocalTime openTime;
+    private final LocalTime closeTime;
     private final List<Menu> menuList;
 
     public StoreDetailResponseDto(Store store, List<Menu> menuList) {

@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalTime;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,7 +15,7 @@ public class StoreRequestDto {
     private String storeAddress;
     private String storeNumber;
     private int minPrice;
-    private int openTime;
-    private int closeTime;
+    private LocalTime openTime;
+    private LocalTime closeTime;
     private StoreServiceEnum storeServiceEnum;
 }
