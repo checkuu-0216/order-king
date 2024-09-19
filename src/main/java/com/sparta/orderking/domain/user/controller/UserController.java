@@ -1,4 +1,4 @@
-package com.sparta.orderking.user.controller;
+package com.sparta.orderking.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

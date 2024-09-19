@@ -1,4 +1,4 @@
-package com.sparta.orderking.user.dto;
+package com.sparta.orderking.domain.user.dto;
 
 import lombok.Getter;
 

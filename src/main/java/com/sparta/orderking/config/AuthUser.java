@@ -1,6 +1,6 @@
 package com.sparta.orderking.config;
 
-import com.sparta.orderking.user.entity.UserEnum;
+import com.sparta.orderking.domain.user.entity.UserEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

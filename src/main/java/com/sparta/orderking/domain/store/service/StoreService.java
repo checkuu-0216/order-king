@@ -10,7 +10,7 @@ import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.entity.StoreServiceEnum;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
-import com.sparta.orderking.user.entity.UserEnum;
+import com.sparta.orderking.domain.user.entity.UserEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.sparta.orderking.user.entity;
+package com.sparta.orderking.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
