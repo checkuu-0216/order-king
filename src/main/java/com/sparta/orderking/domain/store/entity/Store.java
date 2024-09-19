@@ -41,7 +41,7 @@ public class Store {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private StoreServiceEnum service;
+    private StoreStatus storeStatus;
 
     public Store(StoreRequestDto storeRequestDto) {
         this.name = storeRequestDto.getName();
@@ -50,7 +50,7 @@ public class Store {
         this.minPrice = storeRequestDto.getMinPrice();
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
-        this.service = storeRequestDto.getStoreServiceEnum();
+        this.storeStatus = storeRequestDto.getStoreStatus();
     }
 
     public void update(StoreRequestDto storeRequestDto) {
@@ -63,6 +63,6 @@ public class Store {
     }
 
     public void close() {
-        this.service=StoreServiceEnum.CLOSED;
+        this.storeStatus = StoreStatus.CLOSED;
     }
 }

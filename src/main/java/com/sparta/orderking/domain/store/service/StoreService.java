@@ -8,7 +8,7 @@ import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import com.sparta.orderking.domain.store.dto.StoreResponseDto;
 import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.entity.Store;
-import com.sparta.orderking.domain.store.entity.StoreServiceEnum;
+import com.sparta.orderking.domain.store.entity.StoreStatus;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class StoreService {
     }
 
     public Boolean storeIsOpen(Store store){
-        return store.getService().equals(StoreServiceEnum.OPEN);
+        return store.getStoreStatus().equals(StoreStatus.OPEN);
     }
 
     public void checkAdmin(AuthUser authUser){
@@ -66,7 +66,7 @@ public class StoreService {
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {
-        List<Store> storeList = storeRepository.findByNameAndService(storeSimpleRequestDto.getName(),StoreServiceEnum.OPEN);
+        List<Store> storeList = storeRepository.findByNameAndService(storeSimpleRequestDto.getName(), StoreStatus.OPEN);
         List<StoreResponseDto> dtoList = new ArrayList<>();
         for (Store store : storeList) {
             StoreResponseDto dto = new StoreResponseDto(store);
@@ -78,7 +78,7 @@ public class StoreService {
     public void closeStore(AuthUser authUser, Long storeId) {
         checkAdmin(authUser);
         Store store = storeRepository.findById(storeId).orElseThrow(()->new NullPointerException("no such store"));
-        if(store.getService().equals(StoreServiceEnum.CLOSED)){
+        if(store.getStoreStatus().equals(StoreStatus.CLOSED)){
             throw new RuntimeException("already closed");
         }
         store.close();
