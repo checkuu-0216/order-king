@@ -1,6 +1,7 @@
 package com.sparta.orderking.domain.store.service;
 
 import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
 import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import com.sparta.orderking.domain.store.dto.StoreResponseDto;
@@ -61,8 +62,7 @@ public class StoreService {
         if(!storeIsOpen(store)){
             throw new RuntimeException("store is closed");
         }
-        List<Menu> menuList = menuRepository.findMenuByStoreId(storeId);
-        return new StoreDetailResponseDto(store,menuList);
+        return new StoreDetailResponseDto(store,listMenu(storeId,MenuPossibleEnum.DELETE));
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {
@@ -82,5 +82,9 @@ public class StoreService {
             throw new RuntimeException("already closed");
         }
         store.close();
+    }
+
+    public List<Menu> listMenu (Long storeId, MenuPossibleEnum status){
+        return menuRepository.findAllByStoreAndMenuPossibleEnumNot(storeId,MenuPossibleEnum.DELETE);
     }
 }

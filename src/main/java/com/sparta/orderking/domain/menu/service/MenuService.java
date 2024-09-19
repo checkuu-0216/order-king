@@ -4,11 +4,14 @@ import com.sparta.orderking.config.AuthUser;
 import com.sparta.orderking.domain.menu.dto.MenuRequestDto;
 import com.sparta.orderking.domain.menu.dto.MenuUpdateRequestDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
+import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import static com.sparta.orderking.domain.menu.entity.MenuPossibleEnum.DELETE;
 
 @Service
 @RequiredArgsConstructor
@@ -47,7 +50,8 @@ public class MenuService {
         storeRepository.findByUserAndStore(authUser, store).orElseThrow(() -> new NullPointerException("해당 가게 주인이 아닙니다."));
         //등록되어있는지 메뉴 확인
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("해당 메뉴가 존재 하지 않습니다."));
-        //해당 메뉴 삭제
-        menuRepository.delete(menu);
+        //등록되어있는 메뉴 상태 변화
+        menu.deleteMenu(DELETE);
+        menuRepository.save(menu);
     }
 }

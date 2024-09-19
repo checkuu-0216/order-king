@@ -54,5 +54,9 @@ public class Menu extends BaseEntity {
         this.possibleEnum = requestDto.getMenuPossibleEnum();
     }
 
+    public void deleteMenu(MenuPossibleEnum possibleEnum){
+        this.possibleEnum = possibleEnum;
+    }
+
 }
 
