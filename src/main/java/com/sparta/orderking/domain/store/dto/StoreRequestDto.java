@@ -1,9 +1,11 @@
 package com.sparta.orderking.domain.store.dto;
 
-import com.sparta.orderking.domain.store.entity.StoreServiceEnum;
+import com.sparta.orderking.domain.store.entity.StoreStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalTime;
 
 @Getter
 @NoArgsConstructor
@@ -13,7 +15,7 @@ public class StoreRequestDto {
     private String storeAddress;
     private String storeNumber;
     private int minPrice;
-    private int openTime;
-    private int closeTime;
-    private StoreServiceEnum storeServiceEnum;
+    private LocalTime openTime;
+    private LocalTime closeTime;
+    private StoreStatus storeStatus;
 }
