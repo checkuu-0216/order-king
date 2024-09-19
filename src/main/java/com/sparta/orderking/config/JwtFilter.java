@@ -1,5 +1,6 @@
 package com.sparta.orderking.config;
 
+import com.sparta.orderking.user.entity.UserEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
@@ -64,7 +65,7 @@ public class JwtFilter implements Filter {
 
             // 사용자 정보를 ArgumentResolver 로 넘기기 위해 HttpServletRequest 에 세팅
             httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
-            httpRequest.setAttribute("role", claims.get(JwtUtil.AUTHORIZATION_KEY, UserRoleEnum.class) );
+            httpRequest.setAttribute("role", claims.get(JwtUtil.AUTHORIZATION_KEY, UserEnum.class) );
 
             chain.doFilter(request, response);
         } catch (SecurityException | MalformedJwtException e) {
