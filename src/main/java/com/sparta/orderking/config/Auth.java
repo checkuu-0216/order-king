@@ -1,4 +1,4 @@
-package com.sparta.orderking.store.delete;
+package com.sparta.orderking.config;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

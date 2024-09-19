@@ -1,4 +1,4 @@
-package com.sparta.orderking.store.delete;
+package com.sparta.orderking.config;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

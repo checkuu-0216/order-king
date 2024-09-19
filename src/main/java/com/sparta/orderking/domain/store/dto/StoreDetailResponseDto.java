@@ -1,7 +1,7 @@
-package com.sparta.orderking.store.dto;
+package com.sparta.orderking.domain.store.dto;
 
-import com.sparta.orderking.store.delete.Menu;
-import com.sparta.orderking.store.entity.Store;
+import com.sparta.orderking.config.Menu;
+import com.sparta.orderking.domain.store.entity.Store;
 import lombok.Getter;
 
 import java.util.List;

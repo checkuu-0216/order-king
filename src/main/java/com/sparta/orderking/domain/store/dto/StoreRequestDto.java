@@ -1,6 +1,6 @@
-package com.sparta.orderking.store.dto;
+package com.sparta.orderking.domain.store.dto;
 
-import com.sparta.orderking.store.entity.StoreServiceEnum;
+import com.sparta.orderking.domain.store.entity.StoreServiceEnum;
 import lombok.Getter;
 
 @Getter

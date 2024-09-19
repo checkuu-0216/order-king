@@ -1,6 +1,6 @@
-package com.sparta.orderking.store.delete;
+package com.sparta.orderking.config;
 
-import com.sparta.orderking.store.entity.Store;
+import com.sparta.orderking.domain.store.entity.Store;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
