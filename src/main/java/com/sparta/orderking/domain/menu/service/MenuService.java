@@ -1,9 +1,7 @@
-package com.sparta.orderking.menu.service;
+package com.sparta.orderking.domain.menu.service;
 
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
-import com.sparta.orderking.menu.dto.MenuRequestDto;
-import com.sparta.orderking.menu.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

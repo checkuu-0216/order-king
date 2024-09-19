@@ -1,12 +1,10 @@
 package com.sparta.orderking.store.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.orderking.config.AuthUserArgumentResolver;
-import com.sparta.orderking.config.Menu;
+import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.controller.StoreController;
 import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
-import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import com.sparta.orderking.domain.store.dto.StoreResponseDto;
 import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.service.StoreService;
@@ -29,7 +27,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -56,8 +53,8 @@ public class StoreControllerTest {
     }
 
     @Test
-    void 가게저장() throws Exception{
-        given(storeService.saveStore(any(),any())).willReturn(TEST_STORERESPONSEDTO);
+    void 가게저장() throws Exception {
+        given(storeService.saveStore(any(), any())).willReturn(TEST_STORERESPONSEDTO);
 
         //when
         ResultActions resultActions = mockMvc.perform(post("/api/stores")
@@ -70,9 +67,9 @@ public class StoreControllerTest {
     @Test
     void 가게수정() throws Exception {
         Long storeId = 1L;
-        given(storeService.updateStore(any(),anyLong(),any())).willReturn(TEST_STORERESPONSEDTO);
+        given(storeService.updateStore(any(), anyLong(), any())).willReturn(TEST_STORERESPONSEDTO);
 
-        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}",storeId)
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}", storeId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(TEST_STOREREQUESTDTO)));
 
@@ -80,19 +77,19 @@ public class StoreControllerTest {
     }
 
     @Test
-    void 가게단건조회() throws Exception{
-        Long storeId =1L;
+    void 가게단건조회() throws Exception {
+        Long storeId = 1L;
         List<Menu> menuList = new ArrayList<>();
-        StoreDetailResponseDto storeDetailResponseDto = new StoreDetailResponseDto(TEST_STORE,menuList);
+        StoreDetailResponseDto storeDetailResponseDto = new StoreDetailResponseDto(TEST_STORE, menuList);
         given(storeService.getDetailStore(anyLong())).willReturn(storeDetailResponseDto);
 
-        ResultActions resultActions = mockMvc.perform(get("/api/stores/{storeId}",storeId));
+        ResultActions resultActions = mockMvc.perform(get("/api/stores/{storeId}", storeId));
 
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    void 가게다건조회() throws Exception{
+    void 가게다건조회() throws Exception {
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
         StoreSimpleRequestDto storeSimpleRequestDto = new StoreSimpleRequestDto("name");
         given(storeService.getStore(any())).willReturn(storeResponseDtoList);
@@ -105,11 +102,11 @@ public class StoreControllerTest {
     }
 
     @Test
-    void 가게폐업() throws Exception{
-        Long storeId =1L;
-        doNothing().when(storeService).closeStore(any(),anyLong());
+    void 가게폐업() throws Exception {
+        Long storeId = 1L;
+        doNothing().when(storeService).closeStore(any(), anyLong());
 
-        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/close",storeId));
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/close", storeId));
 
         resultActions.andExpect(status().isOk());
     }

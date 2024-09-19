@@ -9,8 +9,8 @@ import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.entity.StoreServiceEnum;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
-import com.sparta.orderking.menu.entity.Menu;
-import com.sparta.orderking.menu.repository.MenuRepository;
+import com.sparta.orderking.domain.menu.entity.Menu;
+import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +33,7 @@ public class StoreService {
     public Boolean storeIsOpen(Store store){
         return store.getService().equals(StoreServiceEnum.OPEN);
     }
+
     public void checkAdmin(AuthUser authUser){
         if(!authUser.getUserEnum().equals(UserRoleEnum.OWNER)){
             throw new RuntimeException("owner only");

@@ -1,4 +1,4 @@
-package com.sparta.orderking.menu.entity;
+package com.sparta.orderking.domain.menu.entity;
 
 public enum MenuPossibleEnum {
     SALE,

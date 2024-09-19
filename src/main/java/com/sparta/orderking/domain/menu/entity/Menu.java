@@ -1,4 +1,4 @@
-package com.sparta.orderking.menu.entity;
+package com.sparta.orderking.domain.menu.entity;
 
 import com.sparta.orderking.common.BaseEntity;
 import com.sparta.orderking.domain.store.entity.Store;
