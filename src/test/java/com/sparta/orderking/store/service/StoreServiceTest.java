@@ -1,8 +1,5 @@
 package com.sparta.orderking.store.service;
 
-import com.sparta.orderking.config.Auth;
-import com.sparta.orderking.config.AuthUser;
-import com.sparta.orderking.config.UserRoleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
 import com.sparta.orderking.domain.store.dto.StoreResponseDto;
@@ -15,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +21,6 @@ import static com.sparta.orderking.store.CommonValue.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class StoreServiceTest {

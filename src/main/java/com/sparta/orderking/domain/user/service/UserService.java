@@ -1,4 +1,4 @@
-package com.sparta.orderking.user.service;
+package com.sparta.orderking.domain.user.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

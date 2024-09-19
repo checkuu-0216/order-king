@@ -1,5 +1,6 @@
 package com.sparta.orderking.config;
 
+import com.sparta.orderking.domain.user.entity.UserEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -41,7 +42,7 @@ public class JwtUtil {
     }
 
     // 토큰 생성
-    public String createToken(long userId, UserRoleEnum role) {
+    public String createToken(long userId, UserEnum role) {
         Date date = new Date();
 
         return BEARER_PREFIX +
