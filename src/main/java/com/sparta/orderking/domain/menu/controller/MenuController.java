@@ -26,7 +26,13 @@ public class MenuController {
     @PutMapping("/stores/{storeId}/menus/{menuId}")
     public ResponseEntity<String> updateMenu(@Auth AuthUser authUser,@PathVariable Long storeId,@PathVariable Long menuId,@RequestBody MenuUpdateRequestDto requestDto){
         menuService.updateMenu(authUser,storeId,menuId,requestDto);
-        return ResponseEntity.ok().body(HttpStatus.OK + "메뉴 수정이 정상적으로 되었습니다.");
+        return ResponseEntity.ok().body(HttpStatus.OK + "메뉴 수정이 정상적으로 작동 하였습니다.");
+    }
+
+    @DeleteMapping("/store/{storeId}/menus/{menuId}")
+    public ResponseEntity<String> deleteMenu(@Auth AuthUser authUser,@PathVariable Long storeId,@PathVariable Long menuId){
+        menuService.deleteMenu(authUser,storeId,menuId);
+        return ResponseEntity.ok().body(HttpStatus.OK + "메뉴 삭제가 정상적으로 작동 하였습니다.");
     }
 
 }

@@ -35,8 +35,19 @@ public class MenuService {
         storeRepository.findByUserAndStore(authUser, store).orElseThrow(() -> new NullPointerException("해당 가게 주인이 아닙니다."));
         //등록되어있는지 메뉴 확인
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("해당 메뉴가 존재 하지 않습니다."));
+        //업데이트 된 request를 받아서 저장
+        menu.updateMenu(requestDto);
+        menuRepository.save(menu);
+    }
 
-
-
+    public void deleteMenu(AuthUser authUser, Long storeId, Long menuId) {
+        //해당 가게 확인
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("해당 가게가 존재하지 않습니다."));
+        //해당 가게 주인이 맞는지 확인
+        storeRepository.findByUserAndStore(authUser, store).orElseThrow(() -> new NullPointerException("해당 가게 주인이 아닙니다."));
+        //등록되어있는지 메뉴 확인
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("해당 메뉴가 존재 하지 않습니다."));
+        //해당 메뉴 삭제
+        menuRepository.delete(menu);
     }
 }
