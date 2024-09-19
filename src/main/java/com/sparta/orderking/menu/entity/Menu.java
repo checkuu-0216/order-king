@@ -1,4 +1,4 @@
-package com.sparta.orderking.menu;
+package com.sparta.orderking.menu.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
