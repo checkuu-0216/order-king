@@ -1,4 +1,4 @@
-package com.sparta.orderking.store.delete;
+package com.sparta.orderking.config;
 
 import jakarta.persistence.*;
 import lombok.Getter;

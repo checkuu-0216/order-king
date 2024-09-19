@@ -1,7 +1,6 @@
-package com.sparta.orderking.store.entity;
+package com.sparta.orderking.domain.store.entity;
 
-import com.sparta.orderking.store.delete.UserRoleEnum;
-import com.sparta.orderking.store.dto.StoreRequestDto;
+import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,6 +43,7 @@ public class Store {
         this.minPrice = storeRequestDto.getMinPrice();
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
+        this.service = storeRequestDto.getStoreServiceEnum();
     }
 
     public void update(StoreRequestDto storeRequestDto) {
@@ -53,5 +53,9 @@ public class Store {
         this.minPrice = storeRequestDto.getMinPrice();
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
+    }
+
+    public void close() {
+        this.service=StoreServiceEnum.CLOSED;
     }
 }

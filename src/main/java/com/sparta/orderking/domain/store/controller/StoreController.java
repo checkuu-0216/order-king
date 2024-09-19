@@ -1,12 +1,12 @@
-package com.sparta.orderking.store.controller;
+package com.sparta.orderking.domain.store.controller;
 
-import com.sparta.orderking.store.delete.Auth;
-import com.sparta.orderking.store.delete.AuthUser;
-import com.sparta.orderking.store.dto.StoreDetailResponseDto;
-import com.sparta.orderking.store.dto.StoreRequestDto;
-import com.sparta.orderking.store.dto.StoreResponseDto;
-import com.sparta.orderking.store.dto.StoreSimpleRequestDto;
-import com.sparta.orderking.store.service.StoreService;
+import com.sparta.orderking.config.Auth;
+import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
+import com.sparta.orderking.domain.store.dto.StoreRequestDto;
+import com.sparta.orderking.domain.store.dto.StoreResponseDto;
+import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
+import com.sparta.orderking.domain.store.service.StoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,5 +41,9 @@ public class StoreController {
         return ResponseEntity.ok(storeService.getStore(storeSimpleRequestDto));
     }
 
+    @PutMapping("/stores/{storeId}/close")
+    public void closeStore(@Auth AuthUser authUser,@PathVariable Long storeId){
+        storeService.closeStore(authUser,storeId);
+    }
 
 }

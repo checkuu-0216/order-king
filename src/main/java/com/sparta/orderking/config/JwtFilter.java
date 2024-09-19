@@ -1,4 +1,4 @@
-package com.sparta.orderking.store.delete;
+package com.sparta.orderking.config;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -15,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.regex.Pattern;
-
-import static com.sparta.orderking.store.delete.JwtUtil.AUTHORIZATION_KEY;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -66,7 +64,7 @@ public class JwtFilter implements Filter {
 
             // 사용자 정보를 ArgumentResolver 로 넘기기 위해 HttpServletRequest 에 세팅
             httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
-            httpRequest.setAttribute("role", claims.get(AUTHORIZATION_KEY, UserRoleEnum.class) );
+            httpRequest.setAttribute("role", claims.get(JwtUtil.AUTHORIZATION_KEY, UserRoleEnum.class) );
 
             chain.doFilter(request, response);
         } catch (SecurityException | MalformedJwtException e) {
