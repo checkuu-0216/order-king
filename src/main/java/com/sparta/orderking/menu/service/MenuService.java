@@ -14,10 +14,4 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final StoreRepository storeRepository;
 
-    public void createMenu(AuthUser authUser, Long storeId, MenuRequestDto requestDto) {
-       if(!menuRepository.findByUserAndStore(authUser,storeId)){
-
-       }
-
-    }
 }

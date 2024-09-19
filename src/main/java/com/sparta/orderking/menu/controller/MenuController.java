@@ -16,9 +16,4 @@ public class MenuController {
 
     private final MenuService menuService;
 
-    @PostMapping("/stores/{storeId}/menus") //게시글 좋아요 생성
-    public ResponseEntity<String> createMenu (@PathVariable Long storeId, @RequestBody MenuRequestDto requestDto){
-        menuService.createMenu(storeId,requestDto);
-        return ResponseEntity.ok().body("메뉴가 정상적으로 추가되었습니다.");
-    }
 }
