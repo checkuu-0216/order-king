@@ -2,12 +2,14 @@ package com.sparta.orderking.domain.store.entity;
 
 import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class Store {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
