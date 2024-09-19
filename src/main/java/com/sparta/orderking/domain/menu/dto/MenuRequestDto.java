@@ -1,6 +1,6 @@
-package com.sparta.orderking.menu.dto;
+package com.sparta.orderking.domain.menu.dto;
 
-import com.sparta.orderking.menu.entity.MenuPossibleEnum;
+import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

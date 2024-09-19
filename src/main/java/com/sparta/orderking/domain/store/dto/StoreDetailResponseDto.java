@@ -1,7 +1,7 @@
 package com.sparta.orderking.domain.store.dto;
 
 import com.sparta.orderking.domain.store.entity.Store;
-import com.sparta.orderking.menu.entity.Menu;
+import com.sparta.orderking.domain.menu.entity.Menu;
 import lombok.Getter;
 
 import java.util.List;
