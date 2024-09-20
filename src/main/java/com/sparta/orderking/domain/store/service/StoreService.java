@@ -11,7 +11,9 @@ import com.sparta.orderking.domain.store.entity.StoreStatus;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
+import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
+import com.sparta.orderking.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,6 +28,7 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
+    private final UserRepository userRepository;
 
     public Store findStoreById(Long storeId){
         return storeRepository.findById(storeId).orElseThrow(()->new NullPointerException("there is no Store"));
@@ -40,11 +43,19 @@ public class StoreService {
             throw new RuntimeException("owner only");
         }
     }
+    public User findUser(Long id){
+        return userRepository.findById(id).orElseThrow(()->new NullPointerException("no such user"));
+    }
 
     @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
-        Store store = new Store(storeRequestDto);
+        User user = findUser(authUser.getId());
+        List<Store> storeList = storeRepository.findByUser(user);
+        if(storeList.size()>=3){
+            throw new RuntimeException("already have 3 stores");
+        }
+        Store store = new Store(storeRequestDto, user);
         Store savedstore = storeRepository.save(store);
         return new StoreResponseDto(savedstore);
     }
@@ -52,7 +63,14 @@ public class StoreService {
     @Transactional
     public StoreResponseDto updateStore(AuthUser authUser, Long storeId, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
+        User user = findUser(authUser.getId());
         Store store = findStoreById(storeId);
+        if(!store.getUser().getRole().equals(UserEnum.OWNER)||user.getRole().equals(UserEnum.OWNER)){
+            throw new RuntimeException("you are not owner");
+        }
+        if(!store.getUser().equals(user)){
+            throw new RuntimeException("you are not the owner of the store");
+        }
         store.update(storeRequestDto);
         return new StoreResponseDto(store);
     }
@@ -74,10 +92,18 @@ public class StoreService {
         }
         return dtoList;
     }
+
     @Transactional
     public void closeStore(AuthUser authUser, Long storeId) {
         checkAdmin(authUser);
+        User user = findUser(authUser.getId());
         Store store = storeRepository.findById(storeId).orElseThrow(()->new NullPointerException("no such store"));
+        if(!store.getUser().getRole().equals(UserEnum.OWNER)||user.getRole().equals(UserEnum.OWNER)){
+            throw new RuntimeException("you are not owner");
+        }
+        if(!store.getUser().equals(user)){
+            throw new RuntimeException("you are not the owner of the store");
+        }
         if(store.getStoreStatus().equals(StoreStatus.CLOSED)){
             throw new RuntimeException("already closed");
         }

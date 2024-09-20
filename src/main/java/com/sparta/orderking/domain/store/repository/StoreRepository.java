@@ -10,5 +10,7 @@ import java.util.Optional;
 
 public interface StoreRepository extends JpaRepository<Store,Long> {
     List<Store> findByNameAndStoreStatus(String name, StoreStatus serviceEnum);
-//    Optional<Store> findByStoreAndUser(User user, Store store);
+    Optional<Store> findByStoreAndUser(User user,Store store);
+
+    List<Store> findByUser(User user);
 }
