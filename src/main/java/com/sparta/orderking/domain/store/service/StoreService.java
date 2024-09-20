@@ -66,7 +66,7 @@ public class StoreService {
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {
-        List<Store> storeList = storeRepository.findByNameAndService(storeSimpleRequestDto.getName(), StoreStatus.OPEN);
+        List<Store> storeList = storeRepository.findByNameAndStoreStatus(storeSimpleRequestDto.getName(), StoreStatus.OPEN);
         List<StoreResponseDto> dtoList = new ArrayList<>();
         for (Store store : storeList) {
             StoreResponseDto dto = new StoreResponseDto(store);
