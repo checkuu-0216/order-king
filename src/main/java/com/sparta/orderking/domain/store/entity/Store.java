@@ -2,6 +2,7 @@ package com.sparta.orderking.domain.store.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.orderking.domain.store.dto.StoreRequestDto;
+import com.sparta.orderking.domain.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,6 +32,10 @@ public class Store {
     @Column(name = "min_price")
     private int minPrice;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user")
+    private User user;
+
     @Column(name = "open_time")
     @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
     private LocalTime openTime;
@@ -43,7 +48,7 @@ public class Store {
     @Enumerated(value = EnumType.STRING)
     private StoreStatus storeStatus;
 
-    public Store(StoreRequestDto storeRequestDto) {
+    public Store(StoreRequestDto storeRequestDto,User user) {
         this.name = storeRequestDto.getName();
         this.storeAddress = storeRequestDto.getStoreAddress();
         this.storeNumber = storeRequestDto.getStoreNumber();
@@ -51,6 +56,7 @@ public class Store {
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
         this.storeStatus = storeRequestDto.getStoreStatus();
+        this.user = user;
     }
 
     public void update(StoreRequestDto storeRequestDto) {
