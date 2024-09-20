@@ -8,12 +8,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuRequestDto {
+public class MenuUpdateRequestDto {
 
     private String menuName;
     private String menuInfo;
     private int menuPrice;
     private String menuImg;
     private MenuPossibleEnum menuPossibleEnum;
-
 }

@@ -1,8 +1,7 @@
 package com.sparta.orderking.domain.store.service;
 
 import com.sparta.orderking.config.AuthUser;
-import com.sparta.orderking.domain.menu.entity.Menu;
-import com.sparta.orderking.domain.menu.repository.MenuRepository;
+import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
 import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import com.sparta.orderking.domain.store.dto.StoreResponseDto;
@@ -10,6 +9,8 @@ import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.entity.StoreStatus;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
+import com.sparta.orderking.domain.menu.entity.Menu;
+import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,12 +62,11 @@ public class StoreService {
         if(!storeIsOpen(store)){
             throw new RuntimeException("store is closed");
         }
-        List<Menu> menuList = menuRepository.findMenuByStoreId(storeId);
-        return new StoreDetailResponseDto(store,menuList);
+        return new StoreDetailResponseDto(store,listMenu(storeId,MenuPossibleEnum.DELETE));
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {
-        List<Store> storeList = storeRepository.findByNameAndStoreStatus(storeSimpleRequestDto.getName(), StoreStatus.OPEN);
+        List<Store> storeList = storeRepository.findByNameAndStoreStatus(storeSimpleRequestDto.getName(),StoreStatus.OPEN);
         List<StoreResponseDto> dtoList = new ArrayList<>();
         for (Store store : storeList) {
             StoreResponseDto dto = new StoreResponseDto(store);
@@ -74,6 +74,7 @@ public class StoreService {
         }
         return dtoList;
     }
+
     @Transactional
     public void closeStore(AuthUser authUser, Long storeId) {
         checkAdmin(authUser);
@@ -82,5 +83,9 @@ public class StoreService {
             throw new RuntimeException("already closed");
         }
         store.close();
+    }
+
+    public List<Menu> listMenu (Long storeId, MenuPossibleEnum status){
+        return menuRepository.findAllByStoreAndMenuPossibleEnumNot(storeId,MenuPossibleEnum.DELETE);
     }
 }
