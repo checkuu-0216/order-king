@@ -74,6 +74,7 @@ public class StoreService {
         }
         return dtoList;
     }
+
     @Transactional
     public void closeStore(AuthUser authUser, Long storeId) {
         checkAdmin(authUser);

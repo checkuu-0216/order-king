@@ -19,7 +19,8 @@ import java.util.Optional;
 
 import static com.sparta.orderking.store.CommonValue.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
@@ -107,7 +108,7 @@ public class StoreServiceTest {
     void getStore(){
         List<Store> storeList = new ArrayList<>();
         StoreSimpleRequestDto storeSimpleRequestDto = new StoreSimpleRequestDto("name");
-        given(storeRepository.findByNameAndService(anyString(),any())).willReturn(storeList);
+        given(storeRepository.findByNameAndStoreStatus(anyString(),any())).willReturn(storeList);
 
         List<StoreResponseDto> dtoList = storeService.getStore(storeSimpleRequestDto);
 
