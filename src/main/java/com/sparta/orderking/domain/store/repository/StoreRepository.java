@@ -13,4 +13,5 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
     Optional<Store> findByStoreAndUser(User user,Store store);
 
     List<Store> findByUser(User user);
+
 }

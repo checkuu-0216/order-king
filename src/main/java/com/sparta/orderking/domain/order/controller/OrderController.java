@@ -1,6 +1,7 @@
 package com.sparta.orderking.domain.order.controller;
 
 import com.sparta.orderking.domain.order.dto.CreateOrderRequestDto;
+import com.sparta.orderking.domain.order.dto.OrderResponseDto;
 import com.sparta.orderking.domain.order.dto.UpdateOrderStatusRequestDto;
 import com.sparta.orderking.domain.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,11 @@ public class OrderController {
     public ResponseEntity<String> updateOrderStatus(@PathVariable Long storeId, @PathVariable Long orderId, @RequestBody UpdateOrderStatusRequestDto requestDto) {
         orderService.updateOrderStatus(storeId, orderId, requestDto);
         return ResponseEntity.ok("주문 상태 변경이 완료되었습니다.");
+    }
+
+    // 주문 조회
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.getOrder(orderId));
     }
 }
