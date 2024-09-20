@@ -3,6 +3,7 @@ package com.sparta.orderking.domain.order.service;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.order.dto.CreateOrderRequestDto;
+import com.sparta.orderking.domain.order.dto.OrderResponseDto;
 import com.sparta.orderking.domain.order.dto.UpdateOrderStatusRequestDto;
 import com.sparta.orderking.domain.order.entity.Order;
 import com.sparta.orderking.domain.order.entity.OrderMenu;
@@ -68,5 +69,12 @@ public class OrderService {
         }
 
         order.setOrderStatus(requestDto.getOrderStatus());
+    }
+
+    public OrderResponseDto getOrder(Long orderId) {
+        Order order = orderRepository.findByIdWithMenus(orderId);
+        OrderResponseDto orderResponseDto = new OrderResponseDto(order);
+        System.out.println(orderResponseDto);
+        return orderResponseDto;
     }
 }

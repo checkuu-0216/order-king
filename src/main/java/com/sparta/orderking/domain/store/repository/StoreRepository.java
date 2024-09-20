@@ -12,4 +12,5 @@ public interface StoreRepository extends JpaRepository<Store,Long> {
     List<Store> findByNameAndStoreStatus(String name, StoreStatus serviceEnum);
 
     List<Store> findByUser(User user);
+
 }

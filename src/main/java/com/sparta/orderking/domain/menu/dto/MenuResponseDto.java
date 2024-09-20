@@ -1,5 +1,6 @@
 package com.sparta.orderking.domain.menu.dto;
 
+import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import lombok.Getter;
 
@@ -18,5 +19,13 @@ public class MenuResponseDto {
         this.menuPrice = menuPrice;
         this.menuImg = menuImg;
         this.menuPossibleEnum = menuPossibleEnum;
+    }
+
+    public MenuResponseDto(Menu menu) {
+        this.menuName = menu.getMenuName();
+        this.menuInfo = menu.getMenuInfo();
+        this.menuPrice = String.valueOf(menu.getMenuPrice());
+        this.menuImg = menu.getMenuImg();
+        this.menuPossibleEnum = menu.getPossibleEnum();
     }
 }

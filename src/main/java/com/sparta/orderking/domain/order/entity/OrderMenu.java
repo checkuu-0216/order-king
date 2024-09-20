@@ -4,10 +4,12 @@ import com.sparta.orderking.common.BaseEntity;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.user.entity.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "order_menu")
+@Getter
 @NoArgsConstructor
 public class OrderMenu extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
