@@ -52,7 +52,7 @@ public class StoreService {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
         List<Store> storeList = storeRepository.findByUser(user);
-        if(storeList.size()>3){
+        if(storeList.size()>=3){
             throw new RuntimeException("already have 3 stores");
         }
         Store store = new Store(storeRequestDto, user);
