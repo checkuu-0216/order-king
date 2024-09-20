@@ -32,7 +32,7 @@ public class StoreService {
     }
 
     public Boolean storeIsOpen(Store store){
-        return store.getService().equals(StoreStatus.OPEN);
+        return store.getStoreStatus().equals(StoreStatus.OPEN);
     }
 
     public void checkAdmin(AuthUser authUser){
@@ -66,7 +66,7 @@ public class StoreService {
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {
-        List<Store> storeList = storeRepository.findByNameAndService(storeSimpleRequestDto.getName(),StoreStatus.OPEN);
+        List<Store> storeList = storeRepository.findByNameAndStoreStatus(storeSimpleRequestDto.getName(),StoreStatus.OPEN);
         List<StoreResponseDto> dtoList = new ArrayList<>();
         for (Store store : storeList) {
             StoreResponseDto dto = new StoreResponseDto(store);
@@ -78,7 +78,7 @@ public class StoreService {
     public void closeStore(AuthUser authUser, Long storeId) {
         checkAdmin(authUser);
         Store store = storeRepository.findById(storeId).orElseThrow(()->new NullPointerException("no such store"));
-        if(store.getService().equals(StoreStatus.CLOSED)){
+        if(store.getStoreStatus().equals(StoreStatus.CLOSED)){
             throw new RuntimeException("already closed");
         }
         store.close();
