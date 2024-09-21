@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalTime;
 
@@ -68,6 +69,19 @@ public class Store extends BaseEntity {
         this.storeStatus = storeRequestDto.getStoreStatus();
         this.storeAdEnum = storeRequestDto.getStoreAdEnum();
         this.user = user;
+    }
+
+    public Store(long l, String name, String storeAddress, String storeNumber, int i, User testUser, LocalTime of, LocalTime of1, StoreStatus storeStatus, StoreAdEnum storeAdEnum) {
+        this.id=l;
+        this.name=name;
+        this.storeAddress=storeAddress;
+        this.storeNumber=storeNumber;
+        this.minPrice=i;
+        this.user=testUser;
+        this.openTime=of;
+        this.closeTime=of1;
+        this.storeStatus=storeStatus;
+        this.storeAdEnum=storeAdEnum;
     }
 
     public void update(StoreRequestDto storeRequestDto) {
