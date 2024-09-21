@@ -41,7 +41,7 @@ public class StoreServiceTest {
         given(storeRepository.findById(storeId)).willReturn(Optional.empty());
 
         NullPointerException exception = assertThrows(NullPointerException.class, ()->{
-            storeService.findStoreById(storeId);
+            storeService.findStore(storeId);
         });
         assertEquals("there is no Store",exception.getMessage());
     }
@@ -83,7 +83,7 @@ public class StoreServiceTest {
         given(storeRepository.findById(storeId)).willReturn(Optional.empty());
 
         NullPointerException exception = assertThrows(NullPointerException.class, ()->{
-            storeService.findStoreById(storeId);
+            storeService.findStore(storeId);
         });
         assertEquals("there is no Store",exception.getMessage());
     }

@@ -35,17 +35,25 @@ public class StoreService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
-    public Store findStoreById(long storeId) {
-        return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("there is no Store"));
-    }
-
-    public Boolean storeIsOpen(Store store) {
-        return store.getStoreStatus().equals(StoreStatus.OPEN);
+    public void storeIsOpen(Store store) {
+        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
+            throw new RuntimeException("it is closed store");
+        }
     }
 
     public void checkAdmin(AuthUser authUser) {
         if (!authUser.getUserEnum().equals(UserEnum.OWNER)) {
             throw new RuntimeException("owner only");
+        }
+    }
+
+    public Store findStore(long storeId) {
+        return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+    }
+
+    public void checkStoreOwner(Store store, User user) {
+        if (!store.getUser().equals(user)) {
+            throw new RuntimeException("you are not the owner of the store");
         }
     }
 
@@ -74,20 +82,15 @@ public class StoreService {
     public StoreResponseDto updateStore(AuthUser authUser, long storeId, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        Store store = findStoreById(storeId);
-
-        if (!store.getUser().equals(user)) {
-            throw new RuntimeException("you are not the owner of the store");
-        }
+        Store store = findStore(storeId);
+        checkStoreOwner(store, user);
         store.update(storeRequestDto);
         return new StoreResponseDto(store);
     }
 
     public StoreDetailResponseDto getDetailStore(long storeId) {
-        Store store = findStoreById(storeId);
-        if (!storeIsOpen(store)) {
-            throw new RuntimeException("store is closed");
-        }
+        Store store = findStore(storeId);
+        storeIsOpen(store);
         return new StoreDetailResponseDto(store, listMenu(storeId, MenuPossibleEnum.DELETE));
     }
 
@@ -116,42 +119,30 @@ public class StoreService {
     public void closeStore(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
-        if (!store.getUser().equals(user)) {
-            throw new RuntimeException("you are not the owner of the store");
-        }
-        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
-            throw new RuntimeException("already closed");
-        }
+        Store store = findStore(storeId);
+        checkStoreOwner(store, user);
+        storeIsOpen(store);
         store.close();
     }
-
+    @Transactional
     public void storeAdOn(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
-        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
-            throw new RuntimeException("it is closed store");
-        }
-        if (!store.getUser().equals(user)) {
-            throw new RuntimeException("you are not the owner of the store");
-        }
+        Store store = findStore(storeId);
+        storeIsOpen(store);
+        checkStoreOwner(store, user);
         if (store.getStoreAdEnum().equals(StoreAdEnum.ON)) {
             throw new RuntimeException("already Ad On");
         }
         store.turnOnAd();
     }
-
+    @Transactional
     public void storeAdOff(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
-        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
-            throw new RuntimeException("it is closed store");
-        }
-        if (!store.getUser().equals(user)) {
-            throw new RuntimeException("you are not the owner of the store");
-        }
+        Store store = findStore(storeId);
+        storeIsOpen(store);
+        checkStoreOwner(store, user);
         if (store.getStoreAdEnum().equals(StoreAdEnum.OFF)) {
             throw new RuntimeException("already Ad Off");
         }
@@ -236,18 +227,20 @@ public class StoreService {
 
         return responseList;
     }
-
+    @Transactional
     public StoreNotificationResponseDto changeNotification(AuthUser authUser, long storeId, StoreNotificationRequestDto storeNotificationRequestDto) {
+        if (storeNotificationRequestDto.getNotification() == null ||
+                storeNotificationRequestDto.getNotification().length() > 255) {
+            throw new RuntimeException("write notification between 0 to 255");
+        }
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
-        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
-            throw new RuntimeException("it is closed store");
-        }
-        if (!store.getUser().equals(user)) {
-            throw new RuntimeException("you are not the owner of the store");
-        }
+        Store store = findStore(storeId);
+        storeIsOpen(store);
+        checkStoreOwner(store, user);
+
         store.updateNotification(storeNotificationRequestDto.getNotification());
         return new StoreNotificationResponseDto(store);
     }
+
 }

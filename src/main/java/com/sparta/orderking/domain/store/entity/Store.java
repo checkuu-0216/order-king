@@ -94,6 +94,6 @@ public class Store extends BaseEntity {
     }
 
     public void updateNotification(String notification) {
-        this.notification=notification;
+        this.notification = notification;
     }
 }

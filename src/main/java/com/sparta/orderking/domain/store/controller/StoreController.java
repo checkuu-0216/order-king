@@ -69,9 +69,8 @@ public class StoreController {
 
     @PutMapping("/stores/{storeId}/notification")
     public ResponseEntity<StoreNotificationResponseDto> changeNotification(@Auth AuthUser authUser, @PathVariable long storeId,
-                                                                           @RequestBody StoreNotificationRequestDto storeNotificationRequestDto){
-        return ResponseEntity.ok(storeService.changeNotification(authUser,storeId,storeNotificationRequestDto));
+                                                                           @RequestBody StoreNotificationRequestDto storeNotificationRequestDto) {
+        return ResponseEntity.ok(storeService.changeNotification(authUser, storeId, storeNotificationRequestDto));
     }
-
 
 }
