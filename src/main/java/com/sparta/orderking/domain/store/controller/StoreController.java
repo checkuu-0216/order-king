@@ -7,6 +7,7 @@ import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import com.sparta.orderking.domain.store.dto.StoreResponseDto;
 import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.service.StoreService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,13 +22,13 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping("/stores")
-    public ResponseEntity<StoreResponseDto> saveStore(@Auth AuthUser authUser, @RequestBody StoreRequestDto storeRequestDto){
+    public ResponseEntity<StoreResponseDto> saveStore(@Auth AuthUser authUser, @RequestBody @Valid StoreRequestDto storeRequestDto){
         return ResponseEntity.ok(storeService.saveStore(authUser,storeRequestDto));
     }
 
     @PutMapping("/stores/{storeId}")
     public ResponseEntity<StoreResponseDto> updateStore(@Auth AuthUser authUser
-            , @PathVariable Long storeId,@RequestBody StoreRequestDto storeRequestDto){
+            , @PathVariable Long storeId,@RequestBody @Valid StoreRequestDto storeRequestDto){
         return ResponseEntity.ok(storeService.updateStore(authUser,storeId,storeRequestDto));
     }
 
@@ -37,7 +38,7 @@ public class StoreController {
     }
 
     @GetMapping("/stores")
-    public ResponseEntity<List<StoreResponseDto>> getStore(@RequestBody StoreSimpleRequestDto storeSimpleRequestDto){
+    public ResponseEntity<List<StoreResponseDto>> getStore(@RequestBody @Valid StoreSimpleRequestDto storeSimpleRequestDto){
         return ResponseEntity.ok(storeService.getStore(storeSimpleRequestDto));
     }
 
