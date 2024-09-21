@@ -1,5 +1,6 @@
 package com.sparta.orderking.domain.store.dto;
 
+import com.sparta.orderking.domain.store.entity.StoreAdEnum;
 import com.sparta.orderking.domain.store.entity.StoreStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
@@ -22,4 +23,5 @@ public class StoreRequestDto {
     private LocalTime openTime;
     private LocalTime closeTime;
     private StoreStatus storeStatus;
+    private StoreAdEnum storeAdEnum;
 }

@@ -47,4 +47,14 @@ public class StoreController {
         storeService.closeStore(authUser,storeId);
     }
 
+    @PutMapping("/stores/{storeId}/adon")
+    public void storeAdOn(@Auth AuthUser authUser,@PathVariable Long storeId){
+        storeService.storeAdOn(authUser,storeId);
+    }
+
+    @PutMapping("/stores/{storeId}/adoff")
+    public void storeAdOff(@Auth AuthUser authUser,@PathVariable Long storeId){
+        storeService.storeAdOff(authUser,storeId);
+    }
+
 }

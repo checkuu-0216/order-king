@@ -48,6 +48,10 @@ public class Store {
     @Enumerated(value = EnumType.STRING)
     private StoreStatus storeStatus;
 
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private StoreAdEnum storeAdEnum;
+
     public Store(StoreRequestDto storeRequestDto,User user) {
         this.name = storeRequestDto.getName();
         this.storeAddress = storeRequestDto.getStoreAddress();
@@ -56,6 +60,7 @@ public class Store {
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
         this.storeStatus = storeRequestDto.getStoreStatus();
+        this.storeAdEnum = storeRequestDto.getStoreAdEnum();
         this.user = user;
     }
 
@@ -66,9 +71,19 @@ public class Store {
         this.minPrice = storeRequestDto.getMinPrice();
         this.openTime = storeRequestDto.getOpenTime();
         this.closeTime = storeRequestDto.getCloseTime();
+        this.storeStatus = storeRequestDto.getStoreStatus();
+        this.storeAdEnum = storeRequestDto.getStoreAdEnum();
     }
 
     public void close() {
         this.storeStatus = StoreStatus.CLOSED;
     }
+
+    public void turnOnAd() {
+        this.storeAdEnum=StoreAdEnum.ON;
+    }
+    public void turnOffAd() {
+        this.storeAdEnum=StoreAdEnum.OFF;
+    }
+
 }
