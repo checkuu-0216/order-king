@@ -12,5 +12,4 @@ public class StoreCheckDailyResponseDto {
     private Long dailyCustomers;
     private Long dailySales;
 
-
 }

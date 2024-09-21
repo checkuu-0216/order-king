@@ -19,7 +19,7 @@ public class StoreRequestDto {
     private String storeAddress;
     private String storeNumber;
     @Positive(message = "양수만 가능합니다.")
-    private int minPrice;
+    private Integer minPrice;
     private LocalTime openTime;
     private LocalTime closeTime;
     private StoreStatus storeStatus;

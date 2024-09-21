@@ -31,7 +31,7 @@ public class Store extends BaseEntity {
     private String storeNumber;
 
     @Column(name = "min_price")
-    private int minPrice;
+    private Integer minPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user")
@@ -53,7 +53,7 @@ public class Store extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private StoreAdEnum storeAdEnum;
 
-    public Store(StoreRequestDto storeRequestDto,User user) {
+    public Store(StoreRequestDto storeRequestDto, User user) {
         this.name = storeRequestDto.getName();
         this.storeAddress = storeRequestDto.getStoreAddress();
         this.storeNumber = storeRequestDto.getStoreNumber();
@@ -66,7 +66,7 @@ public class Store extends BaseEntity {
     }
 
     public void update(StoreRequestDto storeRequestDto) {
-        this.name=storeRequestDto.getName();
+        this.name = storeRequestDto.getName();
         this.storeAddress = storeRequestDto.getStoreAddress();
         this.storeNumber = storeRequestDto.getStoreNumber();
         this.minPrice = storeRequestDto.getMinPrice();
@@ -81,10 +81,11 @@ public class Store extends BaseEntity {
     }
 
     public void turnOnAd() {
-        this.storeAdEnum=StoreAdEnum.ON;
+        this.storeAdEnum = StoreAdEnum.ON;
     }
+
     public void turnOffAd() {
-        this.storeAdEnum=StoreAdEnum.OFF;
+        this.storeAdEnum = StoreAdEnum.OFF;
     }
 
 }

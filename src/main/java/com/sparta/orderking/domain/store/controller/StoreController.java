@@ -19,47 +19,48 @@ public class StoreController {
     private final StoreService storeService;
 
     @PostMapping("/stores")
-    public ResponseEntity<StoreResponseDto> saveStore(@Auth AuthUser authUser, @RequestBody @Valid StoreRequestDto storeRequestDto){
-        return ResponseEntity.ok(storeService.saveStore(authUser,storeRequestDto));
+    public ResponseEntity<StoreResponseDto> saveStore(@Auth AuthUser authUser, @RequestBody @Valid StoreRequestDto storeRequestDto) {
+        return ResponseEntity.ok(storeService.saveStore(authUser, storeRequestDto));
     }
 
     @PutMapping("/stores/{storeId}")
     public ResponseEntity<StoreResponseDto> updateStore(@Auth AuthUser authUser
-            , @PathVariable Long storeId,@RequestBody @Valid StoreRequestDto storeRequestDto){
-        return ResponseEntity.ok(storeService.updateStore(authUser,storeId,storeRequestDto));
+            , @PathVariable long storeId, @RequestBody @Valid StoreRequestDto storeRequestDto) {
+        return ResponseEntity.ok(storeService.updateStore(authUser, storeId, storeRequestDto));
     }
 
     @GetMapping("/stores/{storeId}")
-    public ResponseEntity<StoreDetailResponseDto> getDetailStore(@PathVariable Long storeId){
+    public ResponseEntity<StoreDetailResponseDto> getDetailStore(@PathVariable long storeId) {
         return ResponseEntity.ok(storeService.getDetailStore(storeId));
     }
 
     @GetMapping("/stores")
-    public ResponseEntity<List<StoreResponseDto>> getStore(@RequestBody @Valid StoreSimpleRequestDto storeSimpleRequestDto){
+    public ResponseEntity<List<StoreResponseDto>> getStore(@RequestBody @Valid StoreSimpleRequestDto storeSimpleRequestDto) {
         return ResponseEntity.ok(storeService.getStore(storeSimpleRequestDto));
     }
 
     @PutMapping("/stores/{storeId}/close")
-    public void closeStore(@Auth AuthUser authUser,@PathVariable Long storeId){
-        storeService.closeStore(authUser,storeId);
+    public void closeStore(@Auth AuthUser authUser, @PathVariable long storeId) {
+        storeService.closeStore(authUser, storeId);
     }
 
     @PutMapping("/stores/{storeId}/adon")
-    public void storeAdOn(@Auth AuthUser authUser,@PathVariable Long storeId){
-        storeService.storeAdOn(authUser,storeId);
+    public void storeAdOn(@Auth AuthUser authUser, @PathVariable long storeId) {
+        storeService.storeAdOn(authUser, storeId);
     }
 
     @PutMapping("/stores/{storeId}/adoff")
-    public void storeAdOff(@Auth AuthUser authUser,@PathVariable Long storeId){
-        storeService.storeAdOff(authUser,storeId);
+    public void storeAdOff(@Auth AuthUser authUser, @PathVariable long storeId) {
+        storeService.storeAdOff(authUser, storeId);
     }
 
     @GetMapping("/stores/checkdaily")
-    public ResponseEntity<List<StoreCheckDailyResponseDto>> checkDailyMyStore(@Auth AuthUser authUser){
+    public ResponseEntity<List<StoreCheckDailyResponseDto>> checkDailyMyStore(@Auth AuthUser authUser) {
         return ResponseEntity.ok(storeService.checkDailyMyStore(authUser));
     }
+
     @GetMapping("/stores/checkmonthly")
-    public ResponseEntity<List<StoreCheckMonthlyResponseDto>> checkMonthlyMyStore(@Auth AuthUser authUser){
+    public ResponseEntity<List<StoreCheckMonthlyResponseDto>> checkMonthlyMyStore(@Auth AuthUser authUser) {
         return ResponseEntity.ok(storeService.checkMonthlyMyStore(authUser));
     }
 

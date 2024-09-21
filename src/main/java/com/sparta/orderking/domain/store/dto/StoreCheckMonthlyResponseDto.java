@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class StoreCheckMonthlyResponseDto {
     private Long storeId;
-    private String month; // 월 추가
+    private String month;
     private Long monthlyCustomers;
     private Long monthlySales;
 }

@@ -1,15 +1,15 @@
 package com.sparta.orderking.domain.store.service;
 
 import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
+import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.order.repository.OrderRepository;
 import com.sparta.orderking.domain.store.dto.*;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.entity.StoreAdEnum;
 import com.sparta.orderking.domain.store.entity.StoreStatus;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
-import com.sparta.orderking.domain.menu.entity.Menu;
-import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import com.sparta.orderking.domain.user.repository.UserRepository;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,29 +32,34 @@ public class StoreService {
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
 
-    public Store findStoreById(Long storeId){
-        return storeRepository.findById(storeId).orElseThrow(()->new NullPointerException("there is no Store"));
+    public Store findStoreById(long storeId) {
+        return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("there is no Store"));
     }
 
-    public Boolean storeIsOpen(Store store){
+    public Boolean storeIsOpen(Store store) {
         return store.getStoreStatus().equals(StoreStatus.OPEN);
     }
 
-    public void checkAdmin(AuthUser authUser){
-        if(!authUser.getUserEnum().equals(UserEnum.OWNER)){
+    public void checkAdmin(AuthUser authUser) {
+        if (!authUser.getUserEnum().equals(UserEnum.OWNER)) {
             throw new RuntimeException("owner only");
         }
     }
-    public User findUser(Long id){
-        return userRepository.findById(id).orElseThrow(()->new NullPointerException("no such user"));
+
+    public User findUser(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NullPointerException("no such user"));
+    }
+
+    public List<Menu> listMenu(long storeId, MenuPossibleEnum status) {
+        return menuRepository.findAllByStoreAndMenuPossibleEnumNot(storeId, MenuPossibleEnum.DELETE);
     }
 
     @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        List<Store> storeList = storeRepository.findByUserAndStoreStatus(user,StoreStatus.OPEN);
-        if(storeList.size()>=3){
+        List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
+        if (storeList.size() >= 3) {
             throw new RuntimeException("already have 3 stores");
         }
         Store store = new Store(storeRequestDto, user);
@@ -64,24 +68,24 @@ public class StoreService {
     }
 
     @Transactional
-    public StoreResponseDto updateStore(AuthUser authUser, Long storeId, StoreRequestDto storeRequestDto) {
+    public StoreResponseDto updateStore(AuthUser authUser, long storeId, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
         Store store = findStoreById(storeId);
 
-        if(!store.getUser().equals(user)){
+        if (!store.getUser().equals(user)) {
             throw new RuntimeException("you are not the owner of the store");
         }
         store.update(storeRequestDto);
         return new StoreResponseDto(store);
     }
 
-    public StoreDetailResponseDto getDetailStore(Long storeId) {
+    public StoreDetailResponseDto getDetailStore(long storeId) {
         Store store = findStoreById(storeId);
-        if(!storeIsOpen(store)){
+        if (!storeIsOpen(store)) {
             throw new RuntimeException("store is closed");
         }
-        return new StoreDetailResponseDto(store,listMenu(storeId,MenuPossibleEnum.DELETE));
+        return new StoreDetailResponseDto(store, listMenu(storeId, MenuPossibleEnum.DELETE));
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {
@@ -106,50 +110,46 @@ public class StoreService {
     }
 
     @Transactional
-    public void closeStore(AuthUser authUser, Long storeId) {
+    public void closeStore(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        Store store = storeRepository.findById(storeId).orElseThrow(()->new NullPointerException("no such store"));
-        if(!store.getUser().equals(user)){
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+        if (!store.getUser().equals(user)) {
             throw new RuntimeException("you are not the owner of the store");
         }
-        if(store.getStoreStatus().equals(StoreStatus.CLOSED)){
+        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
             throw new RuntimeException("already closed");
         }
         store.close();
     }
 
-    public List<Menu> listMenu (Long storeId, MenuPossibleEnum status){
-        return menuRepository.findAllByStoreAndMenuPossibleEnumNot(storeId,MenuPossibleEnum.DELETE);
-    }
-
-    public void storeAdOn(AuthUser authUser, Long storeId) {
+    public void storeAdOn(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        Store store = storeRepository.findById(storeId).orElseThrow(()->new NullPointerException("no such store"));
-        if(store.getStoreStatus().equals(StoreStatus.CLOSED)){
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
             throw new RuntimeException("it is closed store");
         }
-        if(!store.getUser().equals(user)){
+        if (!store.getUser().equals(user)) {
             throw new RuntimeException("you are not the owner of the store");
         }
-        if(store.getStoreAdEnum().equals(StoreAdEnum.ON)){
+        if (store.getStoreAdEnum().equals(StoreAdEnum.ON)) {
             throw new RuntimeException("already Ad On");
         }
         store.turnOnAd();
     }
 
-    public void storeAdOff(AuthUser authUser, Long storeId) {
+    public void storeAdOff(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
-        Store store = storeRepository.findById(storeId).orElseThrow(()->new NullPointerException("no such store"));
-        if(store.getStoreStatus().equals(StoreStatus.CLOSED)){
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
             throw new RuntimeException("it is closed store");
         }
-        if(!store.getUser().equals(user)){
+        if (!store.getUser().equals(user)) {
             throw new RuntimeException("you are not the owner of the store");
         }
-        if(store.getStoreAdEnum().equals(StoreAdEnum.OFF)){
+        if (store.getStoreAdEnum().equals(StoreAdEnum.OFF)) {
             throw new RuntimeException("already Ad Off");
         }
         store.turnOffAd();
