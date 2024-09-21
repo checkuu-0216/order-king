@@ -1,10 +1,9 @@
 package com.sparta.orderking.store.service;
 
-import com.sparta.orderking.config.AuthUser;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
-import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
-import com.sparta.orderking.domain.store.dto.StoreResponseDto;
-import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
+import com.sparta.orderking.domain.store.dto.response.StoreDetailResponseDto;
+import com.sparta.orderking.domain.store.dto.response.StoreResponseDto;
+import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.store.service.StoreService;

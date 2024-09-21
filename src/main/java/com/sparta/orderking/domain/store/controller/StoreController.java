@@ -2,7 +2,10 @@ package com.sparta.orderking.domain.store.controller;
 
 import com.sparta.orderking.config.Auth;
 import com.sparta.orderking.config.AuthUser;
-import com.sparta.orderking.domain.store.dto.*;
+import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
+import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
+import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;
+import com.sparta.orderking.domain.store.dto.response.*;
 import com.sparta.orderking.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +66,12 @@ public class StoreController {
     public ResponseEntity<List<StoreCheckMonthlyResponseDto>> checkMonthlyMyStore(@Auth AuthUser authUser) {
         return ResponseEntity.ok(storeService.checkMonthlyMyStore(authUser));
     }
+
+    @PutMapping("/stores/{storeId}/notification")
+    public ResponseEntity<StoreNotificationResponseDto> changeNotification(@Auth AuthUser authUser, @PathVariable long storeId,
+                                                                           @RequestBody StoreNotificationRequestDto storeNotificationRequestDto){
+        return ResponseEntity.ok(storeService.changeNotification(authUser,storeId,storeNotificationRequestDto));
+    }
+
 
 }

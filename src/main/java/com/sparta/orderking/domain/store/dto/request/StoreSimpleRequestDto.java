@@ -1,4 +1,4 @@
-package com.sparta.orderking.domain.store.dto;
+package com.sparta.orderking.domain.store.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

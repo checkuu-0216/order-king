@@ -1,4 +1,4 @@
-package com.sparta.orderking.domain.store.dto;
+package com.sparta.orderking.domain.store.dto.request;
 
 import com.sparta.orderking.domain.store.entity.StoreAdEnum;
 import com.sparta.orderking.domain.store.entity.StoreStatus;

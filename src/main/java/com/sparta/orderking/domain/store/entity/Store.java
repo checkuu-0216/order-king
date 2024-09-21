@@ -2,9 +2,10 @@ package com.sparta.orderking.domain.store.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sparta.orderking.common.BaseEntity;
-import com.sparta.orderking.domain.store.dto.StoreRequestDto;
+import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
 import com.sparta.orderking.domain.user.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,6 +54,10 @@ public class Store extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private StoreAdEnum storeAdEnum;
 
+    @Size(max = 255)
+    @Column(name = "notification")
+    private String notification;
+
     public Store(StoreRequestDto storeRequestDto, User user) {
         this.name = storeRequestDto.getName();
         this.storeAddress = storeRequestDto.getStoreAddress();
@@ -88,4 +93,7 @@ public class Store extends BaseEntity {
         this.storeAdEnum = StoreAdEnum.OFF;
     }
 
+    public void updateNotification(String notification) {
+        this.notification=notification;
+    }
 }

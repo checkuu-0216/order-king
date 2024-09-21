@@ -1,8 +1,8 @@
 package com.sparta.orderking.store;
 
 import com.sparta.orderking.config.AuthUser;
-import com.sparta.orderking.domain.store.dto.StoreRequestDto;
-import com.sparta.orderking.domain.store.dto.StoreResponseDto;
+import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
+import com.sparta.orderking.domain.store.dto.response.StoreResponseDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.entity.StoreAdEnum;
 import com.sparta.orderking.domain.store.entity.StoreStatus;

@@ -1,4 +1,4 @@
-package com.sparta.orderking.domain.store.dto;
+package com.sparta.orderking.domain.store.dto.response;
 
 import com.sparta.orderking.domain.store.entity.Bookmark;
 import lombok.Getter;

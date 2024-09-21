@@ -1,7 +1,7 @@
 package com.sparta.orderking.domain.store.service;
 
 import com.sparta.orderking.config.AuthUser;
-import com.sparta.orderking.domain.store.dto.BookmarkSaveResponseDto;
+import com.sparta.orderking.domain.store.dto.response.BookmarkSaveResponseDto;
 import com.sparta.orderking.domain.store.entity.Bookmark;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.BookmarkRepository;

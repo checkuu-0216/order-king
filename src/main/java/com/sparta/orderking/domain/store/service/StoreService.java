@@ -5,7 +5,10 @@ import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.order.repository.OrderRepository;
-import com.sparta.orderking.domain.store.dto.*;
+import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
+import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
+import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;
+import com.sparta.orderking.domain.store.dto.response.*;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.entity.StoreAdEnum;
 import com.sparta.orderking.domain.store.entity.StoreStatus;
@@ -232,5 +235,19 @@ public class StoreService {
         }
 
         return responseList;
+    }
+
+    public StoreNotificationResponseDto changeNotification(AuthUser authUser, long storeId, StoreNotificationRequestDto storeNotificationRequestDto) {
+        checkAdmin(authUser);
+        User user = findUser(authUser.getId());
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
+            throw new RuntimeException("it is closed store");
+        }
+        if (!store.getUser().equals(user)) {
+            throw new RuntimeException("you are not the owner of the store");
+        }
+        store.updateNotification(storeNotificationRequestDto.getNotification());
+        return new StoreNotificationResponseDto(store);
     }
 }
