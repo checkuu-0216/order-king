@@ -2,10 +2,7 @@ package com.sparta.orderking.domain.store.controller;
 
 import com.sparta.orderking.config.Auth;
 import com.sparta.orderking.config.AuthUser;
-import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
-import com.sparta.orderking.domain.store.dto.StoreRequestDto;
-import com.sparta.orderking.domain.store.dto.StoreResponseDto;
-import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
+import com.sparta.orderking.domain.store.dto.*;
 import com.sparta.orderking.domain.store.service.StoreService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +52,15 @@ public class StoreController {
     @PutMapping("/stores/{storeId}/adoff")
     public void storeAdOff(@Auth AuthUser authUser,@PathVariable Long storeId){
         storeService.storeAdOff(authUser,storeId);
+    }
+
+    @GetMapping("/stores/checkdaily")
+    public ResponseEntity<List<StoreCheckDailyResponseDto>> checkDailyMyStore(@Auth AuthUser authUser){
+        return ResponseEntity.ok(storeService.checkDailyMyStore(authUser));
+    }
+    @GetMapping("/stores/checkmonthly")
+    public ResponseEntity<List<StoreCheckMonthlyResponseDto>> checkMonthlyMyStore(@Auth AuthUser authUser){
+        return ResponseEntity.ok(storeService.checkMonthlyMyStore(authUser));
     }
 
 }

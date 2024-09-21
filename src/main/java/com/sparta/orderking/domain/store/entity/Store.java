@@ -1,6 +1,7 @@
 package com.sparta.orderking.domain.store.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sparta.orderking.common.BaseEntity;
 import com.sparta.orderking.domain.store.dto.StoreRequestDto;
 import com.sparta.orderking.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -14,7 +15,7 @@ import java.time.LocalTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Store {
+public class Store extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
