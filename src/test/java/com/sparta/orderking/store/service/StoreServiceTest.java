@@ -1,5 +1,6 @@
 package com.sparta.orderking.store.service;
 
+import com.sparta.orderking.config.AuthUser;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
 import com.sparta.orderking.domain.store.dto.StoreResponseDto;
@@ -7,6 +8,7 @@ import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.store.service.StoreService;
+import com.sparta.orderking.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,13 +21,14 @@ import java.util.Optional;
 
 import static com.sparta.orderking.store.CommonValue.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
 public class StoreServiceTest {
 
+    @Mock
+    private UserRepository userRepository;
     @Mock
     private StoreRepository storeRepository;
     @Mock
@@ -54,6 +57,8 @@ public class StoreServiceTest {
 
     @Test
     void saveStore(){
+
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(TEST_USER));
         given(storeRepository.save(any())).willReturn(TEST_STORE);
 
         StoreResponseDto responseDto = storeService.saveStore(TEST_AUTHUSER,TEST_STOREREQUESTDTO);
@@ -64,6 +69,8 @@ public class StoreServiceTest {
     @Test
     void updateStore(){
         Long storeId =1L;
+
+        given(userRepository.findById(anyLong())).willReturn(Optional.of(TEST_USER));
         given(storeRepository.findById(storeId)).willReturn(Optional.of(TEST_STORE));
 
         StoreResponseDto responseDto = storeService.updateStore(TEST_AUTHUSER,storeId,TEST_STOREREQUESTDTO);

@@ -15,4 +15,8 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserEnum role;
+
+    public User(UserEnum userEnum) {
+        this.role=userEnum;
+    }
 }

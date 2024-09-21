@@ -66,9 +66,7 @@ public class StoreService {
         checkAdmin(authUser);
         User user = findUser(authUser.getId());
         Store store = findStoreById(storeId);
-        if(!store.getUser().getRole().equals(UserEnum.OWNER)||user.getRole().equals(UserEnum.OWNER)){
-            throw new RuntimeException("you are not owner");
-        }
+
         if(!store.getUser().equals(user)){
             throw new RuntimeException("you are not the owner of the store");
         }
