@@ -1,7 +1,7 @@
-package com.sparta.orderking.domain.store.dto;
+package com.sparta.orderking.domain.store.dto.response;
 
-import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.menu.entity.Menu;
+import com.sparta.orderking.domain.store.entity.Store;
 import lombok.Getter;
 
 import java.time.LocalTime;
@@ -13,7 +13,7 @@ public class StoreDetailResponseDto {
     private final String name;
     private final String storeAddress;
     private final String storeNumber;
-    private final int minPrice;
+    private final Integer minPrice;
     private final LocalTime openTime;
     private final LocalTime closeTime;
     private final List<Menu> menuList;
