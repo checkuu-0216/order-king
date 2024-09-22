@@ -79,6 +79,20 @@ public class Store extends BaseEntity {
         this.storeAdEnum=storeAdEnum;
     }
 
+    public Store(long l, String name, String storeAddress, String storeNumber, int i, User testUser, LocalTime of, LocalTime of1, StoreStatus storeStatus, StoreAdEnum storeAdEnum, String notification) {
+        this.id=l;
+        this.name=name;
+        this.storeAddress=storeAddress;
+        this.storeNumber=storeNumber;
+        this.minPrice=i;
+        this.user=testUser;
+        this.openTime=of;
+        this.closeTime=of1;
+        this.storeStatus=storeStatus;
+        this.storeAdEnum=storeAdEnum;
+        this.notification=notification;
+    }
+
     public void update(StoreRequestDto storeRequestDto) {
         this.name = storeRequestDto.getName();
         this.storeAddress = storeRequestDto.getStoreAddress();
