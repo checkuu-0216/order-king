@@ -36,7 +36,7 @@ public class Store extends BaseEntity {
     private Integer minPrice;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "open_time")

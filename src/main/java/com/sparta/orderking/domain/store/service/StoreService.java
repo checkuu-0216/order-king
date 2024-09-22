@@ -231,7 +231,7 @@ public class StoreService {
     public StoreNotificationResponseDto changeNotification(AuthUser authUser, long storeId, StoreNotificationRequestDto storeNotificationRequestDto) {
         if (storeNotificationRequestDto.getNotification() == null ||
                 storeNotificationRequestDto.getNotification().length() > 255) {
-            throw new RuntimeException("write notification between 0 to 255");
+            throw new RuntimeException("write notification between 1 to 254");
         }
         checkAdmin(authUser);
         User user = findUser(authUser.getId());

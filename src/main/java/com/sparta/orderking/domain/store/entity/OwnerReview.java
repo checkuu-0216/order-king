@@ -18,11 +18,11 @@ public class OwnerReview {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review")
+    @JoinColumn(name = "review_id")
     private Review review;
 
     @ManyToOne
-    @JoinColumn(name = "store")
+    @JoinColumn(name = "store_id")
     private Store store;
 
     @Size(max = 255)
