@@ -20,6 +20,7 @@ public class BookmarkService {
     private final BookmarkRepository bookmarkRepository;
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
+
     @Transactional
     public BookmarkSaveResponseDto bookmarkOn(AuthUser authUser, long storeId) {
         User user = userRepository.findById(authUser.getId()).orElseThrow(() -> new NullPointerException("there is no user"));

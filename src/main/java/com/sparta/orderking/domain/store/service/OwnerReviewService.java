@@ -51,7 +51,7 @@ public class OwnerReviewService {
     }
 
     public void checkReview(Review review, Store store) {
-        if (review.getStore().equals(store)) {
+        if (!review.getStore().equals(store)) {
             throw new RuntimeException("review is not for the store");
         }
     }
@@ -59,7 +59,12 @@ public class OwnerReviewService {
     public OwnerReview findOwnerReview(long id) {
         return ownerReviewRepository.findById(id).orElseThrow(() -> new NullPointerException("no such owner review"));
     }
-
+    public void lengthCheck(OwnerReviewRequestDto ownerReviewRequestDto){
+        if (ownerReviewRequestDto.getComment() == null ||
+                ownerReviewRequestDto.getComment().length() > 255) {
+            throw new RuntimeException("write comment between 0 to 255");
+        }
+    }
     @Transactional
     public OwnerReviewResponseDto postComment(long storeId, long reviewId, AuthUser authuser, OwnerReviewRequestDto ownerReviewRequestDto) {
         checkAdmin(authuser);
@@ -68,10 +73,8 @@ public class OwnerReviewService {
         checkStoreOwner(store, user);
         Review review = findReview(reviewId);
         checkReview(review, store);
-        if (ownerReviewRequestDto.getComment() == null ||
-                ownerReviewRequestDto.getComment().length() > 255) {
-            throw new RuntimeException("write comment between 0 to 255");
-        }
+        lengthCheck(ownerReviewRequestDto);
+
         OwnerReview ownerReview = new OwnerReview(review, store, ownerReviewRequestDto.getComment());
         OwnerReview savedOwnerReview = ownerReviewRepository.save(ownerReview);
         return new OwnerReviewResponseDto(savedOwnerReview);
@@ -84,6 +87,8 @@ public class OwnerReviewService {
         Store store = ownerReview.getStore();
         User user = findUser(authUser.getId());
         checkStoreOwner(store, user);
+        lengthCheck(ownerReviewRequestDto);
+
         ownerReview.update(ownerReviewRequestDto.getComment());
 
         return new OwnerReviewResponseDto(ownerReview);
