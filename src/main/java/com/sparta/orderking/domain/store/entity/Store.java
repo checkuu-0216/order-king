@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.time.LocalTime;
 
@@ -18,10 +17,6 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Store extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -82,6 +77,20 @@ public class Store extends BaseEntity {
         this.closeTime=of1;
         this.storeStatus=storeStatus;
         this.storeAdEnum=storeAdEnum;
+    }
+
+    public Store(long l, String name, String storeAddress, String storeNumber, int i, User testUser, LocalTime of, LocalTime of1, StoreStatus storeStatus, StoreAdEnum storeAdEnum, String notification) {
+        this.id=l;
+        this.name=name;
+        this.storeAddress=storeAddress;
+        this.storeNumber=storeNumber;
+        this.minPrice=i;
+        this.user=testUser;
+        this.openTime=of;
+        this.closeTime=of1;
+        this.storeStatus=storeStatus;
+        this.storeAdEnum=storeAdEnum;
+        this.notification=notification;
     }
 
     public void update(StoreRequestDto storeRequestDto) {
