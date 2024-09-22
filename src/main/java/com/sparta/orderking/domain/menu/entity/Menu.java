@@ -38,20 +38,22 @@ public class Menu extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private MenuPossibleEnum possibleEnum;
 
-    public Menu (MenuRequestDto requestDto){
+    public Menu (MenuRequestDto requestDto,Store store){
         this.menuName = requestDto.getMenuName();
         this.menuInfo = requestDto.getMenuInfo();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuImg = requestDto.getMenuImg();
         this.possibleEnum = requestDto.getMenuPossibleEnum();
+        this.store = store;
     }
 
-    public void updateMenu(MenuUpdateRequestDto requestDto){
+    public void updateMenu(MenuUpdateRequestDto requestDto,Store store){
         this.menuName = requestDto.getMenuName();
         this.menuInfo = requestDto.getMenuInfo();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuImg = requestDto.getMenuImg();
         this.possibleEnum = requestDto.getMenuPossibleEnum();
+        this.store=store;
     }
 
     public void deleteMenu(MenuPossibleEnum possibleEnum){

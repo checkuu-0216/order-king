@@ -31,7 +31,7 @@ public class MenuService {
         //가게 주인 확인 메서드
         Store store = validateStoreOwner(authUser,storeId);
         //등록할 메뉴 생성
-        Menu menu = new Menu(requestDto);
+        Menu menu = new Menu(requestDto,store);
         //메뉴 저장
         menuRepository.save(menu);
     }
@@ -42,7 +42,7 @@ public class MenuService {
         //등록되어있는지 메뉴 확인
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("해당 메뉴가 존재 하지 않습니다."));
         //업데이트 된 request를 받아서 저장
-        menu.updateMenu(requestDto);
+        menu.updateMenu(requestDto,store);
         menuRepository.save(menu);
     }
 
@@ -55,6 +55,7 @@ public class MenuService {
         //등록되어있는 메뉴 상태 변화
         menuRepository.save(menu);
     }
+
     private Store validateStoreOwner(AuthUser authUser, Long storeId) {
         // 가게 존재 확인
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("해당 가게가 존재하지 않습니다."));
