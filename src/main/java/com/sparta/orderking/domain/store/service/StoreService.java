@@ -4,6 +4,7 @@ import com.sparta.orderking.config.AuthUser;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
+import com.sparta.orderking.domain.order.enums.OrderStatus;
 import com.sparta.orderking.domain.order.repository.OrderRepository;
 import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
 import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
@@ -157,6 +158,7 @@ public class StoreService {
         List<StoreCheckDailyResponseDto> responseList = new ArrayList<>();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime currentTime = LocalDateTime.now();
+        OrderStatus orderStatus = OrderStatus.DELIVERY_COMPLETED; // 주문 상태 설정
 
         for (Store store : storeList) {
             LocalDateTime createTime = store.getCreatedAt();
@@ -170,7 +172,7 @@ public class StoreService {
                 LocalDateTime nextDay = startDate.plusDays(1);
 
                 // 고객 수와 매출 조회
-                Object[] result = orderRepository.countCustomersAndSales(store.getId(), startDate, nextDay);
+                Object[] result = orderRepository.countCustomersAndSales(store.getId(), startDate, nextDay, orderStatus);
                 Long dailyCustomers = (Long) result[0];
                 Long dailySales = (Long) result[1];
 
@@ -199,6 +201,7 @@ public class StoreService {
         List<StoreCheckMonthlyResponseDto> responseList = new ArrayList<>();
         DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
         LocalDateTime currentTime = LocalDateTime.now();
+        OrderStatus orderStatus = OrderStatus.DELIVERY_COMPLETED; // 주문 상태 설정
 
         for (Store store : storeList) {
             LocalDateTime createTime = store.getCreatedAt();
@@ -207,7 +210,7 @@ public class StoreService {
 
             while (startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
                 // 월별 고객 수와 매출 조회
-                Object[] result = orderRepository.countMonthlyCustomersAndSales(store.getId(), startDate);
+                Object[] result = orderRepository.countMonthlyCustomersAndSales(store.getId(), startDate, orderStatus);
                 Long monthlyCustomers = (Long) result[0];
                 Long monthlySales = (Long) result[1];
 
