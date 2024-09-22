@@ -1,6 +1,8 @@
 package com.sparta.orderking.store;
 
 import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.order.entity.Order;
+import com.sparta.orderking.domain.review.entity.Review;
 import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
 import com.sparta.orderking.domain.store.dto.response.StoreResponseDto;
 import com.sparta.orderking.domain.store.entity.Store;
@@ -20,4 +22,6 @@ public class CommonValue {
     public final static StoreResponseDto TEST_STORERESPONSEDTO = new StoreResponseDto(TEST_STORE);
     public final static AuthUser TEST_AUTHUSER2 = new AuthUser(1L, UserEnum.USER);
     public final static AuthUser TEST_AUTHUSER = new AuthUser(1L, UserEnum.OWNER);
+    public final static Order TEST_ORDER = new Order(TEST_USER,TEST_STORE,100000);
+    public final static Review TEST_REVIEW = new Review(TEST_USER,TEST_ORDER,TEST_STORE,"content",100000);
 }
