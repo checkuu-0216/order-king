@@ -1,10 +1,9 @@
 package com.sparta.orderking.domain.menu.service;
 
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.menu.dto.MenuRequestDto;
 import com.sparta.orderking.domain.menu.dto.MenuUpdateRequestDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
-import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
@@ -60,7 +59,7 @@ public class MenuService {
         // 가게 존재 확인
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("해당 가게가 존재하지 않습니다."));
         // 가게 주인 확인
-        User user = userRepository.findById(authUser.getId()).orElseThrow(() -> new EntityNotFoundException("해당 유저가 존재하지 않습니다."));
+        User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new EntityNotFoundException("해당 유저가 존재하지 않습니다."));
         // 가게의 주인과 유저가 일치하는지 확인
         if (!user.getId().equals(store.getUser().getId())) {
             throw new NullPointerException("해당 가게의 주인이 아닙니다.");

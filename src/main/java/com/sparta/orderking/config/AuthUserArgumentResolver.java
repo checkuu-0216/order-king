@@ -1,5 +1,6 @@
 package com.sparta.orderking.config;
 
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.MethodParameter;
@@ -36,6 +37,6 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
         // JwtFilter 에서 set 한 userId 값을 가져옴
         Long userId = (Long) request.getAttribute("userId");
         UserEnum userEnum = (UserEnum) request.getAttribute("userEnum");
-        return new AuthUser(userId,userEnum);
+        return new AuthUser(userId, userEnum);
     }
 }

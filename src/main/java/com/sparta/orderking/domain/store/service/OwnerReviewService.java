@@ -1,6 +1,6 @@
 package com.sparta.orderking.domain.store.service;
 
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.review.entity.Review;
 import com.sparta.orderking.domain.review.repository.ReviewRepository;
 import com.sparta.orderking.domain.store.dto.request.OwnerReviewRequestDto;
@@ -69,7 +69,7 @@ public class OwnerReviewService {
     public OwnerReviewResponseDto postComment(long storeId, long reviewId, AuthUser authuser, OwnerReviewRequestDto ownerReviewRequestDto) {
         checkAdmin(authuser);
         Store store = findStore(storeId);
-        User user = findUser(authuser.getId());
+        User user = findUser(authuser.getUserId());
         checkStoreOwner(store, user);
         Review review = findReview(reviewId);
         checkReview(review, store);
@@ -85,7 +85,7 @@ public class OwnerReviewService {
         checkAdmin(authUser);
         OwnerReview ownerReview = findOwnerReview(ownerReviewId);
         Store store = ownerReview.getStore();
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         checkStoreOwner(store, user);
         lengthCheck(ownerReviewRequestDto);
 
@@ -99,7 +99,7 @@ public class OwnerReviewService {
         checkAdmin(authUser);
         OwnerReview ownerReview = findOwnerReview(ownerReviewId);
         Store store = ownerReview.getStore();
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         checkStoreOwner(store, user);
         ownerReviewRepository.delete(ownerReview);
     }
