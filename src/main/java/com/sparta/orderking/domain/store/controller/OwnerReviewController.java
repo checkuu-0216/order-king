@@ -1,7 +1,7 @@
 package com.sparta.orderking.domain.store.controller;
 
 import com.sparta.orderking.config.Auth;
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.store.dto.request.OwnerReviewRequestDto;
 import com.sparta.orderking.domain.store.dto.response.OwnerReviewResponseDto;
 import com.sparta.orderking.domain.store.service.OwnerReviewService;

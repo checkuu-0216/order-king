@@ -1,6 +1,6 @@
 package com.sparta.orderking.domain.store.service;
 
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
@@ -69,7 +69,7 @@ public class StoreService {
     @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
         if (storeList.size() >= 3) {
             throw new RuntimeException("already have 3 stores");
@@ -82,7 +82,7 @@ public class StoreService {
     @Transactional
     public StoreResponseDto updateStore(AuthUser authUser, long storeId, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         Store store = findStore(storeId);
         checkStoreOwner(store, user);
         store.update(storeRequestDto);
@@ -119,7 +119,7 @@ public class StoreService {
     @Transactional
     public void closeStore(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         Store store = findStore(storeId);
         checkStoreOwner(store, user);
         storeIsOpen(store);
@@ -128,7 +128,7 @@ public class StoreService {
     @Transactional
     public void storeAdOn(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         Store store = findStore(storeId);
         storeIsOpen(store);
         checkStoreOwner(store, user);
@@ -140,7 +140,7 @@ public class StoreService {
     @Transactional
     public void storeAdOff(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         Store store = findStore(storeId);
         storeIsOpen(store);
         checkStoreOwner(store, user);
@@ -152,7 +152,7 @@ public class StoreService {
 
     public List<StoreCheckDailyResponseDto> checkDailyMyStore(AuthUser authUser) {
         checkAdmin(authUser);
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
 
         List<StoreCheckDailyResponseDto> responseList = new ArrayList<>();
@@ -195,7 +195,7 @@ public class StoreService {
 
     public List<StoreCheckMonthlyResponseDto> checkMonthlyMyStore(AuthUser authUser) {
         checkAdmin(authUser);
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
 
         List<StoreCheckMonthlyResponseDto> responseList = new ArrayList<>();
@@ -237,7 +237,7 @@ public class StoreService {
             throw new RuntimeException("write notification between 1 to 254");
         }
         checkAdmin(authUser);
-        User user = findUser(authUser.getId());
+        User user = findUser(authUser.getUserId());
         Store store = findStore(storeId);
         storeIsOpen(store);
         checkStoreOwner(store, user);

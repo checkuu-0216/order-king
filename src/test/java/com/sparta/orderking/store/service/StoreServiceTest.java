@@ -1,10 +1,9 @@
 package com.sparta.orderking.store.service;
 
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
-import com.sparta.orderking.domain.store.dto.response.StoreCheckDailyResponseDto;
 import com.sparta.orderking.domain.store.dto.response.StoreDetailResponseDto;
 import com.sparta.orderking.domain.store.dto.response.StoreResponseDto;
 import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;
@@ -18,15 +17,12 @@ import com.sparta.orderking.domain.user.entity.UserEnum;
 import com.sparta.orderking.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 

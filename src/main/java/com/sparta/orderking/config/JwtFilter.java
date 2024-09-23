@@ -5,17 +5,14 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import jakarta.servlet.*;
 import jakarta.servlet.FilterConfig;
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-import java.net.URLDecoder;
-import java.util.regex.Pattern;
 
 @Slf4j
 @RequiredArgsConstructor

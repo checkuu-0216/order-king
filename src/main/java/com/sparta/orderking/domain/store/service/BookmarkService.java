@@ -1,6 +1,6 @@
 package com.sparta.orderking.domain.store.service;
 
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.store.dto.response.BookmarkSaveResponseDto;
 import com.sparta.orderking.domain.store.entity.Bookmark;
 import com.sparta.orderking.domain.store.entity.Store;
@@ -23,7 +23,7 @@ public class BookmarkService {
 
     @Transactional
     public BookmarkSaveResponseDto bookmarkOn(AuthUser authUser, long storeId) {
-        User user = userRepository.findById(authUser.getId()).orElseThrow(() -> new NullPointerException("there is no user"));
+        User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new NullPointerException("there is no user"));
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("there is no such store"));
         if (store.getUser().equals(user)) {
             throw new RuntimeException("you can't bookmark your own store");
@@ -38,7 +38,7 @@ public class BookmarkService {
     }
     @Transactional
     public void bookmarkOff(AuthUser authUser, long storeId) {
-        User user = userRepository.findById(authUser.getId()).orElseThrow(() -> new NullPointerException("there is no user"));
+        User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new NullPointerException("there is no user"));
         Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("there is no such store"));
         Bookmark bookmark = bookmarkRepository.findByUserAndStore(user, store).orElseThrow(() -> new NullPointerException("you are not bookmark store"));
         bookmarkRepository.delete(bookmark);
