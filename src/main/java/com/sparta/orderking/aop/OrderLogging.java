@@ -17,7 +17,8 @@ public class OrderLogging {
     // 주문 생성 및 상태 변경 메서드를 지정하는 포인트컷
     @Pointcut("execution(* com.sparta.orderking.domain.order.controller.OrderController.createOrder(..)) " +
             "|| execution(* com.sparta.orderking.domain.order.controller.OrderController.updateOrderStatus(..))")
-    public void orderMethods() {}
+    public void orderMethods() {
+    }
 
     // 주문 생성/상태 변경 이전에 로그 기록
     @Before("orderMethods()")
