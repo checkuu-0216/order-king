@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.chrono.ChronoLocalDateTime;
 
 @Service
@@ -39,12 +40,12 @@ public class OrderService {
             throw new IllegalArgumentException("최소 주문 금액 보다 적습니다.");
         }
         // 가게의 오픈 / 마감 시간 확인
-        LocalDateTime now = LocalDateTime.now();
-        if(now.isBefore(ChronoLocalDateTime.from(store.getOpenTime()))) {
+        LocalTime now = LocalTime.now();
+        if(now.isBefore(store.getOpenTime())) {
             throw new IllegalArgumentException("가게 오픈시간 전입니다.");
         }
 
-        if(now.isAfter(ChronoLocalDateTime.from(store.getCloseTime()))) {
+        if(now.isAfter(store.getCloseTime())) {
             throw new IllegalArgumentException("가게 마감시간 후입니다.");
         }
 
@@ -56,12 +57,12 @@ public class OrderService {
             OrderMenu orderMenu = new OrderMenu(user, menu, order);
             orderMenuRepository.save(orderMenu);
             order.addMenu(orderMenu);
-            System.out.println(order.getMenuList());
         }
         order.setOrderStatus(OrderStatus.PENDING);
         orderRepository.save(order);
     }
 
+    @Transactional
     public void updateOrderStatus(Long userId, Long storeId, Long orderId, UpdateOrderStatusRequestDto requestDto) {
         User user = userRepository.findById(userId).orElseThrow();
 

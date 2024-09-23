@@ -20,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -61,6 +63,7 @@ public class ReviewService {
 
     public Page<ReviewResponseDto> getReviewsByPointRange(Long storeId, int minPoint, int maxPoint, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        return reviewRepository.findAllByStoreIdAndPointBetweenOrderByCreatedAtDesc(storeId, minPoint, maxPoint, pageable);
+        return reviewRepository.findAllByStoreIdAndPointBetweenOrderByCreatedAtDesc(storeId, minPoint, maxPoint, pageable)
+                .map(ReviewResponseDto::new);
     }
 }

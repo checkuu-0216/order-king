@@ -1,5 +1,6 @@
 package com.sparta.orderking.domain.review.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sparta.orderking.common.BaseEntity;
 import com.sparta.orderking.domain.order.entity.Order;
 import com.sparta.orderking.domain.store.entity.Store;
@@ -20,6 +21,7 @@ public class Review extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
