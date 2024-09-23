@@ -1,6 +1,7 @@
 package com.sparta.orderking.domain.store.service;
 
 import com.sparta.orderking.domain.auth.dto.AuthUser;
+import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
@@ -63,11 +64,6 @@ public class StoreService {
         return userRepository.findById(id).orElseThrow(() -> new NullPointerException("no such user"));
     }
 
-    public List<Menu> listMenu(long storeId, MenuPossibleEnum status) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
-        return menuRepository.findAllByStoreAndPossibleEnumNot(store, status);
-    }
-
     @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
@@ -94,8 +90,17 @@ public class StoreService {
     public StoreDetailResponseDto getDetailStore(long storeId) {
         Store store = findStore(storeId);
         storeIsOpen(store);
-        List<Menu> menuList = listMenu(storeId,MenuPossibleEnum.DELETE);
-        return new StoreDetailResponseDto(store, menuList);
+        List<Menu> menuList = menuRepository.findAllByStoreAndPossibleEnumNot(store,MenuPossibleEnum.DELETE);
+        List<MenuResponseDto> menudtoList = new ArrayList<>();
+        for(Menu m : menuList){
+            MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
+                    m.getMenuInfo(),
+                    m.getMenuPrice(),
+                    m.getMenuImg(),
+                    m.getPossibleEnum());
+            menudtoList.add(dto);
+        }
+        return new StoreDetailResponseDto(store, menudtoList);
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {

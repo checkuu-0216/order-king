@@ -1,5 +1,6 @@
 package com.sparta.orderking.domain.store.dto.response;
 
+import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.entity.Store;
 import lombok.Getter;
@@ -16,9 +17,9 @@ public class StoreDetailResponseDto {
     private final Integer minPrice;
     private final LocalTime openTime;
     private final LocalTime closeTime;
-    private final List<Menu> menuList;
+    private final List<MenuResponseDto> menuList;
 
-    public StoreDetailResponseDto(Store store, List<Menu> menuList) {
+    public StoreDetailResponseDto(Store store, List<MenuResponseDto> menuList) {
         this.id = store.getId();
         this.name = store.getName();
         this.storeAddress = store.getStoreAddress();
