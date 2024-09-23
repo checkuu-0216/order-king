@@ -6,5 +6,7 @@ public enum MenuCategoryEnum {
     일식,
     양식,
     분식,
-    간식
+    간식,
+    치킨,
+    피자
 }

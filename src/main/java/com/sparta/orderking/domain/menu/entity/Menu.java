@@ -1,6 +1,5 @@
 package com.sparta.orderking.domain.menu.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.orderking.common.BaseEntity;
 import com.sparta.orderking.domain.menu.dto.MenuRequestDto;
 import com.sparta.orderking.domain.menu.dto.MenuUpdateRequestDto;
@@ -37,14 +36,19 @@ public class Menu extends BaseEntity {
 
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
-    private MenuPossibleEnum possibleEnum;
+    private MenuPossibleEnum menuPossibleEnum;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private MenuCategoryEnum menuCategoryEnum;
 
     public Menu(MenuRequestDto requestDto, Store store) {
         this.menuName = requestDto.getMenuName();
         this.menuInfo = requestDto.getMenuInfo();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuImg = requestDto.getMenuImg();
-        this.possibleEnum = requestDto.getMenuPossibleEnum();
+        this.menuPossibleEnum = requestDto.getMenuPossibleEnum();
+        this.menuCategoryEnum = requestDto.getMenuCategoryEnum();
         this.store = store;
     }
 
@@ -53,12 +57,13 @@ public class Menu extends BaseEntity {
         this.menuInfo = requestDto.getMenuInfo();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuImg = requestDto.getMenuImg();
-        this.possibleEnum = requestDto.getMenuPossibleEnum();
+        this.menuPossibleEnum = requestDto.getMenuPossibleEnum();
+        this.menuCategoryEnum = requestDto.getMenuCategoryEnum();
         this.store = store;
     }
 
     public void deleteMenu(MenuPossibleEnum possibleEnum) {
-        this.possibleEnum = possibleEnum;
+        this.menuPossibleEnum = possibleEnum;
     }
 
 }

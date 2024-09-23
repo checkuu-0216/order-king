@@ -65,7 +65,7 @@ public class StoreService {
         return userRepository.findById(id).orElseThrow(() -> new NullPointerException("no such user"));
     }
 
-     @Transactional
+    @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
         User user = findUser(authUser.getUserId());
@@ -91,14 +91,15 @@ public class StoreService {
     public StoreDetailResponseDto getDetailStore(long storeId) {
         Store store = findStore(storeId);
         storeIsOpen(store);
-        List<Menu> menuList = menuRepository.findAllByStoreAndPossibleEnumNot(store,MenuPossibleEnum.DELETE);
+        List<Menu> menuList = menuRepository.findAllByStoreAndMenuPossibleEnumNot(store, MenuPossibleEnum.DELETE);
         List<MenuResponseDto> menudtoList = new ArrayList<>();
-        for(Menu m : menuList){
+        for (Menu m : menuList) {
             MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
                     m.getMenuInfo(),
                     m.getMenuPrice(),
                     m.getMenuImg(),
-                    m.getPossibleEnum());
+                    m.getMenuPossibleEnum(),
+                    m.getMenuCategoryEnum());
             menudtoList.add(dto);
         }
         return new StoreDetailResponseDto(store, menudtoList);
@@ -134,6 +135,7 @@ public class StoreService {
         storeIsOpen(store);
         store.close();
     }
+
     @Transactional
     public void storeAdOn(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
@@ -146,6 +148,7 @@ public class StoreService {
         }
         store.turnOnAd();
     }
+
     @Transactional
     public void storeAdOff(AuthUser authUser, long storeId) {
         checkAdmin(authUser);
@@ -158,6 +161,7 @@ public class StoreService {
         }
         store.turnOffAd();
     }
+
     public List<StoreCheckDailyResponseDto> checkDailyMyStore(AuthUser authUser) {
         checkAdmin(authUser);
         User user = findUser(authUser.getUserId());
@@ -257,6 +261,7 @@ public class StoreService {
         }
         return responseList;
     }
+
     @Transactional
     public StoreNotificationResponseDto changeNotification(AuthUser authUser, long storeId, StoreNotificationRequestDto storeNotificationRequestDto) {
         if (storeNotificationRequestDto.getNotification() == null ||
