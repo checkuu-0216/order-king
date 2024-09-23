@@ -58,6 +58,9 @@ public class Store extends BaseEntity {
     @Column(name = "notification")
     private String notification;
 
+    @OneToMany(mappedBy = "store", fetch = FetchType.LAZY)
+    private List<Menu> menus;
+
     public Store(StoreRequestDto storeRequestDto, User user) {
         this.name = storeRequestDto.getName();
         this.storeAddress = storeRequestDto.getStoreAddress();
