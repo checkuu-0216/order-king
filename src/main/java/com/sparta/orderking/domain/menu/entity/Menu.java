@@ -1,5 +1,6 @@
 package com.sparta.orderking.domain.menu.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sparta.orderking.common.BaseEntity;
 import com.sparta.orderking.domain.menu.dto.MenuRequestDto;
 import com.sparta.orderking.domain.menu.dto.MenuUpdateRequestDto;
@@ -29,7 +30,7 @@ public class Menu extends BaseEntity {
     private String menuInfo;
 
     @Column(name = "menuPrice")
-    private int menuPrice;
+    private Integer menuPrice;
 
     @Column(name = "menuImg")
     private String menuImg;

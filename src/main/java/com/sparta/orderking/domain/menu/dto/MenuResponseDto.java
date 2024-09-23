@@ -9,11 +9,11 @@ public class MenuResponseDto {
 
     private final String menuName;
     private final String menuInfo;
-    private final String menuPrice;
+    private final Integer menuPrice;
     private final String menuImg;
     private final MenuPossibleEnum menuPossibleEnum;
 
-    public MenuResponseDto(String menuName, String menuInfo, String menuPrice, String menuImg, MenuPossibleEnum menuPossibleEnum) {
+    public MenuResponseDto(String menuName, String menuInfo, int menuPrice, String menuImg, MenuPossibleEnum menuPossibleEnum) {
         this.menuName = menuName;
         this.menuInfo = menuInfo;
         this.menuPrice = menuPrice;
@@ -24,7 +24,7 @@ public class MenuResponseDto {
     public MenuResponseDto(Menu menu) {
         this.menuName = menu.getMenuName();
         this.menuInfo = menu.getMenuInfo();
-        this.menuPrice = String.valueOf(menu.getMenuPrice());
+        this.menuPrice = menu.getMenuPrice();
         this.menuImg = menu.getMenuImg();
         this.menuPossibleEnum = menu.getPossibleEnum();
     }

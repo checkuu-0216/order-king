@@ -9,6 +9,7 @@ import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.repository.UserRepository;
+import com.sparta.orderking.exception.EntityAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,10 @@ public class MenuService {
     public void saveMenu(AuthUser authUser, Long storeId, MenuRequestDto requestDto) {
         //가게 주인 확인 메서드
         Store store = validateStoreOwner(authUser,storeId);
+        //메뉴 중복 생성 방지
+        if(menuRepository.existsByStoreAndMenuName(store,requestDto.getMenuName())){
+            throw new EntityAlreadyExistsException("이미 존재하는 메뉴 입니다.");
+        }
         //등록할 메뉴 생성
         Menu menu = new Menu(requestDto,store);
         //메뉴 저장
