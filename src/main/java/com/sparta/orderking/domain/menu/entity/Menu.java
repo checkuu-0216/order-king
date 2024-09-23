@@ -18,7 +18,7 @@ public class Menu extends BaseEntity {
     @Column(name = "menu_id")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "store")
     private Store store;
 
@@ -38,7 +38,7 @@ public class Menu extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private MenuPossibleEnum possibleEnum;
 
-    public Menu (MenuRequestDto requestDto,Store store){
+    public Menu(MenuRequestDto requestDto, Store store) {
         this.menuName = requestDto.getMenuName();
         this.menuInfo = requestDto.getMenuInfo();
         this.menuPrice = requestDto.getMenuPrice();
@@ -47,16 +47,16 @@ public class Menu extends BaseEntity {
         this.store = store;
     }
 
-    public void updateMenu(MenuUpdateRequestDto requestDto,Store store){
+    public void updateMenu(MenuUpdateRequestDto requestDto, Store store) {
         this.menuName = requestDto.getMenuName();
         this.menuInfo = requestDto.getMenuInfo();
         this.menuPrice = requestDto.getMenuPrice();
         this.menuImg = requestDto.getMenuImg();
         this.possibleEnum = requestDto.getMenuPossibleEnum();
-        this.store=store;
+        this.store = store;
     }
 
-    public void deleteMenu(MenuPossibleEnum possibleEnum){
+    public void deleteMenu(MenuPossibleEnum possibleEnum) {
         this.possibleEnum = possibleEnum;
     }
 

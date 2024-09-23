@@ -43,3 +43,4 @@ public class OrderLogging {
         log.info("주문 ID: " + orderId);
     }
 }
+

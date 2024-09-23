@@ -48,6 +48,10 @@ public class User extends BaseEntity {
         this.userEnum = requestDto.getUserEnum();
     }
 
+    public User(UserEnum userEnum) {
+        this.userEnum=userEnum;
+    }
+
     public void update(User user) {
         this.username = user.getUsername();
         this.email = user.getEmail();
