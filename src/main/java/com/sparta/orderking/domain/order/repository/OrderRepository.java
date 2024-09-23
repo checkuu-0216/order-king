@@ -20,7 +20,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
                                     @Param("orderStatus") OrderStatus orderStatus);
     @Query("SELECT COUNT(DISTINCT o.user.id), SUM(o.price) " +
             "FROM Order o WHERE o.store.id = :storeId AND " +
-            "DATE_FORMAT(o.createdAt, '%Y-%m') = DATE_FORMAT(:date, '%Y-%m') AND " +
+            "FUNCTION('DATE_FORMAT', o.createdAt, '%Y-%m') = FUNCTION('DATE_FORMAT', :date, '%Y-%m') AND " +
             "o.orderStatus = :orderStatus")
     Object[] countMonthlyCustomersAndSales(@Param("storeId") Long storeId,
                                            @Param("date") LocalDateTime date,

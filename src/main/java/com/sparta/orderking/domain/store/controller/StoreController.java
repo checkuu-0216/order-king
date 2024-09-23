@@ -32,7 +32,7 @@ public class StoreController {
         return ResponseEntity.ok(storeService.updateStore(authUser, storeId, storeRequestDto));
     }
 
-    //이거 안댐
+
     @GetMapping("/stores/{storeId}")
     public ResponseEntity<StoreDetailResponseDto> getDetailStore(@PathVariable long storeId) {
         return ResponseEntity.ok(storeService.getDetailStore(storeId));
