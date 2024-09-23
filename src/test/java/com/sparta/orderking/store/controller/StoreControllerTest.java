@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.orderking.config.AuthUserArgumentResolver;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.controller.StoreController;
-import com.sparta.orderking.domain.store.dto.StoreDetailResponseDto;
-import com.sparta.orderking.domain.store.dto.StoreResponseDto;
-import com.sparta.orderking.domain.store.dto.StoreSimpleRequestDto;
+import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
+import com.sparta.orderking.domain.store.dto.response.*;
+import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.service.StoreService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -31,6 +32,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
+@MockBean(JpaMetamodelMappingContext.class)
 @WebMvcTest(StoreController.class)
 public class StoreControllerTest {
     @Autowired
@@ -91,7 +93,6 @@ public class StoreControllerTest {
     @Test
     void 가게다건조회() throws Exception {
         List<StoreResponseDto> storeResponseDtoList = new ArrayList<>();
-        StoreSimpleRequestDto storeSimpleRequestDto = new StoreSimpleRequestDto("name");
         given(storeService.getStore(any())).willReturn(storeResponseDtoList);
 
         ResultActions resultActions = mockMvc.perform(get("/api/stores")
@@ -107,6 +108,55 @@ public class StoreControllerTest {
         doNothing().when(storeService).closeStore(any(), anyLong());
 
         ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/close", storeId));
+
+        resultActions.andExpect(status().isOk());
+    }
+    @Test
+    void 광고시작() throws Exception {
+        Long storeId =1L;
+        doNothing().when(storeService).storeAdOn(any(),anyLong());
+
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/adon",storeId));
+
+        resultActions.andExpect(status().isOk());
+    }
+    @Test
+    void 광고끝() throws Exception {
+        Long storeId =1L;
+        doNothing().when(storeService).storeAdOff(any(),anyLong());
+
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/adoff",storeId));
+
+        resultActions.andExpect(status().isOk());
+    }
+    @Test
+    void checkDaily() throws Exception{
+        List<StoreCheckDailyResponseDto> dto = new ArrayList<>();
+        given(storeService.checkDailyMyStore(any())).willReturn(dto);
+
+        ResultActions resultActions = mockMvc.perform(get("/api/stores/checkdaily"));
+
+        resultActions.andExpect(status().isOk());
+    }
+    @Test
+    void checkMonthly() throws Exception{
+        List<StoreCheckMonthlyResponseDto> dto = new ArrayList<>();
+        given(storeService.checkMonthlyMyStore(any())).willReturn(dto);
+
+        ResultActions resultActions = mockMvc.perform(get("/api/stores/checkmonthly"));
+
+        resultActions.andExpect(status().isOk());
+    }
+    @Test
+    void 공지() throws Exception {
+        Long storeId =1L;
+        StoreNotificationResponseDto dto = new StoreNotificationResponseDto(TEST_STORE3);
+        StoreNotificationRequestDto requestDto = new StoreNotificationRequestDto("notification");
+        given(storeService.changeNotification(any(),anyLong(),any())).willReturn(dto);
+
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/notification",storeId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(requestDto)));
 
         resultActions.andExpect(status().isOk());
     }

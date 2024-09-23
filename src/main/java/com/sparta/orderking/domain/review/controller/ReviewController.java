@@ -54,4 +54,6 @@ public class ReviewController {
         Page<ReviewResponseDto> reviews = reviewService.getReviewsByPointRange(storeId, defaultMinPoint, defaultMaxPoint, page, size);
         return ResponseEntity.ok(reviews);
     }
+
+
 }
