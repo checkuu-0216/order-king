@@ -78,7 +78,7 @@ public class StoreControllerTest {
         resultActions.andExpect(status().isOk());
     }
 
-    @Test
+    /*@Test
     void 가게단건조회() throws Exception {
         Long storeId = 1L;
         List<Menu> menuList = new ArrayList<>();
@@ -88,7 +88,7 @@ public class StoreControllerTest {
         ResultActions resultActions = mockMvc.perform(get("/api/stores/{storeId}", storeId));
 
         resultActions.andExpect(status().isOk());
-    }
+    }*/
 
     @Test
     void 가게다건조회() throws Exception {

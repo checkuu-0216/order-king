@@ -1,6 +1,7 @@
 package com.sparta.orderking.domain.store.service;
 
 import com.sparta.orderking.domain.auth.dto.AuthUser;
+import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -63,12 +65,7 @@ public class StoreService {
         return userRepository.findById(id).orElseThrow(() -> new NullPointerException("no such user"));
     }
 
-    public List<Menu> listMenu(long storeId, MenuPossibleEnum status) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
-        return menuRepository.findAllByStoreAndPossibleEnumNot(store, status);
-    }
-
-    @Transactional
+     @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
         checkAdmin(authUser);
         User user = findUser(authUser.getUserId());
@@ -94,8 +91,17 @@ public class StoreService {
     public StoreDetailResponseDto getDetailStore(long storeId) {
         Store store = findStore(storeId);
         storeIsOpen(store);
-        List<Menu> menuList = listMenu(storeId,MenuPossibleEnum.DELETE);
-        return new StoreDetailResponseDto(store, menuList);
+        List<Menu> menuList = menuRepository.findAllByStoreAndPossibleEnumNot(store,MenuPossibleEnum.DELETE);
+        List<MenuResponseDto> menudtoList = new ArrayList<>();
+        for(Menu m : menuList){
+            MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
+                    m.getMenuInfo(),
+                    String.valueOf(m.getMenuPrice()),
+                    m.getMenuImg(),
+                    m.getPossibleEnum());
+            menudtoList.add(dto);
+        }
+        return new StoreDetailResponseDto(store, menudtoList);
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {
@@ -152,7 +158,6 @@ public class StoreService {
         }
         store.turnOffAd();
     }
-
     public List<StoreCheckDailyResponseDto> checkDailyMyStore(AuthUser authUser) {
         checkAdmin(authUser);
         User user = findUser(authUser.getUserId());
@@ -160,39 +165,38 @@ public class StoreService {
 
         List<StoreCheckDailyResponseDto> responseList = new ArrayList<>();
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime currentTime = LocalDateTime.now();
+        LocalDate currentDate = LocalDate.now(); // 현재 날짜
         OrderStatus orderStatus = OrderStatus.DELIVERY_COMPLETED; // 주문 상태 설정
 
         for (Store store : storeList) {
-            LocalDateTime createTime = store.getCreatedAt();
+            LocalDateTime createTime = store.getCreatedAt(); // 매장 생성 시간
+            LocalDate startDate = createTime.toLocalDate(); // LocalDate로 변환
 
             // 하루 단위로 고객 수와 매출을 집계
-            LocalDateTime startDate = createTime; // 매장 생성 시간
-            LocalDateTime endDate = currentTime; // 현재 시간
-
-            while (startDate.toLocalDate().isBefore(endDate.toLocalDate()) || startDate.toLocalDate().isEqual(endDate.toLocalDate())) {
+            while (!startDate.isAfter(currentDate)) {
                 // 하루 단위로 끝나는 시간 설정
-                LocalDateTime nextDay = startDate.plusDays(1);
+                LocalDateTime startDateTime = startDate.atStartOfDay(); // LocalDate를 LocalDateTime으로 변환
+                LocalDateTime nextDayTime = startDate.plusDays(1).atStartOfDay(); // 다음 날의 시작 시간
 
                 // 고객 수와 매출 조회
-                Object[] result = orderRepository.countCustomersAndSales(store.getId(), startDate, nextDay, orderStatus);
-                Long dailyCustomers = (Long) result[0];
-                Long dailySales = (Long) result[1];
+                Object[] result = orderRepository.countCustomersAndSales(store.getId(), startDateTime, nextDayTime, orderStatus);
+
+                Long dailyCustomers = (result[0] instanceof Number) ? ((Number) result[0]).longValue() : 0L;
+                Long dailySales = (result[1] instanceof Number) ? ((Number) result[1]).longValue() : 0L;
 
                 // DTO 생성 및 추가
                 StoreCheckDailyResponseDto dto = new StoreCheckDailyResponseDto(
                         store.getId(),
-                        startDate.toLocalDate().format(dateFormatter),
+                        startDate.format(dateFormatter),
                         dailyCustomers,
                         dailySales
                 );
                 responseList.add(dto);
 
                 // 다음 날로 이동
-                startDate = nextDay;
+                startDate = startDate.plusDays(1); // LocalDate로 이동
             }
         }
-
         return responseList;
     }
 
@@ -204,7 +208,7 @@ public class StoreService {
         List<StoreCheckMonthlyResponseDto> responseList = new ArrayList<>();
         DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("yyyy-MM");
         LocalDateTime currentTime = LocalDateTime.now();
-        OrderStatus orderStatus = OrderStatus.DELIVERY_COMPLETED; // 주문 상태 설정
+        OrderStatus orderStatus = OrderStatus.DELIVERY_COMPLETED;
 
         for (Store store : storeList) {
             LocalDateTime createTime = store.getCreatedAt();
@@ -214,8 +218,19 @@ public class StoreService {
             while (startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
                 // 월별 고객 수와 매출 조회
                 Object[] result = orderRepository.countMonthlyCustomersAndSales(store.getId(), startDate, orderStatus);
-                Long monthlyCustomers = (Long) result[0];
-                Long monthlySales = (Long) result[1];
+
+                Long monthlyCustomers = 0L; // 기본값
+                Long monthlySales = 0L; // 기본값
+
+                // 배열의 길이를 확인
+                if (result != null && result.length >= 2) {
+                    if (result[0] instanceof Number) {
+                        monthlyCustomers = ((Number) result[0]).longValue();
+                    }
+                    if (result[1] instanceof Number) {
+                        monthlySales = ((Number) result[1]).longValue();
+                    }
+                }
 
                 // DTO 생성 및 추가
                 StoreCheckMonthlyResponseDto dto = new StoreCheckMonthlyResponseDto(
@@ -230,7 +245,6 @@ public class StoreService {
                 startDate = startDate.plusMonths(1);
             }
         }
-
         return responseList;
     }
     @Transactional
