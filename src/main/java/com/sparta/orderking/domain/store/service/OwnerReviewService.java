@@ -12,6 +12,7 @@ import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import com.sparta.orderking.domain.user.repository.UserRepository;
+import com.sparta.orderking.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +39,7 @@ public class OwnerReviewService {
 
     public void checkStoreOwner(Store store, User user) {
         if (!store.getUser().equals(user)) {
-            throw new RuntimeException("you are not the owner of the store");
+            throw new UnauthorizedAccessException("you are not the owner of the store");
         }
     }
 

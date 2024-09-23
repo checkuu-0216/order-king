@@ -54,7 +54,7 @@ public class JwtFilter implements Filter {
             Claims claims = jwtUtil.getUserInfoFromToken(jwt);
 
             httpRequest.setAttribute("userId", Long.parseLong(claims.getSubject()));
-            httpRequest.setAttribute("userEnum", claims.get("userEnum", UserEnum.class));
+            httpRequest.setAttribute("userEnum", claims.get("userEnum"));
 
             filterChain.doFilter(servletRequest, servletResponse);
 

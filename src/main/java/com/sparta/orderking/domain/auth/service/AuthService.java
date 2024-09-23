@@ -27,14 +27,14 @@ public class AuthService {
         // 닉네임 중복 체크
         String username = requestDto.getUsername();
         Optional<User> checkUsername = userRepository.findByUsername(username);
-        if(checkUsername.isPresent() && !checkUsername.get().isDeleted()) {
+        if (checkUsername.isPresent() && !checkUsername.get().isDeleted()) {
             throw new IllegalArgumentException("이미 존재하는 닉네임입니다.");
         }
 
         // 이메일 중복 체크
         String email = requestDto.getEmail();
         Optional<User> checkEmail = userRepository.findByEmail(email);
-        if(checkEmail.isPresent() && !checkEmail.get().isDeleted()) {
+        if (checkEmail.isPresent() && !checkEmail.get().isDeleted()) {
             throw new IllegalArgumentException("이미 가입된 이메일입니다.");
         }
 
@@ -43,7 +43,7 @@ public class AuthService {
         userRepository.save(user);
         Long userId = user.getId();
 
-        return jwtUtil.createToken(userId,requestDto.getUserEnum());
+        return jwtUtil.createToken(userId, requestDto.getUserEnum());
     }
 
     @Transactional(readOnly = true)
@@ -55,15 +55,15 @@ public class AuthService {
                 () -> new NullPointerException("등록된 사용자가 없습니다.")
         );
 
-        if(user.isDeleted()) {
+        if (user.isDeleted()) {
             throw new IllegalArgumentException("탈퇴한 유저 입니다.");
         }
 
-        if(!passwordEncoder.matches(password, user.getPassword())) {
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
-        return jwtUtil.createToken(user.getId(),user.getUserEnum());
+        return jwtUtil.createToken(user.getId(), user.getUserEnum());
     }
 
 }

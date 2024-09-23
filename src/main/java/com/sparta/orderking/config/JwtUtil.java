@@ -43,7 +43,7 @@ public class JwtUtil {
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(String.valueOf(userId)) // 사용자 식별값
-                        .claim("userEnum", userEnum)
+                        .claim("userEnum", userEnum.name())
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(key, signatureAlgorithm)

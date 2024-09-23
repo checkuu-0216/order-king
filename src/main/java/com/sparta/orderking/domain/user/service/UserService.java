@@ -68,7 +68,7 @@ public class UserService {
         // 업데이트
         findUser.update(user);
     }
-
+    @Transactional
     public void deleteUser(AuthUser authUser, DeleteUserRequestDto requestDto) {
         String email = requestDto.getEmail();
         String password = requestDto.getPassword();

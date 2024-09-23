@@ -31,12 +31,13 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
             @Nullable ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest,
             @Nullable WebDataBinderFactory binderFactory
-    ) {HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
+    ) {
+        HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
 
 
         // JwtFilter 에서 set 한 userId 값을 가져옴
         Long userId = (Long) request.getAttribute("userId");
-        UserEnum userEnum = (UserEnum) request.getAttribute("userEnum");
+        UserEnum userEnum = UserEnum.valueOf(request.getAttribute("userEnum").toString());
         return new AuthUser(userId, userEnum);
     }
 }
