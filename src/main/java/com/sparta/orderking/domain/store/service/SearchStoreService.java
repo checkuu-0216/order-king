@@ -1,17 +1,19 @@
 package com.sparta.orderking.domain.store.service;
 
-import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
-import com.sparta.orderking.domain.menu.dto.MenuSimpleResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
+import com.sparta.orderking.domain.menu.entity.MenuCategoryEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
-import com.sparta.orderking.domain.store.dto.response.StoreResponseDto;
+import com.sparta.orderking.domain.store.dto.response.StoreCategoryResponseDto;
 import com.sparta.orderking.domain.store.dto.response.StoreSimpleResponseDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +24,7 @@ public class SearchStoreService {
     //이름으로 가게 찾기
     public List<StoreSimpleResponseDto> searchStoreByNameOrMenu(String keyword) {
         List<Store> storeByName = storeRepository.findByNameContaining(keyword);
-        List<Store> storeByMenu = storeRepository.findStoreByMenuName(keyword);
+        List<Store> storeByMenu = storeRepository.findStoresByMenuName(keyword);
 
         Map<String, StoreSimpleResponseDto> resultMap = new HashMap<>();
 
@@ -41,7 +43,8 @@ public class SearchStoreService {
         }
         return new ArrayList<>(resultMap.values());
     }
-}
+
+/* 이름으로 가게찾기 1차 작성본
     //        //키워드 포함된 가게 저장하기
 //        Set<StoreSimpleResponseDto> result = new HashSet<>();
 //        for (Store store : storeByName) {
@@ -57,4 +60,15 @@ public class SearchStoreService {
     //검색된 결과 병합
 //        result.addAll(storeNameByMenu);
 //        return new ArrayList<>(result);
+    */
 
+    public List<StoreCategoryResponseDto> searchStoresByCategory(MenuCategoryEnum menuCategoryEnum) {
+        List<Store> store = storeRepository.findStoresByMenuCategory(menuCategoryEnum);
+        List<StoreCategoryResponseDto> storeList = new ArrayList<>();
+        for (Store store1 : store) {
+            StoreCategoryResponseDto dto = new StoreCategoryResponseDto(store1.getName());
+            storeList.add(dto);
+        }
+        return storeList;
+    }
+}

@@ -1,5 +1,7 @@
 package com.sparta.orderking.domain.store.controller;
 
+import com.sparta.orderking.domain.menu.entity.MenuCategoryEnum;
+import com.sparta.orderking.domain.store.dto.response.StoreCategoryResponseDto;
 import com.sparta.orderking.domain.store.dto.response.StoreSimpleResponseDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.service.SearchStoreService;
@@ -24,5 +26,10 @@ public class SearchStoreController {
         //이름으로 찾고 리스트 리턴
         List<StoreSimpleResponseDto> storeList = searchStoreService.searchStoreByNameOrMenu(keyword);
         return storeList;
+    }
+
+    @GetMapping("/stores/category")
+    public List<StoreCategoryResponseDto> searchCategory(@RequestParam MenuCategoryEnum menuCategoryEnum){
+        return searchStoreService.searchStoresByCategory(menuCategoryEnum);
     }
 }
