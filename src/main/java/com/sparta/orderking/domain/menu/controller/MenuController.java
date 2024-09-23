@@ -29,7 +29,7 @@ public class MenuController {
         return ResponseEntity.ok().body(HttpStatus.OK + ", 메뉴 수정이 정상적으로 작동 하였습니다.");
     }
 
-    @GetMapping("/store/{storeId}/menus/{menuId}")
+    @GetMapping("/stores/{storeId}/menus/{menuId}")
     public ResponseEntity<String> deleteMenu(@Auth AuthUser authUser, @PathVariable Long storeId, @PathVariable Long menuId) {
         menuService.deleteMenu(authUser, storeId, menuId);
         return ResponseEntity.ok().body(HttpStatus.OK + ", 메뉴 삭제가 정상적으로 작동 하였습니다.");
