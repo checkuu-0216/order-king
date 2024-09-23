@@ -62,6 +62,7 @@ public class OrderService {
         orderRepository.save(order);
     }
 
+    @Transactional
     public void updateOrderStatus(Long userId, Long storeId, Long orderId, UpdateOrderStatusRequestDto requestDto) {
         User user = userRepository.findById(userId).orElseThrow();
 
