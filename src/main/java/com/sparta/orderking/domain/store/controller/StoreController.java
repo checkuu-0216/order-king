@@ -1,7 +1,7 @@
 package com.sparta.orderking.domain.store.controller;
 
 import com.sparta.orderking.config.Auth;
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
 import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
 import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;

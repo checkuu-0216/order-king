@@ -135,7 +135,7 @@ public class OwnerReviewServiceTest {
         ReflectionTestUtils.setField(TEST_REVIEW,"store",TEST_STORE);
 
         given(storeRepository.findById(storeId)).willReturn(Optional.of(TEST_STORE));
-        given(userRepository.findById(TEST_AUTHUSER.getId())).willReturn(Optional.of(TEST_USER));
+        given(userRepository.findById(TEST_AUTHUSER.getUserId())).willReturn(Optional.of(TEST_USER));
         given(reviewRepository.findById(reviewId)).willReturn(Optional.of(TEST_REVIEW));
         given(ownerReviewRepository.save(any(OwnerReview.class))).willAnswer(invocation -> invocation.getArgument(0));
 

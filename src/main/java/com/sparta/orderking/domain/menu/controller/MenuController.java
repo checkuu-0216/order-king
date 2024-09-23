@@ -1,7 +1,7 @@
 package com.sparta.orderking.domain.menu.controller;
 
 import com.sparta.orderking.config.Auth;
-import com.sparta.orderking.config.AuthUser;
+import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.menu.dto.MenuRequestDto;
 import com.sparta.orderking.domain.menu.dto.MenuUpdateRequestDto;
 import com.sparta.orderking.domain.menu.service.MenuService;
