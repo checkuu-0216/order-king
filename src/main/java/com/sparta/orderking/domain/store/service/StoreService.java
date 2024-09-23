@@ -17,6 +17,7 @@ import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import com.sparta.orderking.domain.user.repository.UserRepository;
+import com.sparta.orderking.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +45,7 @@ public class StoreService {
 
     public void checkAdmin(AuthUser authUser) {
         if (!authUser.getUserEnum().equals(UserEnum.OWNER)) {
-            throw new RuntimeException("owner only");
+            throw new UnauthorizedAccessException("owner only");
         }
     }
 
@@ -54,7 +55,7 @@ public class StoreService {
 
     public void checkStoreOwner(Store store, User user) {
         if (!store.getUser().equals(user)) {
-            throw new RuntimeException("you are not the owner of the store");
+            throw new UnauthorizedAccessException("you are not the owner of the store");
         }
     }
 
@@ -63,7 +64,8 @@ public class StoreService {
     }
 
     public List<Menu> listMenu(long storeId, MenuPossibleEnum status) {
-        return menuRepository.findAllByStoreAndMenuPossibleEnumNot(storeId, MenuPossibleEnum.DELETE);
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+        return menuRepository.findAllByStoreAndPossibleEnumNot(store, status);
     }
 
     @Transactional
@@ -92,7 +94,8 @@ public class StoreService {
     public StoreDetailResponseDto getDetailStore(long storeId) {
         Store store = findStore(storeId);
         storeIsOpen(store);
-        return new StoreDetailResponseDto(store, listMenu(storeId, MenuPossibleEnum.DELETE));
+        List<Menu> menuList = listMenu(storeId,MenuPossibleEnum.DELETE);
+        return new StoreDetailResponseDto(store, menuList);
     }
 
     public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {

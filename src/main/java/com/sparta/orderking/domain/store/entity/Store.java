@@ -35,11 +35,11 @@ public class Store extends BaseEntity {
     private User user;
 
     @Column(name = "open_time")
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime openTime;
 
     @Column(name = "close_time")
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "HH:mm")
     private LocalTime closeTime;
 
     @Column(nullable = false)
