@@ -1,7 +1,10 @@
 package com.sparta.orderking.domain.store.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.orderking.common.BaseEntity;
+import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
 import com.sparta.orderking.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -11,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Getter

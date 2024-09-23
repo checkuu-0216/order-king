@@ -10,4 +10,5 @@ import java.util.List;
 public interface MenuRepository extends JpaRepository<Menu, Long> {
     List<Menu> findAllByStoreAndPossibleEnumNot(Store store, MenuPossibleEnum status);
 
+    boolean existsByStoreAndMenuName (Store store,String name);
 }

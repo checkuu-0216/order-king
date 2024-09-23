@@ -2,6 +2,7 @@ package com.sparta.orderking.store.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.orderking.config.AuthUserArgumentResolver;
+import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.controller.StoreController;
 import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
@@ -82,7 +83,16 @@ public class StoreControllerTest {
     void 가게단건조회() throws Exception {
         Long storeId = 1L;
         List<Menu> menuList = new ArrayList<>();
-        StoreDetailResponseDto storeDetailResponseDto = new StoreDetailResponseDto(TEST_STORE, menuList);
+        List<MenuResponseDto> menudtoList = new ArrayList<>();
+        for(Menu m : menuList){
+            MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
+                    m.getMenuInfo(),
+                    m.getMenuPrice(),
+                    m.getMenuImg(),
+                    m.getPossibleEnum());
+            menudtoList.add(dto);
+        }
+        StoreDetailResponseDto storeDetailResponseDto = new StoreDetailResponseDto(TEST_STORE, menudtoList);
         given(storeService.getDetailStore(anyLong())).willReturn(storeDetailResponseDto);
 
         ResultActions resultActions = mockMvc.perform(get("/api/stores/{storeId}", storeId));
