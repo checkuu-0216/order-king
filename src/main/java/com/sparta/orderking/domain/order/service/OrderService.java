@@ -1,5 +1,7 @@
 package com.sparta.orderking.domain.order.service;
 
+import com.sparta.orderking.domain.cart.entity.Cart;
+import com.sparta.orderking.domain.cart.repository.CartRepository;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.order.dto.CreateOrderRequestDto;
@@ -31,6 +33,7 @@ public class OrderService {
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
 
     @Transactional
     public void createOrder(Long userId, Long storeId, CreateOrderRequestDto requestDto) {
@@ -50,10 +53,11 @@ public class OrderService {
         }
 
         User user = userRepository.findById(userId).orElseThrow();
+        Cart userCart = cartRepository.findByUser(user);
         Order order = new Order(user, store, requestDto.getPrice());
 
-        for(Long menuId : requestDto.getMenuList()) {
-            Menu menu = menuRepository.findById(menuId).orElseThrow();
+        for(Menu menu : userCart.getCartMenuList()) {
+//            Menu menu = menuRepository.findById(menuId).orElseThrow();
             OrderMenu orderMenu = new OrderMenu(user, menu, order);
             orderMenuRepository.save(orderMenu);
             order.addMenu(orderMenu);
