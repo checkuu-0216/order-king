@@ -65,7 +65,7 @@ public class OrderService {
     public void updateOrderStatus(Long userId, Long storeId, Long orderId, UpdateOrderStatusRequestDto requestDto) {
         User user = userRepository.findById(userId).orElseThrow();
 
-        if(!user.getRole().equals(UserEnum.OWNER)) {
+        if(!user.getUserEnum().equals(UserEnum.OWNER)) {
             throw new IllegalArgumentException("주문을 수락할 권한이 없습니다.");
         }
 
