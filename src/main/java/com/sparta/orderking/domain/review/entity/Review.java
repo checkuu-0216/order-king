@@ -18,7 +18,7 @@ public class Review extends BaseEntity {
     @Column(name = "point")
     private int point;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

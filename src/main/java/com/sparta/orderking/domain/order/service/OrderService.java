@@ -13,6 +13,7 @@ import com.sparta.orderking.domain.order.repository.OrderRepository;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
+import com.sparta.orderking.domain.user.entity.UserEnum;
 import com.sparta.orderking.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -61,7 +62,13 @@ public class OrderService {
         orderRepository.save(order);
     }
 
-    public void updateOrderStatus(Long storeId, Long orderId, UpdateOrderStatusRequestDto requestDto) {
+    public void updateOrderStatus(Long userId, Long storeId, Long orderId, UpdateOrderStatusRequestDto requestDto) {
+        User user = userRepository.findById(userId).orElseThrow();
+
+        if(!user.getRole().equals(UserEnum.OWNER)) {
+            throw new IllegalArgumentException("주문을 수락할 권한이 없습니다.");
+        }
+
         Order order = orderRepository.findById(orderId).orElseThrow();
 
         if(!order.getStore().getId().equals(storeId)) {

@@ -26,7 +26,7 @@ public class OrderController {
     // 주문 상태 변경
     @PutMapping("/store/{storeId}/order/{orderId}")
     public ResponseEntity<String> updateOrderStatus(@Auth AuthUser authUser, @PathVariable Long storeId, @PathVariable Long orderId, @RequestBody UpdateOrderStatusRequestDto requestDto) {
-        orderService.updateOrderStatus(storeId, orderId, requestDto);
+        orderService.updateOrderStatus(authUser.getId(), storeId, orderId, requestDto);
         return ResponseEntity.ok("주문 상태 변경이 완료되었습니다.");
     }
 
