@@ -96,7 +96,7 @@ public class StoreService {
         for(Menu m : menuList){
             MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
                     m.getMenuInfo(),
-                    String.valueOf(m.getMenuPrice()),
+                    m.getMenuPrice(),
                     m.getMenuImg(),
                     m.getPossibleEnum());
             menudtoList.add(dto);
@@ -181,8 +181,18 @@ public class StoreService {
                 // 고객 수와 매출 조회
                 Object[] result = orderRepository.countCustomersAndSales(store.getId(), startDateTime, nextDayTime, orderStatus);
 
-                Long dailyCustomers = (result[0] instanceof Number) ? ((Number) result[0]).longValue() : 0L;
-                Long dailySales = (result[1] instanceof Number) ? ((Number) result[1]).longValue() : 0L;
+                Long dailyCustomers = 0L; // 기본값
+                Long dailySales = 0L; // 기본값
+
+                // 배열의 길이를 확인
+                if (result != null && result.length >= 2) {
+                    if (result[0] instanceof Number) {
+                        dailyCustomers = ((Number) result[0]).longValue();
+                    }
+                    if (result[1] instanceof Number) {
+                        dailySales = ((Number) result[1]).longValue();
+                    }
+                }
 
                 // DTO 생성 및 추가
                 StoreCheckDailyResponseDto dto = new StoreCheckDailyResponseDto(
