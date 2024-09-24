@@ -5,6 +5,7 @@ import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,7 +15,7 @@ public class CartResponseDto {
     private Long userId;
     private List<MenuResponseDto> menuList;
     private Long storeId;
-    private LocalTime lastUpdated;
+    private LocalDateTime lastUpdated;
 
     public CartResponseDto(Cart cart) {
         this.userId = cart.getUser().getId();

@@ -33,14 +33,14 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    public Order(User user, Store store, int price) {
+    public Order(User user, Store store) {
         this.user = user;
         this.store = store;
-        this.price = price;
     }
 
     public void addMenu(OrderMenu orderMenu) {
         this.menuList.add(orderMenu);
+        this.price = this.price + orderMenu.getMenu().getMenuPrice();
     }
 
     public void setOrderStatus(OrderStatus orderStatus) {

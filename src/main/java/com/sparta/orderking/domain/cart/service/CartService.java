@@ -12,7 +12,9 @@ import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -26,16 +28,16 @@ public class CartService {
     private final MenuRepository menuRepository;
 
     public CartResponseDto addMenu(Long userId, Long storeId, CartRequestDto requestDto) {
-        //- 한 가게의 메뉴만 담을 수 있으며, 가게가 변경될 시 장바구니는 초기화 됩니다.
-        //- 장바구니는 마지막 업데이트 시점으로부터 최대 하루만 유지 됩니다.
         User user = userRepository.findById(userId).orElseThrow();
         Store store = storeRepository.findById(storeId).orElseThrow();
 
         Cart cart = cartRepository.findByUser(user);
+        LocalDateTime now = LocalDateTime.now();
 
         if(cart != null) {
-            if (!cart.getStore().getId().equals(storeId)) {
-                cart.clear(); // 가게 변경 시 장바구니 초기화
+            // 가게 변경 시 or 카트 24시간 후 장바구니 초기화
+            if (!cart.getStore().getId().equals(storeId) || now.isAfter(cart.getLastUpdated().plusHours(24))) {
+                cart.clear();
             }
         } else {
             cart = new Cart(user, store);
@@ -43,10 +45,46 @@ public class CartService {
 
         for (Long menuId : requestDto.getMenuList()) {
             Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("Menu not found"));
-            cart.addMenu(menu); // 장바구니에 메뉴 항목 추가
+
+            cart.addMenu(menu);
         }
 
         cartRepository.save(cart);
+
+        return new CartResponseDto(cart);
+    }
+
+    public CartResponseDto getCart(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Cart cart = cartRepository.findByUser(user);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isAfter(cart.getLastUpdated().plusHours(24))) {
+            cart.clear();
+        }
+
+        return new CartResponseDto(cart);
+    }
+
+    @Transactional
+    public CartResponseDto clearCart(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Cart cart = cartRepository.findByUser(user);
+
+        cart.clear();
+
+        return new CartResponseDto(cart);
+    }
+
+    @Transactional
+    public CartResponseDto removeMenu(Long userId, Long menuId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Cart cart = cartRepository.findByUser(user);
+
+        Menu menu = menuRepository.findById(menuId).orElseThrow();
+
+        cart.removeMenu(menu);
 
         return new CartResponseDto(cart);
     }
