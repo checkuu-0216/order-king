@@ -21,7 +21,7 @@ public class UserController {
     // 유저 프로필 조회
     @GetMapping("")
     public ResponseEntity<UserResponseDto> getUserProfile(@Auth AuthUser authUser) {
-        return new ResponseEntity<>(userService.getUser(authUser), HttpStatus.OK);
+        return ResponseEntity.ok(userService.getUser(authUser));
     }
 
     // 유저 프로필 업데이트
