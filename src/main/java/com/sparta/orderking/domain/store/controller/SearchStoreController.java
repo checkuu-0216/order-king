@@ -23,8 +23,7 @@ public class SearchStoreController {
     @GetMapping("/stores/search")
     public ResponseEntity<List<StoreSimpleResponseDto>> searchStores(@RequestParam String keyword){
         //이름으로 찾고 리스트 리턴
-        List<StoreSimpleResponseDto> storeList = searchStoreService.searchStoreByNameOrMenu(keyword);
-        return ResponseEntity.ok(storeList);
+        return ResponseEntity.ok(searchStoreService.searchStoreByNameOrMenu(keyword));
     }
 
     @GetMapping("/stores/category")

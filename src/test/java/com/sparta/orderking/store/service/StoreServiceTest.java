@@ -1,14 +1,12 @@
-
 package com.sparta.orderking.store.service;
 
 import com.sparta.orderking.domain.auth.dto.AuthUser;
-import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
+import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.dto.response.StoreDetailResponseDto;
 import com.sparta.orderking.domain.store.dto.response.StoreResponseDto;
-import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.entity.StoreAdEnum;
 import com.sparta.orderking.domain.store.entity.StoreStatus;
@@ -16,7 +14,9 @@ import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
-import com.sparta.orderking.domain.user.repository.UserRepository;
+import com.sparta.orderking.domain.user.service.UserService;
+import com.sparta.orderking.exception.EntityNotFoundException;
+import com.sparta.orderking.exception.WrongConditionException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,13 +32,14 @@ import static com.sparta.orderking.store.CommonValue.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class StoreServiceTest {
 
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
     @Mock
     private StoreRepository storeRepository;
     @Mock
@@ -46,34 +47,27 @@ public class StoreServiceTest {
     @InjectMocks
     private StoreService storeService;
 
-//    @Test
-//    void storeIsOpen(){
-//        Store store = TEST_STORE2;
-//
-//        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-//            storeService.storeIsOpen(store);
-//        });
-//        assertEquals("it is closed store",exception.getMessage());
-//    }
-
+    @Test
+    void storeIsOpen(){
+        Store store = TEST_STORE2;
+        Long storeId =1L;
+        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
+        WrongConditionException exception = assertThrows(WrongConditionException.class,()->{
+            storeService.storeIsOpen(storeId);
+        });
+        assertEquals("it is closed store",exception.getMessage());
+    }
     @Test
     void findStore(){
         Long storeId=1L;
         given(storeRepository.findById(storeId)).willReturn(Optional.empty());
 
-        NullPointerException exception = assertThrows(NullPointerException.class, ()->{
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, ()->{
             storeService.findStore(storeId);
         });
         assertEquals("no such store",exception.getMessage());
     }
 
-//    @Test
-//    void checkAdmin(){
-//        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-//            storeService.checkAdmin(TEST_AUTHUSER2);
-//        });
-//        assertEquals("owner only",exception.getMessage());
-//    }
 
     @Test
     void checkStoreOwner(){
@@ -85,31 +79,17 @@ public class StoreServiceTest {
 
         assertEquals("you are not the owner of the store",exception.getMessage());
     }
-//    @Test
-//    void findUser(){
-//        Long id = 2L;
-//        User user = new User(UserEnum.USER);
-//        ReflectionTestUtils.setField(user,"id",1L);
-//        NullPointerException exception = assertThrows(NullPointerException.class,()->{
-//            storeService.findUser(id);
-//        });
-//
-//        assertEquals("no such user",exception.getMessage());
-//    }
 
     @Test
     void saveStore_실패테스트_3개이상(){
         AuthUser authUser = TEST_AUTHUSER;
         User user = new User(UserEnum.OWNER);
         ReflectionTestUtils.setField(user,"id",1L);
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-        List<Store> storeList = new ArrayList<>();
-        storeList.add(TEST_STORE);
-        storeList.add(TEST_STORE);
-        storeList.add(TEST_STORE);
-        given(storeRepository.findByUserAndStoreStatus(any(),any())).willReturn(storeList);
+        given(userService.findUser(anyLong())).willReturn(user);
+        int count = 3;
+        given(storeRepository.countByUserAndStoreStatus(any(),any())).willReturn(count);
 
-        RuntimeException exception = assertThrows(RuntimeException.class,()->{
+        WrongConditionException exception = assertThrows(WrongConditionException.class,()->{
             storeService.saveStore(authUser,TEST_STOREREQUESTDTO);
         });
 
@@ -120,7 +100,7 @@ public class StoreServiceTest {
     @Test
     void saveStore(){
 
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(TEST_USER));
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
         given(storeRepository.save(any())).willReturn(TEST_STORE);
 
         StoreResponseDto responseDto = storeService.saveStore(TEST_AUTHUSER,TEST_STOREREQUESTDTO);
@@ -132,7 +112,7 @@ public class StoreServiceTest {
     void updateStore(){
         Long storeId =1L;
 
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(TEST_USER));
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
         given(storeRepository.findById(storeId)).willReturn(Optional.of(TEST_STORE));
 
         StoreResponseDto responseDto = storeService.updateStore(TEST_AUTHUSER,storeId,TEST_STOREREQUESTDTO);
@@ -145,7 +125,7 @@ public class StoreServiceTest {
         Long storeId=1L;
         given(storeRepository.findById(storeId)).willReturn(Optional.empty());
 
-        NullPointerException exception = assertThrows(NullPointerException.class, ()->{
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, ()->{
             storeService.findStore(storeId);
         });
         assertEquals("no such store",exception.getMessage());
@@ -185,93 +165,54 @@ public class StoreServiceTest {
         assertNotNull(dtoList);
     }
     @Test
-    void closerStore(){
+    void closeStore(){
         Long storeId = 1L;
         Store store = mock(Store.class);
-        User owner = TEST_USER;
-
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(owner));
-
-        given(store.getUser()).willReturn(owner);
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
+        given(store.getUser()).willReturn(TEST_USER);
         given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
 
         storeService.closeStore(TEST_AUTHUSER, storeId);
 
         verify(store).close();
     }
-//    @Test
-//    void storeAdOn_실패(){
-//        Long storeId = 1L;
-//        Store store = mock(Store.class);
-//        User user = TEST_USER;
-//
-//        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-//        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-//
-//        given(store.getUser()).willReturn(user);
-//        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
-//        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.ON);
-//
-//        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-//            storeService.storeAdOn(TEST_AUTHUSER,storeId);
-//        });
-//
-//        assertEquals("already Ad On",exception.getMessage());
-//    }
-//    @Test
-//    void storeAdOn(){
-//        Long storeId = 1L;
-//        Store store = mock(Store.class);
-//        User user = TEST_USER;
-//
-//        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-//        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-//
-//        given(store.getUser()).willReturn(user);
-//        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
-//        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.OFF);
-//
-//        storeService.storeAdOn(TEST_AUTHUSER,storeId);
-//
-//        verify(store).turnOnAd();
-//    }
-//    @Test
-//    void storeAdOff_실패(){
-//        Long storeId = 1L;
-//        Store store = mock(Store.class);
-//        User user = TEST_USER;
-//
-//        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-//        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-//
-//        given(store.getUser()).willReturn(user);
-//        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
-//        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.OFF);
-//
-//        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-//            storeService.storeAdOff(TEST_AUTHUSER,storeId);
-//        });
-//
-//        assertEquals("already Ad Off",exception.getMessage());
-//    }
-//    @Test
-//    void storeAdOff(){
-//        Long storeId = 1L;
-//        Store store = mock(Store.class);
-//        User user = TEST_USER;
-//
-//        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-//        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-//
-//        given(store.getUser()).willReturn(user);
-//        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
-//        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.ON);
-//
-//        storeService.storeAdOff(TEST_AUTHUSER,storeId);
-//
-//        verify(store).turnOffAd();
-//    }
+
+    @Test
+    void storeAd_Off에서_ON(){
+        Long storeId = 1L;
+        Store store = mock(Store.class);
+        User user = TEST_USER;
+
+        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
+
+        given(store.getUser()).willReturn(user);
+        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
+        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.OFF);
+
+        storeService.storeAd(TEST_AUTHUSER,storeId);
+
+        verify(store).turnOnAd();
+    }
+    @Test
+    void storeAd_ON에서_Off(){
+        Long storeId = 1L;
+        Store store = mock(Store.class);
+        User user = TEST_USER;
+
+        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
+
+        given(store.getUser()).willReturn(user);
+        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
+        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.ON);
+
+        storeService.storeAd(TEST_AUTHUSER,storeId);
+
+        verify(store).turnOffAd();
+    }
+
     @Test
     void changeNotification_실패글자수(){
         Long storeId=1L;
@@ -291,7 +232,7 @@ public class StoreServiceTest {
         StoreNotificationRequestDto storeNotificationRequestDto = new StoreNotificationRequestDto("1234");
 
         given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
 
         given(store.getUser()).willReturn(user);
         given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
@@ -300,7 +241,5 @@ public class StoreServiceTest {
 
         verify(store).updateNotification(storeNotificationRequestDto.getNotification());
     }
-
-
 
 }

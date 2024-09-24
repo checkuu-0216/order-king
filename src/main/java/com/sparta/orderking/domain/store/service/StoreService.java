@@ -22,6 +22,7 @@ import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.repository.UserRepository;
 import com.sparta.orderking.domain.user.service.UserService;
+import com.sparta.orderking.exception.EntityNotFoundException;
 import com.sparta.orderking.exception.UnauthorizedAccessException;
 import com.sparta.orderking.exception.WrongConditionException;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,6 @@ public class StoreService {
 
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
-    private final UserRepository userRepository;
     private final OrderRepository orderRepository;
     private final UserService userService;
 
@@ -111,6 +111,7 @@ public class StoreService {
         User user = userService.findUser(authUser.getUserId());
         userService.checkAdmin(user);
         Store store = storeIsOpen(storeId);
+        checkStoreOwner(store, user);
         store.close();
     }
 
@@ -180,7 +181,7 @@ public class StoreService {
     }
 
     public Store storeIsOpen(Long storeId) {
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new EntityNotFoundException("no such store"));
         if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
             throw new WrongConditionException("it is closed store");
         }
@@ -188,7 +189,7 @@ public class StoreService {
     }
 
     public Store findStore(long storeId) {
-        return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+        return storeRepository.findById(storeId).orElseThrow(() -> new EntityNotFoundException("no such store"));
     }
 
     public void checkStoreOwner(Store store, User user) {

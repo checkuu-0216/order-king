@@ -8,11 +8,10 @@ import com.sparta.orderking.domain.store.dto.response.OwnerReviewResponseDto;
 import com.sparta.orderking.domain.store.entity.OwnerReview;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.OwnerReviewRepository;
-import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
-import com.sparta.orderking.domain.user.entity.UserEnum;
-import com.sparta.orderking.domain.user.repository.UserRepository;
-import com.sparta.orderking.exception.UnauthorizedAccessException;
+import com.sparta.orderking.domain.user.service.UserService;
+import com.sparta.orderking.exception.EntityNotFoundException;
+import com.sparta.orderking.exception.WrongConditionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,57 +22,38 @@ import org.springframework.transaction.annotation.Transactional;
 public class OwnerReviewService {
 
     private final OwnerReviewRepository ownerReviewRepository;
-    private final StoreRepository storeRepository;
-    private final UserRepository userRepository;
     private final ReviewRepository reviewRepository;
+    private final UserService userService;
+    private final StoreService storeService;
 
-    public void checkAdmin(AuthUser authUser) {
-        if (!authUser.getUserEnum().equals(UserEnum.OWNER)) {
-            throw new RuntimeException("owner only");
-        }
-    }
-
-    public Store findStore(long storeId) {
-        return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
-    }
-
-    public void checkStoreOwner(Store store, User user) {
-        if (!store.getUser().equals(user)) {
-            throw new UnauthorizedAccessException("you are not the owner of the store");
-        }
-    }
-
-    public User findUser(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NullPointerException("no such user"));
-    }
 
     public Review findReview(long id) {
-        return reviewRepository.findById(id).orElseThrow(() -> new NullPointerException("no such review"));
+        return reviewRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("no such review"));
     }
 
     public void checkReview(Review review, Store store) {
         if (!review.getStore().equals(store)) {
-            throw new RuntimeException("review is not for the store");
+            throw new WrongConditionException("review is not for the store");
         }
     }
 
     public OwnerReview findOwnerReview(long id) {
-        return ownerReviewRepository.findById(id).orElseThrow(() -> new NullPointerException("no such owner review"));
+        return ownerReviewRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("no such owner review"));
     }
 
     public void lengthCheck(OwnerReviewRequestDto ownerReviewRequestDto) {
         if (ownerReviewRequestDto.getComment() == null ||
                 ownerReviewRequestDto.getComment().length() > 255) {
-            throw new RuntimeException("write comment between 0 to 255");
+            throw new WrongConditionException("write comment between 0 to 255");
         }
     }
 
     @Transactional
-    public OwnerReviewResponseDto postComment(long storeId, long reviewId, AuthUser authuser, OwnerReviewRequestDto ownerReviewRequestDto) {
-        checkAdmin(authuser);
-        Store store = findStore(storeId);
-        User user = findUser(authuser.getUserId());
-        checkStoreOwner(store, user);
+    public OwnerReviewResponseDto postComment(long storeId, long reviewId, AuthUser authUser, OwnerReviewRequestDto ownerReviewRequestDto) {
+        User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
+        Store store = storeService.findStore(storeId);
+        storeService.checkStoreOwner(store, user);
         Review review = findReview(reviewId);
         checkReview(review, store);
         lengthCheck(ownerReviewRequestDto);
@@ -85,25 +65,23 @@ public class OwnerReviewService {
 
     @Transactional
     public OwnerReviewResponseDto updateComment(long ownerReviewId, AuthUser authUser, OwnerReviewRequestDto ownerReviewRequestDto) {
-        checkAdmin(authUser);
         OwnerReview ownerReview = findOwnerReview(ownerReviewId);
-        Store store = ownerReview.getStore();
-        User user = findUser(authUser.getUserId());
-        checkStoreOwner(store, user);
+        User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
+        Store store = storeService.findStore(ownerReview.getStore().getId());
+        storeService.checkStoreOwner(store, user);
         lengthCheck(ownerReviewRequestDto);
-
         ownerReview.update(ownerReviewRequestDto.getComment());
-
         return new OwnerReviewResponseDto(ownerReview);
     }
 
     @Transactional
     public void deleteComment(long ownerReviewId, AuthUser authUser) {
-        checkAdmin(authUser);
+        User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
         OwnerReview ownerReview = findOwnerReview(ownerReviewId);
-        Store store = ownerReview.getStore();
-        User user = findUser(authUser.getUserId());
-        checkStoreOwner(store, user);
+        Store store = storeService.findStore(ownerReview.getStore().getId());
+        storeService.checkStoreOwner(store, user);
         ownerReviewRepository.delete(ownerReview);
     }
 }
