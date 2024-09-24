@@ -20,7 +20,7 @@ public class MenuController {
     @PostMapping("/stores/{storeId}/menus")
     public ResponseEntity<String> saveMenu(@Auth AuthUser authUser, @PathVariable Long storeId, @RequestBody MenuRequestDto requestDto) {
         menuService.saveMenu(authUser, storeId, requestDto);
-        return ResponseEntity.ok().body(HttpStatus.OK + ", 메뉴 등록이 정상적으로 되었습니다.");
+        return ResponseEntity.ok().body(HttpStatus.OK + ", menu save complete.");
     }
 
     @PutMapping("/stores/{storeId}/menus/{menuId}")

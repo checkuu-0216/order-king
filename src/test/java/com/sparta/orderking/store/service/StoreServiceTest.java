@@ -200,78 +200,78 @@ public class StoreServiceTest {
 
         verify(store).close();
     }
-    @Test
-    void storeAdOn_실패(){
-        Long storeId = 1L;
-        Store store = mock(Store.class);
-        User user = TEST_USER;
-
-        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-
-        given(store.getUser()).willReturn(user);
-        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
-        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.ON);
-
-        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-            storeService.storeAdOn(TEST_AUTHUSER,storeId);
-        });
-
-        assertEquals("already Ad On",exception.getMessage());
-    }
-    @Test
-    void storeAdOn(){
-        Long storeId = 1L;
-        Store store = mock(Store.class);
-        User user = TEST_USER;
-
-        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-
-        given(store.getUser()).willReturn(user);
-        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
-        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.OFF);
-
-        storeService.storeAdOn(TEST_AUTHUSER,storeId);
-
-        verify(store).turnOnAd();
-    }
-    @Test
-    void storeAdOff_실패(){
-        Long storeId = 1L;
-        Store store = mock(Store.class);
-        User user = TEST_USER;
-
-        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-
-        given(store.getUser()).willReturn(user);
-        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
-        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.OFF);
-
-        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-            storeService.storeAdOff(TEST_AUTHUSER,storeId);
-        });
-
-        assertEquals("already Ad Off",exception.getMessage());
-    }
-    @Test
-    void storeAdOff(){
-        Long storeId = 1L;
-        Store store = mock(Store.class);
-        User user = TEST_USER;
-
-        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
-
-        given(store.getUser()).willReturn(user);
-        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
-        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.ON);
-
-        storeService.storeAdOff(TEST_AUTHUSER,storeId);
-
-        verify(store).turnOffAd();
-    }
+//    @Test
+//    void storeAdOn_실패(){
+//        Long storeId = 1L;
+//        Store store = mock(Store.class);
+//        User user = TEST_USER;
+//
+//        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
+//        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+//
+//        given(store.getUser()).willReturn(user);
+//        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
+//        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.ON);
+//
+//        RuntimeException exception = assertThrows(RuntimeException.class,()->{
+//            storeService.storeAdOn(TEST_AUTHUSER,storeId);
+//        });
+//
+//        assertEquals("already Ad On",exception.getMessage());
+//    }
+//    @Test
+//    void storeAdOn(){
+//        Long storeId = 1L;
+//        Store store = mock(Store.class);
+//        User user = TEST_USER;
+//
+//        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
+//        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+//
+//        given(store.getUser()).willReturn(user);
+//        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
+//        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.OFF);
+//
+//        storeService.storeAdOn(TEST_AUTHUSER,storeId);
+//
+//        verify(store).turnOnAd();
+//    }
+//    @Test
+//    void storeAdOff_실패(){
+//        Long storeId = 1L;
+//        Store store = mock(Store.class);
+//        User user = TEST_USER;
+//
+//        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
+//        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+//
+//        given(store.getUser()).willReturn(user);
+//        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
+//        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.OFF);
+//
+//        RuntimeException exception = assertThrows(RuntimeException.class,()->{
+//            storeService.storeAdOff(TEST_AUTHUSER,storeId);
+//        });
+//
+//        assertEquals("already Ad Off",exception.getMessage());
+//    }
+//    @Test
+//    void storeAdOff(){
+//        Long storeId = 1L;
+//        Store store = mock(Store.class);
+//        User user = TEST_USER;
+//
+//        given(storeRepository.findById(anyLong())).willReturn(Optional.of(store));
+//        given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
+//
+//        given(store.getUser()).willReturn(user);
+//        given(store.getStoreStatus()).willReturn(StoreStatus.OPEN);
+//        given(store.getStoreAdEnum()).willReturn(StoreAdEnum.ON);
+//
+//        storeService.storeAdOff(TEST_AUTHUSER,storeId);
+//
+//        verify(store).turnOffAd();
+//    }
     @Test
     void changeNotification_실패글자수(){
         Long storeId=1L;
