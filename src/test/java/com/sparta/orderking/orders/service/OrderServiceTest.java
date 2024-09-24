@@ -96,9 +96,12 @@ public class OrderServiceTest {
         long userId = 1L;
         long storeId = 1L;
 
+        ReflectionTestUtils.setField(store, "openTime", LocalTime.of(0, 0)); // 가게 오픈 시간 설정
+        ReflectionTestUtils.setField(store, "closeTime", LocalTime.of(23, 0)); // 가게 마감 시간 설정
+
         given(userService.findUser(anyLong())).willReturn(user);
         given(storeService.findStore(anyLong())).willReturn(store);
-        given(cartService.findCart(user)).willReturn(cart);
+        given(cartService.getCart(user)).willReturn(cart);
 
         // When
         orderService.createOrder(userId, storeId);
@@ -114,11 +117,14 @@ public class OrderServiceTest {
         long userId = 1L;
         long storeId = 1L;
 
+        ReflectionTestUtils.setField(store, "openTime", LocalTime.of(0, 0)); // 가게 오픈 시간 설정
+        ReflectionTestUtils.setField(store, "closeTime", LocalTime.of(23, 0)); // 가게 마감 시간 설정
+
         ReflectionTestUtils.setField(store, "minPrice", 30000);
 
         given(userService.findUser(anyLong())).willReturn(user);
         given(storeService.findStore(anyLong())).willReturn(store);
-        given(cartService.findCart(user)).willReturn(cart);
+        given(cartService.getCart(user)).willReturn(cart);
 
         // when
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
