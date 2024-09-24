@@ -46,10 +46,10 @@ public class StoreService {
     @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
         User user = userService.findUser(authUser.getUserId());
-        userService.checkAdmin(authUser);//user
-        List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);//count로 가져오게 한번에
-        if (storeList.size() >= 3) {
-            throw new RuntimeException("already have 3 stores");//custumException 만들고 (enum)으로
+        userService.checkAdmin(user);//user
+        int count = storeRepository.countByUserAndStoreStatus(user, StoreStatus.OPEN);
+        if (count >= 3) {
+            throw new UnauthorizedAccessException("already have 3 stores");
         }
         Store store = new Store(storeRequestDto, user);
         Store savedstore = storeRepository.save(store);
@@ -58,8 +58,8 @@ public class StoreService {
 
     @Transactional
     public StoreResponseDto updateStore(AuthUser authUser, long storeId, StoreRequestDto storeRequestDto) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
         Store store = findStore(storeId);
         checkStoreOwner(store, user);
         store.update(storeRequestDto);
@@ -104,21 +104,18 @@ public class StoreService {
     }
 
     @Transactional
-    public void closeStore(User user, long storeId) {
-        userService.checkAdmin(user);
+    public void closeStore(AuthUser authUser, long storeId) {
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        checkStoreOwner(store, user);
-        storeIsOpen(store);
+        userService.checkAdmin(user);
+        Store store = storeIsOpen(storeId);
         store.close();
     }
 
     @Transactional
     public void storeAdOn(AuthUser authUser, long storeId) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        storeIsOpen(store);
+        userService.checkAdmin(user);
+        Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
         if (store.getStoreAdEnum().equals(StoreAdEnum.ON)) {
             throw new RuntimeException("already Ad On");
@@ -128,10 +125,9 @@ public class StoreService {
 
     @Transactional
     public void storeAdOff(AuthUser authUser, long storeId) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        storeIsOpen(store);
+        userService.checkAdmin(user);
+        Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
         if (store.getStoreAdEnum().equals(StoreAdEnum.OFF)) {
             throw new RuntimeException("already Ad Off");
@@ -140,8 +136,8 @@ public class StoreService {
     }
 
     public List<StoreCheckDailyResponseDto> checkDailyMyStore(AuthUser authUser) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
 
         List<StoreCheckDailyResponseDto> responseList = new ArrayList<>();
@@ -192,8 +188,8 @@ public class StoreService {
     }
 
     public List<StoreCheckMonthlyResponseDto> checkMonthlyMyStore(AuthUser authUser) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
 
         List<StoreCheckMonthlyResponseDto> responseList = new ArrayList<>();
@@ -245,8 +241,8 @@ public class StoreService {
                 storeNotificationRequestDto.getNotification().length() > 255) {
             throw new RuntimeException("write notification between 1 to 254");
         }//벨리데이션으로 처리
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
         Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
 
@@ -271,6 +267,7 @@ public class StoreService {
             throw new UnauthorizedAccessException("you are not the owner of the store");
         }
     }
+
 
 
 }

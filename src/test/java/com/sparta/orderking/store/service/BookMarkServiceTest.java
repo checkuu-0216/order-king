@@ -45,6 +45,7 @@ public class BookMarkServiceTest {
 
         assertEquals("there is no user",exception.getMessage());
     }
+
     @Test
     void bookmarkOn_실패가게찾기(){
         Long storeId =1L;
@@ -55,9 +56,9 @@ public class BookMarkServiceTest {
         NullPointerException exception = assertThrows(NullPointerException.class,()->{
             bookmarkService.bookmarkOn(TEST_AUTHUSER,storeId);
         });
-
         assertEquals("there is no such store",exception.getMessage());
     }
+
     @Test
     void bookmarkOn_실패자기가게(){
         Long storeId=1L;

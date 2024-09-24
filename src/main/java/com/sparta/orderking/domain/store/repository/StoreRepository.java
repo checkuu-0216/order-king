@@ -20,4 +20,6 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     @Query("SELECT s FROM Store s JOIN s.menus m WHERE m.menuCategoryEnum = :category")
     List<Store> findStoresByMenuCategory(@Param("category") MenuCategoryEnum category);
+
+    int countByUserAndStoreStatus(User user, StoreStatus storeStatus);
 }
