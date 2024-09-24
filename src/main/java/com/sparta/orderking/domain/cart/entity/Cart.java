@@ -46,6 +46,7 @@ public class Cart extends BaseEntity {
         this.lastUpdated = LocalDateTime.now();
     }
 
+    // repository에서 delete
     public void clear() {
         this.cartMenuList.clear();
         this.store = null;

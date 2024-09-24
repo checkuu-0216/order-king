@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
@@ -27,15 +25,17 @@ public class CartService {
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
 
+    @Transactional
     public CartResponseDto addMenu(Long userId, Long storeId, CartRequestDto requestDto) {
         User user = userRepository.findById(userId).orElseThrow();
         Store store = storeRepository.findById(storeId).orElseThrow();
 
-        Cart cart = cartRepository.findByUser(user);
+        Cart cart = cartRepository.findByUser(user); // findByUser
         LocalDateTime now = LocalDateTime.now();
 
         if(cart != null) {
             // 가게 변경 시 or 카트 24시간 후 장바구니 초기화
+            // 스케쥴러 카트 삭제
             if (!cart.getStore().getId().equals(storeId) || now.isAfter(cart.getLastUpdated().plusHours(24))) {
                 cart.clear();
             }
@@ -44,6 +44,7 @@ public class CartService {
         }
 
         for (Long menuId : requestDto.getMenuList()) {
+            // in => 받아와서 비교
             Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("Menu not found"));
 
             cart.addMenu(menu);
@@ -54,12 +55,15 @@ public class CartService {
         return new CartResponseDto(cart);
     }
 
+
+    @Transactional()
     public CartResponseDto getCart(Long userId) {
         User user = userRepository.findById(userId).orElseThrow();
         Cart cart = cartRepository.findByUser(user);
 
         LocalDateTime now = LocalDateTime.now();
 
+        //스케쥴러
         if (now.isAfter(cart.getLastUpdated().plusHours(24))) {
             cart.clear();
         }
@@ -80,7 +84,7 @@ public class CartService {
     @Transactional
     public CartResponseDto removeMenu(Long userId, Long menuId) {
         User user = userRepository.findById(userId).orElseThrow();
-        Cart cart = cartRepository.findByUser(user);
+        Cart cart = cartRepository.findByUser(user); //optional
 
         Menu menu = menuRepository.findById(menuId).orElseThrow();
 

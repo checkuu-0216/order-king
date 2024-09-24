@@ -19,8 +19,8 @@ public class OrderController {
 
     // 주문 생성
     @PostMapping("/{storeId}")
-    public ResponseEntity<String> createOrder(@Auth AuthUser authUser, @PathVariable Long storeId, @RequestBody CreateOrderRequestDto requestDto) {
-        orderService.createOrder(authUser.getUserId(), storeId, requestDto);
+    public ResponseEntity<String> createOrder(@Auth AuthUser authUser, @PathVariable Long storeId) {
+        orderService.createOrder(authUser.getUserId(), storeId);
         return ResponseEntity.ok("주문이 완료되었습니다.");
     }
 

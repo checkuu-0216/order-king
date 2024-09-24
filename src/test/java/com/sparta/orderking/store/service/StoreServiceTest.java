@@ -165,7 +165,7 @@ public class StoreServiceTest {
         Long storeId =1L;
         List<Menu> menuList = new ArrayList<>();
         given(storeRepository.findById(storeId)).willReturn(Optional.of(TEST_STORE));
-        given(menuRepository.findAllByStoreAndPossibleEnumNot(any(),any())).willReturn(menuList);
+        given(menuRepository.findAllByStoreAndMenuPossibleEnumNot(any(),any())).willReturn(menuList);
         StoreDetailResponseDto responseDto = storeService.getDetailStore(storeId);
 
         assertNotNull(responseDto);

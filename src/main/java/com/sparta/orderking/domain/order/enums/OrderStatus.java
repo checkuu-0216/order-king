@@ -5,7 +5,7 @@ import com.sun.jdi.request.InvalidRequestStateException;
 import java.util.Arrays;
 
 public enum OrderStatus {
-    PENDING, // 주문 접수
+    PENDING(1), // 주문 접수
     PREPARING, // 준비중
     IN_DELIVERY, // 배송중
     DELIVERY_COMPLETED, // 배송 완료
