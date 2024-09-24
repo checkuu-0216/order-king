@@ -5,6 +5,7 @@ import com.sparta.orderking.domain.store.dto.response.StoreCategoryResponseDto;
 import com.sparta.orderking.domain.store.dto.response.StoreSimpleResponseDto;
 import com.sparta.orderking.domain.store.service.SearchStoreService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +24,7 @@ public class SearchStoreController {
     public ResponseEntity<List<StoreSimpleResponseDto>> searchStores(@RequestParam String keyword){
         //이름으로 찾고 리스트 리턴
         List<StoreSimpleResponseDto> storeList = searchStoreService.searchStoreByNameOrMenu(keyword);
-        return ResponseEntity.ok(storeList); //responseEntity로 반환
+        return ResponseEntity.ok(storeList);
     }
 
     @GetMapping("/stores/category")

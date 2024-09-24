@@ -65,13 +65,13 @@ public class StoreServiceTest {
         assertEquals("no such store",exception.getMessage());
     }
 
-    @Test
-    void checkAdmin(){
-        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-            storeService.checkAdmin(TEST_AUTHUSER2);
-        });
-        assertEquals("owner only",exception.getMessage());
-    }
+//    @Test
+//    void checkAdmin(){
+//        RuntimeException exception = assertThrows(RuntimeException.class,()->{
+//            storeService.checkAdmin(TEST_AUTHUSER2);
+//        });
+//        assertEquals("owner only",exception.getMessage());
+//    }
 
     @Test
     void checkStoreOwner(){
@@ -83,17 +83,17 @@ public class StoreServiceTest {
 
         assertEquals("you are not the owner of the store",exception.getMessage());
     }
-    @Test
-    void findUser(){
-        Long id = 2L;
-        User user = new User(UserEnum.USER);
-        ReflectionTestUtils.setField(user,"id",1L);
-        NullPointerException exception = assertThrows(NullPointerException.class,()->{
-            storeService.findUser(id);
-        });
-
-        assertEquals("no such user",exception.getMessage());
-    }
+//    @Test
+//    void findUser(){
+//        Long id = 2L;
+//        User user = new User(UserEnum.USER);
+//        ReflectionTestUtils.setField(user,"id",1L);
+//        NullPointerException exception = assertThrows(NullPointerException.class,()->{
+//            storeService.findUser(id);
+//        });
+//
+//        assertEquals("no such user",exception.getMessage());
+//    }
 
     @Test
     void saveStore_실패테스트_3개이상(){

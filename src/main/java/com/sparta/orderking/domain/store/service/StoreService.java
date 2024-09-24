@@ -67,9 +67,8 @@ public class StoreService {
     }
 
     public StoreDetailResponseDto getDetailStore(long storeId) {
-        Store store = findStore(storeId);
-        storeIsOpen(store);//열려있는 가게 가져오기 메서드로 합치기
-        List<Menu> menuList = menuRepository.findAllByStoreAndMenuPossibleEnumNot(store, MenuPossibleEnum.DELETE);//sale
+        Store store = storeIsOpen(storeId);
+        List<Menu> menuList = menuRepository.findAllByStoreAndMenuPossibleEnum(store, MenuPossibleEnum.SALE);//sale
         List<MenuResponseDto> menudtoList = new ArrayList<>();
         for (Menu m : menuList) {
             MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
@@ -105,8 +104,8 @@ public class StoreService {
     }
 
     @Transactional
-    public void closeStore(AuthUser authUser, long storeId) {
-        userService.checkAdmin(authUser);
+    public void closeStore(User user, long storeId) {
+        userService.checkAdmin(user);
         User user = userService.findUser(authUser.getUserId());
         Store store = findStore(storeId);
         checkStoreOwner(store, user);
@@ -248,19 +247,21 @@ public class StoreService {
         }//벨리데이션으로 처리
         userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        storeIsOpen(store);
+        Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
 
         store.updateNotification(storeNotificationRequestDto.getNotification());
         return new StoreNotificationResponseDto(store);
     }
 
-    public void storeIsOpen(Store store) {
+    public Store storeIsOpen(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
         if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
             throw new RuntimeException("it is closed store");
         }
+        return store;
     }
+
     public Store findStore(long storeId) {
         return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
     }
