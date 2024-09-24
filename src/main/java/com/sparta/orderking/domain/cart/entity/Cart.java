@@ -17,6 +17,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class Cart extends BaseEntity {
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

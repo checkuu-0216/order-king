@@ -32,7 +32,6 @@ public class StoreController {
         return ResponseEntity.ok(storeService.updateStore(authUser, storeId, storeRequestDto));
     }
 
-
     @GetMapping("/stores/{storeId}")
     public ResponseEntity<StoreDetailResponseDto> getDetailStore(@PathVariable long storeId) {
         return ResponseEntity.ok(storeService.getDetailStore(storeId));
@@ -57,12 +56,12 @@ public class StoreController {
     public void storeAdOff(@Auth AuthUser authUser, @PathVariable long storeId) {
         storeService.storeAdOff(authUser, storeId);
     }
-//안댐
+
     @GetMapping("/stores/checkdaily")
     public ResponseEntity<List<StoreCheckDailyResponseDto>> checkDailyMyStore(@Auth AuthUser authUser) {
         return ResponseEntity.ok(storeService.checkDailyMyStore(authUser));
     }
-//안댐
+
     @GetMapping("/stores/checkmonthly")
     public ResponseEntity<List<StoreCheckMonthlyResponseDto>> checkMonthlyMyStore(@Auth AuthUser authUser) {
         return ResponseEntity.ok(storeService.checkMonthlyMyStore(authUser));
