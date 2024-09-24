@@ -6,6 +6,8 @@ import com.sparta.orderking.domain.cart.entity.Cart;
 import com.sparta.orderking.domain.cart.repository.CartRepository;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
+import com.sparta.orderking.domain.store.entity.Store;
+import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -23,12 +25,14 @@ public class CartService {
     private final CartRepository cartRepository;
     private final MenuRepository menuRepository;
     private final UserService userService;
+    private final StoreService storeService;
 
     @Transactional
     public CartResponseDto addMenu(Long userId, Long storeId, CartRequestDto requestDto) {
         User user = userService.findUser(userId);
+        Store store = storeService.findStore(storeId);
 
-        Cart cart = findCart(user);
+        Cart cart = findCart(user, store);
 
         List<Menu> menuList = menuRepository.findAllById(requestDto.getMenuList());
 
@@ -50,7 +54,7 @@ public class CartService {
     @Transactional()
     public CartResponseDto getCart(Long userId) {
         User user = userService.findUser(userId);
-        Cart cart = findCart(user);
+        Cart cart = getCart(user);
 
         return new CartResponseDto(cart);
     }
@@ -58,7 +62,7 @@ public class CartService {
     @Transactional
     public CartResponseDto clearCart(Long userId) {
         User user = userService.findUser(userId);
-        Cart cart = findCart(user);
+        Cart cart = getCart(user);
 
         cart.clear();
 
@@ -68,7 +72,7 @@ public class CartService {
     @Transactional
     public CartResponseDto removeMenu(Long userId, Long menuId) {
         User user = userService.findUser(userId);
-        Cart cart = findCart(user);
+        Cart cart = getCart(user);
 
         Menu menu = menuRepository.findById(menuId).orElseThrow();
 
@@ -77,12 +81,23 @@ public class CartService {
         return new CartResponseDto(cart);
     }
 
-    public Cart findCart(User user) {
+    public Cart getCart(User user) {
         Optional<Cart> optionalCart = cartRepository.findByUser(user);
 
         Cart cart = optionalCart.orElseGet(Cart::new);
 
         return cart;
+    }
+
+    public Cart findCart(User user, Store store) {
+        Optional<Cart> optionalCart = cartRepository.findByUser(user);
+
+        if (optionalCart.isEmpty()) {
+            Cart newCart = new Cart(user, store);
+            return cartRepository.save(newCart);
+        }
+
+        return optionalCart.get();
     }
 
     // 매 시간마다 24시간이 지난 Cart를 삭제하는 스케줄러

@@ -41,7 +41,7 @@ public class OrderService {
         checkStoreBusinessTimes(store, now);
 
         User user = userService.findUser(userId);
-        Cart userCart = cartService.findCart(user);
+        Cart userCart = cartService.getCart(user);
 
         // 가게 최소 주문 금액 체크
         checkStoreMinPrice(store, userCart);
