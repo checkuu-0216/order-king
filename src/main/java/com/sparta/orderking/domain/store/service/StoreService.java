@@ -172,7 +172,9 @@ public class StoreService {
             throw new WrongConditionException("write notification between 1 to 254");
         }
         User user = userService.findUser(authUser.getUserId());
+
         userService.checkAdmin(user);
+
         Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
 

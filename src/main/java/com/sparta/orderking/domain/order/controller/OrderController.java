@@ -31,7 +31,7 @@ public class OrderController {
 
     // 주문 조회
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderResponseDto> getOrder(@PathVariable Long orderId) {
-        return ResponseEntity.ok(orderService.getOrder(orderId));
+    public ResponseEntity<OrderResponseDto> getOrder(@Auth AuthUser authUser, @PathVariable Long orderId) {
+        return ResponseEntity.ok(orderService.getOrder(authUser.getUserId(), orderId));
     }
 }

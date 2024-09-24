@@ -38,12 +38,18 @@ public class Order extends BaseEntity {
         this.store = store;
     }
 
+    public Order(User user, Store store, OrderStatus orderStatus) {
+        this.user = user;
+        this.store = store;
+        this.orderStatus = orderStatus;
+    }
+
     public void addMenu(OrderMenu orderMenu) {
         this.menuList.add(orderMenu);
         this.price = this.price + orderMenu.getMenu().getMenuPrice();
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
+    public void updateOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
     }
 }
