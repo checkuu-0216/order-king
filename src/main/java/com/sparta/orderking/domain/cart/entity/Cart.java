@@ -41,6 +41,10 @@ public class Cart extends BaseEntity {
         this.lastUpdated = LocalDateTime.now();
     }
 
+    public Cart(User user) {
+        this.user = user;
+    }
+
     public void addMenu(Menu menu) {
         this.cartMenuList.add(menu);
         this.totalPrice = this.totalPrice + menu.getMenuPrice();
