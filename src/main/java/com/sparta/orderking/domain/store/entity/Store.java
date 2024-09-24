@@ -1,8 +1,6 @@
 package com.sparta.orderking.domain.store.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.sparta.orderking.common.BaseEntity;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
@@ -74,30 +72,30 @@ public class Store extends BaseEntity {
     }
 
     public Store(long l, String name, String storeAddress, String storeNumber, int i, User testUser, LocalTime of, LocalTime of1, StoreStatus storeStatus, StoreAdEnum storeAdEnum) {
-        this.id=l;
-        this.name=name;
-        this.storeAddress=storeAddress;
-        this.storeNumber=storeNumber;
-        this.minPrice=i;
-        this.user=testUser;
-        this.openTime=of;
-        this.closeTime=of1;
-        this.storeStatus=storeStatus;
-        this.storeAdEnum=storeAdEnum;
+        this.id = l;
+        this.name = name;
+        this.storeAddress = storeAddress;
+        this.storeNumber = storeNumber;
+        this.minPrice = i;
+        this.user = testUser;
+        this.openTime = of;
+        this.closeTime = of1;
+        this.storeStatus = storeStatus;
+        this.storeAdEnum = storeAdEnum;
     }
 
     public Store(long l, String name, String storeAddress, String storeNumber, int i, User testUser, LocalTime of, LocalTime of1, StoreStatus storeStatus, StoreAdEnum storeAdEnum, String notification) {
-        this.id=l;
-        this.name=name;
-        this.storeAddress=storeAddress;
-        this.storeNumber=storeNumber;
-        this.minPrice=i;
-        this.user=testUser;
-        this.openTime=of;
-        this.closeTime=of1;
-        this.storeStatus=storeStatus;
-        this.storeAdEnum=storeAdEnum;
-        this.notification=notification;
+        this.id = l;
+        this.name = name;
+        this.storeAddress = storeAddress;
+        this.storeNumber = storeNumber;
+        this.minPrice = i;
+        this.user = testUser;
+        this.openTime = of;
+        this.closeTime = of1;
+        this.storeStatus = storeStatus;
+        this.storeAdEnum = storeAdEnum;
+        this.notification = notification;
     }
 
     public void update(StoreRequestDto storeRequestDto) {

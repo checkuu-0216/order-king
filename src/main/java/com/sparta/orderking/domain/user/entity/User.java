@@ -32,7 +32,7 @@ public class User extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private UserEnum userEnum;
 
-    public User(String username, String email, String password, String location,UserEnum userEnum) {
+    public User(String username, String email, String password, String location, UserEnum userEnum) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -49,7 +49,7 @@ public class User extends BaseEntity {
     }
 
     public User(UserEnum userEnum) {
-        this.userEnum=userEnum;
+        this.userEnum = userEnum;
     }
 
     public void update(User user) {

@@ -20,14 +20,14 @@ public class SearchStoreController {
     private final SearchStoreService searchStoreService;
 
     @GetMapping("/stores/search")
-    public List<StoreSimpleResponseDto> searchStores(@RequestParam String keyword){
+    public List<StoreSimpleResponseDto> searchStores(@RequestParam String keyword) {
         //이름으로 찾고 리스트 리턴
         List<StoreSimpleResponseDto> storeList = searchStoreService.searchStoreByNameOrMenu(keyword);
         return storeList;
     }
 
     @GetMapping("/stores/category")
-    public List<StoreCategoryResponseDto> searchCategory(@RequestParam MenuCategoryEnum menuCategoryEnum){
+    public List<StoreCategoryResponseDto> searchCategory(@RequestParam MenuCategoryEnum menuCategoryEnum) {
         return searchStoreService.searchStoresByCategory(menuCategoryEnum);
     }
 }

@@ -9,6 +9,4 @@ import lombok.NoArgsConstructor;
 @Getter
 public class OwnerReviewRequestDto {
     private String comment;
-
-
 }

@@ -8,5 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreNotificationRequestDto {
+    //벨리데이션
     private String notification;
 }
