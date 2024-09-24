@@ -60,12 +60,14 @@ public class OwnerReviewService {
     public OwnerReview findOwnerReview(long id) {
         return ownerReviewRepository.findById(id).orElseThrow(() -> new NullPointerException("no such owner review"));
     }
-    public void lengthCheck(OwnerReviewRequestDto ownerReviewRequestDto){
+
+    public void lengthCheck(OwnerReviewRequestDto ownerReviewRequestDto) {
         if (ownerReviewRequestDto.getComment() == null ||
                 ownerReviewRequestDto.getComment().length() > 255) {
             throw new RuntimeException("write comment between 0 to 255");
         }
     }
+
     @Transactional
     public OwnerReviewResponseDto postComment(long storeId, long reviewId, AuthUser authuser, OwnerReviewRequestDto ownerReviewRequestDto) {
         checkAdmin(authuser);

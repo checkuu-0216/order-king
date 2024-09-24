@@ -2,11 +2,9 @@ package com.sparta.orderking.domain.cart.dto;
 
 import com.sparta.orderking.domain.cart.entity.Cart;
 import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
-import com.sparta.orderking.domain.menu.entity.Menu;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

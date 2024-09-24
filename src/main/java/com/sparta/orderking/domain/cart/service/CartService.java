@@ -15,9 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class CartService {
         Cart cart = cartRepository.findByUser(user);
         LocalDateTime now = LocalDateTime.now();
 
-        if(cart != null) {
+        if (cart != null) {
             // 가게 변경 시 or 카트 24시간 후 장바구니 초기화
             if (!cart.getStore().getId().equals(storeId) || now.isAfter(cart.getLastUpdated().plusHours(24))) {
                 cart.clear();

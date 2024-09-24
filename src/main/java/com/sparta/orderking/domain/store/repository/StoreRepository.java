@@ -1,7 +1,6 @@
 package com.sparta.orderking.domain.store.repository;
 
 import com.sparta.orderking.domain.menu.entity.MenuCategoryEnum;
-import com.sparta.orderking.domain.store.dto.response.StoreSimpleResponseDto;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.entity.StoreStatus;
 import com.sparta.orderking.domain.user.entity.User;

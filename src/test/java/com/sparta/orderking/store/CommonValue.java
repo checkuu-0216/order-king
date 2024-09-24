@@ -25,7 +25,7 @@ public class CommonValue {
     public final static StoreResponseDto TEST_STORERESPONSEDTO = new StoreResponseDto(TEST_STORE);
     public final static AuthUser TEST_AUTHUSER2 = new AuthUser(1L, UserEnum.USER);
     public final static AuthUser TEST_AUTHUSER = new AuthUser(1L, UserEnum.OWNER);
-    public final static Order TEST_ORDER = new Order(TEST_USER,TEST_STORE,100000);
+    public final static Order TEST_ORDER = new Order(TEST_USER,TEST_STORE);
     public final static Review TEST_REVIEW = new Review(TEST_USER,TEST_ORDER,TEST_STORE,"content",100000);
     public final static Bookmark TEST_BOOKMARK = new Bookmark(TEST_USER,TEST_STORE);
 }

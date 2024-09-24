@@ -20,8 +20,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
@@ -36,7 +34,7 @@ public class ReviewService {
         Store store = storeRepository.findById(storeId).orElseThrow();
 
         // 배달 완료 되지 않으면 리뷰 작성 불가
-        if(!order.getOrderStatus().equals(OrderStatus.DELIVERY_COMPLETED)) {
+        if (!order.getOrderStatus().equals(OrderStatus.DELIVERY_COMPLETED)) {
             throw new IllegalArgumentException("배달 완료된 주문만 리뷰 작성 가능합니다.");
         }
 

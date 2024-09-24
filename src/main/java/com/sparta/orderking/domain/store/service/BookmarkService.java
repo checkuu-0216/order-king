@@ -36,6 +36,7 @@ public class BookmarkService {
 
         return new BookmarkSaveResponseDto(savedBookmark);
     }
+
     @Transactional
     public void bookmarkOff(AuthUser authUser, long storeId) {
         User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new NullPointerException("there is no user"));

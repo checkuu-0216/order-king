@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +15,12 @@ import java.time.LocalDateTime;
 public class OrderLogging {
     // 주문 생성 및 상태 변경 메서드를 지정하는 포인트컷
     @Pointcut("execution(* com.sparta.orderking.domain.order.controller.OrderController.createOrder(..)) ")
-    public void orderCreateMethods() {}
+    public void orderCreateMethods() {
+    }
 
     @Pointcut("execution(* com.sparta.orderking.domain.order.controller.OrderController.updateOrderStatus(..))")
-    public void orderUpdateMethods() {}
+    public void orderUpdateMethods() {
+    }
 
     @AfterReturning("orderCreateMethods()")
     public void orderCreateLogAfterReturning(JoinPoint joinPoint) {

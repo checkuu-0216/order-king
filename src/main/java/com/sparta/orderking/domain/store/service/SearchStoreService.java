@@ -1,6 +1,5 @@
 package com.sparta.orderking.domain.store.service;
 
-import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.entity.MenuCategoryEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.dto.response.StoreCategoryResponseDto;
@@ -10,7 +9,8 @@ import com.sparta.orderking.domain.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

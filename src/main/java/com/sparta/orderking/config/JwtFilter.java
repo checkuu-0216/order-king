@@ -1,6 +1,5 @@
 package com.sparta.orderking.config;
 
-import com.sparta.orderking.domain.user.entity.UserEnum;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
