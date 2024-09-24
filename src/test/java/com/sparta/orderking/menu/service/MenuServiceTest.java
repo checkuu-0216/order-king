@@ -108,4 +108,29 @@ public class MenuServiceTest {
         assertEquals(menu.getMenuPossibleEnum(),requestDto1.getMenuPossibleEnum());
         assertEquals(menu.getMenuCategoryEnum(),requestDto1.getMenuCategoryEnum());
     }
+
+    @Test
+    public void 메뉴_삭제_정상작동() {
+        //given
+        long storeId = 1L;
+        AuthUser authUser = new AuthUser(1L, UserEnum.OWNER);
+        User user = userService.findUser(1L);
+        Store store = storeService.findStore(storeId);
+        storeService.checkStoreOwner(store, user);
+        long menuId = 1L;
+        MenuRequestDto requestDto = new MenuRequestDto("b","b",1000,"a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
+        Menu menu = new Menu(requestDto,store);
+        given(menuRepository.findById(anyLong())).willReturn(Optional.of(menu));
+        menu.deleteMenu(MenuPossibleEnum.DELETE);
+        //when
+        menuService.deleteMenu(authUser,storeId,menuId);
+        //then
+        assertNotNull(menu);
+        assertEquals(menu.getMenuName(),requestDto.getMenuName());
+        assertEquals(menu.getMenuInfo(),requestDto.getMenuInfo());
+        assertEquals(menu.getMenuPrice(),requestDto.getMenuPrice());
+        assertEquals(menu.getMenuPrice(),requestDto.getMenuPrice());
+        assertEquals(menu.getMenuPossibleEnum(),MenuPossibleEnum.DELETE);
+        assertEquals(menu.getMenuCategoryEnum(),requestDto.getMenuCategoryEnum());
+    }
 }
