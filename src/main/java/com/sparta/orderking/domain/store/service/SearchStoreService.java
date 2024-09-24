@@ -28,7 +28,7 @@ public class SearchStoreService {
         for (Store store : storeByNameAndMenu) {
             StoreSimpleResponseDto dto = new StoreSimpleResponseDto(store.getName());
             result.add(dto);
-        }
+        } //stream 이용해 보기
 
         return result;
     }
@@ -41,7 +41,7 @@ public class SearchStoreService {
         for (Store store1 : store) {
             StoreCategoryResponseDto dto = new StoreCategoryResponseDto(store1.getName());
             storeList.add(dto);
-        }
+        }//stream
         return storeList;
     }
 }

@@ -1,6 +1,6 @@
 package com.sparta.orderking.domain.menu.entity;
 
-public enum MenuCategoryEnum {
+public enum MenuCategoryEnum { //영어로 쓰고 한글을 부여
     한식,
     중식,
     일식,
