@@ -46,10 +46,10 @@ public class StoreService {
     @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
         User user = userService.findUser(authUser.getUserId());
-        userService.checkAdmin(authUser);//user
-        List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);//count로 가져오게 한번에
-        if (storeList.size() >= 3) {
-            throw new RuntimeException("already have 3 stores");//custumException 만들고 (enum)으로
+        userService.checkAdmin(user);//user
+        int count = storeRepository.countByUserAndStoreStatus(user, StoreStatus.OPEN);
+        if (count >= 3) {
+            throw new UnauthorizedAccessException("already have 3 stores");
         }
         Store store = new Store(storeRequestDto, user);
         Store savedstore = storeRepository.save(store);
@@ -58,8 +58,8 @@ public class StoreService {
 
     @Transactional
     public StoreResponseDto updateStore(AuthUser authUser, long storeId, StoreRequestDto storeRequestDto) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
         Store store = findStore(storeId);
         checkStoreOwner(store, user);
         store.update(storeRequestDto);
@@ -67,9 +67,8 @@ public class StoreService {
     }
 
     public StoreDetailResponseDto getDetailStore(long storeId) {
-        Store store = findStore(storeId);
-        storeIsOpen(store);//열려있는 가게 가져오기 메서드로 합치기
-        List<Menu> menuList = menuRepository.findAllByStoreAndMenuPossibleEnumNot(store, MenuPossibleEnum.DELETE);//sale
+        Store store = storeIsOpen(storeId);
+        List<Menu> menuList = menuRepository.findAllByStoreAndMenuPossibleEnum(store, MenuPossibleEnum.SALE);//sale
         List<MenuResponseDto> menudtoList = new ArrayList<>();
         for (Menu m : menuList) {
             MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
@@ -106,20 +105,17 @@ public class StoreService {
 
     @Transactional
     public void closeStore(AuthUser authUser, long storeId) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        checkStoreOwner(store, user);
-        storeIsOpen(store);
+        userService.checkAdmin(user);
+        Store store = storeIsOpen(storeId);
         store.close();
     }
 
     @Transactional
     public void storeAdOn(AuthUser authUser, long storeId) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        storeIsOpen(store);
+        userService.checkAdmin(user);
+        Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
         if (store.getStoreAdEnum().equals(StoreAdEnum.ON)) {
             throw new RuntimeException("already Ad On");
@@ -129,10 +125,9 @@ public class StoreService {
 
     @Transactional
     public void storeAdOff(AuthUser authUser, long storeId) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        storeIsOpen(store);
+        userService.checkAdmin(user);
+        Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
         if (store.getStoreAdEnum().equals(StoreAdEnum.OFF)) {
             throw new RuntimeException("already Ad Off");
@@ -141,8 +136,8 @@ public class StoreService {
     }
 
     public List<StoreCheckDailyResponseDto> checkDailyMyStore(AuthUser authUser) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
 
         List<StoreCheckDailyResponseDto> responseList = new ArrayList<>();
@@ -193,8 +188,8 @@ public class StoreService {
     }
 
     public List<StoreCheckMonthlyResponseDto> checkMonthlyMyStore(AuthUser authUser) {
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(user);
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
 
         List<StoreCheckMonthlyResponseDto> responseList = new ArrayList<>();
@@ -246,21 +241,23 @@ public class StoreService {
                 storeNotificationRequestDto.getNotification().length() > 255) {
             throw new RuntimeException("write notification between 1 to 254");
         }//벨리데이션으로 처리
-        userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        storeIsOpen(store);
+        userService.checkAdmin(user);
+        Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
 
         store.updateNotification(storeNotificationRequestDto.getNotification());
         return new StoreNotificationResponseDto(store);
     }
 
-    public void storeIsOpen(Store store) {
+    public Store storeIsOpen(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
         if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
             throw new RuntimeException("it is closed store");
         }
+        return store;
     }
+
     public Store findStore(long storeId) {
         return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
     }
@@ -270,6 +267,7 @@ public class StoreService {
             throw new UnauthorizedAccessException("you are not the owner of the store");
         }
     }
+
 
 
 }
