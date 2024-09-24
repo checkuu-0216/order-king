@@ -7,7 +7,6 @@ import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.controller.StoreController;
 import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
 import com.sparta.orderking.domain.store.dto.response.*;
-import com.sparta.orderking.domain.store.dto.request.StoreSimpleRequestDto;
 import com.sparta.orderking.domain.store.service.StoreService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

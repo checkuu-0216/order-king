@@ -19,7 +19,7 @@ public class ReviewController {
 
     // 리뷰 생성
     @PostMapping("/store/{storeId}/order/{orderId}")
-    public ResponseEntity<ReviewResponseDto> createReview(@Auth AuthUser authUser,@PathVariable Long storeId, @PathVariable Long orderId, @RequestBody CreateReviewRequestDto requestDto) {
+    public ResponseEntity<ReviewResponseDto> createReview(@Auth AuthUser authUser, @PathVariable Long storeId, @PathVariable Long orderId, @RequestBody CreateReviewRequestDto requestDto) {
         return ResponseEntity.ok(reviewService.createReview(authUser.getUserId(), storeId, orderId, requestDto));
     }
 

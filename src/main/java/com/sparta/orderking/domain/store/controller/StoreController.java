@@ -47,6 +47,7 @@ public class StoreController {
         storeService.closeStore(authUser, storeId);
     }
 
+    //하나로 합치기 광고
     @PutMapping("/stores/{storeId}/adon")
     public void storeAdOn(@Auth AuthUser authUser, @PathVariable long storeId) {
         storeService.storeAdOn(authUser, storeId);
@@ -61,7 +62,9 @@ public class StoreController {
     public ResponseEntity<List<StoreCheckDailyResponseDto>> checkDailyMyStore(@Auth AuthUser authUser) {
         return ResponseEntity.ok(storeService.checkDailyMyStore(authUser));
     }
-
+    //합쳐서 파라미터로
+    //시작날짜,종료날짜 받기
+    //입력없으면 디폴트로 가게생성~현재날짜
     @GetMapping("/stores/checkmonthly")
     public ResponseEntity<List<StoreCheckMonthlyResponseDto>> checkMonthlyMyStore(@Auth AuthUser authUser) {
         return ResponseEntity.ok(storeService.checkMonthlyMyStore(authUser));

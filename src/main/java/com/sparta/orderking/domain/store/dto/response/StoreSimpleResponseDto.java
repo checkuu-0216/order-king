@@ -1,9 +1,6 @@
 package com.sparta.orderking.domain.store.dto.response;
 
-import com.sparta.orderking.domain.menu.dto.MenuSimpleResponseDto;
 import lombok.Getter;
-
-import java.util.List;
 
 @Getter
 public class StoreSimpleResponseDto {
