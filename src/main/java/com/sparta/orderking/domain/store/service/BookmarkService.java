@@ -5,9 +5,10 @@ import com.sparta.orderking.domain.store.dto.response.BookmarkSaveResponseDto;
 import com.sparta.orderking.domain.store.entity.Bookmark;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.BookmarkRepository;
-import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
-import com.sparta.orderking.domain.user.repository.UserRepository;
+import com.sparta.orderking.domain.user.service.UserService;
+import com.sparta.orderking.exception.EntityNotFoundException;
+import com.sparta.orderking.exception.WrongConditionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,18 +19,19 @@ import org.springframework.transaction.annotation.Transactional;
 public class BookmarkService {
 
     private final BookmarkRepository bookmarkRepository;
-    private final UserRepository userRepository;
-    private final StoreRepository storeRepository;
+    private final UserService userService;
+    private final StoreService storeService;
+
 
     @Transactional
     public BookmarkSaveResponseDto bookmarkOn(AuthUser authUser, long storeId) {
-        User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new NullPointerException("there is no user"));
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("there is no such store"));
+        User user = userService.findUser(authUser.getUserId());
+        Store store = storeService.findStore(storeId);
         if (store.getUser().equals(user)) {
-            throw new RuntimeException("you can't bookmark your own store");
+            throw new WrongConditionException("you can't bookmark your own store");
         }
         if (bookmarkRepository.findByUserAndStore(user, store).isPresent()) {
-            throw new RuntimeException("you already bookmarked");
+            throw new WrongConditionException("you already bookmarked");
         }
         Bookmark bookmark = new Bookmark(user, store);
         Bookmark savedBookmark = bookmarkRepository.save(bookmark);
@@ -39,9 +41,9 @@ public class BookmarkService {
 
     @Transactional
     public void bookmarkOff(AuthUser authUser, long storeId) {
-        User user = userRepository.findById(authUser.getUserId()).orElseThrow(() -> new NullPointerException("there is no user"));
-        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("there is no such store"));
-        Bookmark bookmark = bookmarkRepository.findByUserAndStore(user, store).orElseThrow(() -> new NullPointerException("you are not bookmark store"));
+        User user = userService.findUser(authUser.getUserId());
+        Store store = storeService.findStore(storeId);
+        Bookmark bookmark = bookmarkRepository.findByUserAndStore(user, store).orElseThrow(() -> new EntityNotFoundException("you are not bookmark store"));
         bookmarkRepository.delete(bookmark);
     }
 }
