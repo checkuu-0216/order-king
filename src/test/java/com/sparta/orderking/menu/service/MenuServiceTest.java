@@ -9,11 +9,9 @@ import com.sparta.orderking.domain.menu.entity.MenuPossibleEnum;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.menu.service.MenuService;
 import com.sparta.orderking.domain.store.entity.Store;
-import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
-import com.sparta.orderking.domain.user.repository.UserRepository;
 import com.sparta.orderking.domain.user.service.UserService;
 import com.sparta.orderking.exception.EntityAlreadyExistsException;
 import org.junit.jupiter.api.Test;
@@ -23,11 +21,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 public class MenuServiceTest {
