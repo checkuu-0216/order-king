@@ -6,51 +6,40 @@ import com.sparta.orderking.domain.cart.entity.Cart;
 import com.sparta.orderking.domain.cart.repository.CartRepository;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
-import com.sparta.orderking.domain.store.entity.Store;
-import com.sparta.orderking.domain.store.repository.StoreRepository;
-import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.entity.User;
-import com.sparta.orderking.domain.user.repository.UserRepository;
 import com.sparta.orderking.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CartService {
     private final CartRepository cartRepository;
-    private final UserRepository userRepository;
-    private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
     private final UserService userService;
-    private final StoreService storeService;
 
     @Transactional
     public CartResponseDto addMenu(Long userId, Long storeId, CartRequestDto requestDto) {
         User user = userService.findUser(userId);
-        Store store = storeService.findStore(storeId);
 
-        Cart cart = cartRepository.findByUser(user); // findByUser
-        LocalDateTime now = LocalDateTime.now();
+        Cart cart = findCart(user);
 
-        if (cart != null) {
-            // 가게 변경 시 or 카트 24시간 후 장바구니 초기화
-            // 스케쥴러 카트 삭제
-            if (!cart.getStore().getId().equals(storeId) || now.isAfter(cart.getLastUpdated().plusHours(24))) {
+        List<Menu> menuList = menuRepository.findAllById(requestDto.getMenuList());
+
+        for (Menu menu : menuList) {
+            if(menu.getStore().getId().equals(storeId)) {
+                cart.addMenu(menu);
+            } else {
+                // 다른 가게의 메뉴 추가 시 장바구니 비운 후 메뉴 추가
                 cart.clear();
+                cart.addMenu(menu);
             }
-        } else {
-            cart = new Cart(user, store);
-        }
-
-        for (Long menuId : requestDto.getMenuList()) {
-            // in => 받아와서 비교
-            Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("Menu not found"));
-
-            cart.addMenu(menu);
         }
 
         cartRepository.save(cart);
@@ -58,26 +47,18 @@ public class CartService {
         return new CartResponseDto(cart);
     }
 
-
     @Transactional()
     public CartResponseDto getCart(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        Cart cart = cartRepository.findByUser(user);
-
-        LocalDateTime now = LocalDateTime.now();
-
-        //스케쥴러
-        if (now.isAfter(cart.getLastUpdated().plusHours(24))) {
-            cart.clear();
-        }
+        User user = userService.findUser(userId);
+        Cart cart = findCart(user);
 
         return new CartResponseDto(cart);
     }
 
     @Transactional
     public CartResponseDto clearCart(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        Cart cart = cartRepository.findByUser(user);
+        User user = userService.findUser(userId);
+        Cart cart = findCart(user);
 
         cart.clear();
 
@@ -86,8 +67,8 @@ public class CartService {
 
     @Transactional
     public CartResponseDto removeMenu(Long userId, Long menuId) {
-        User user = userRepository.findById(userId).orElseThrow();
-        Cart cart = cartRepository.findByUser(user); //optional
+        User user = userService.findUser(userId);
+        Cart cart = findCart(user);
 
         Menu menu = menuRepository.findById(menuId).orElseThrow();
 
@@ -97,7 +78,22 @@ public class CartService {
     }
 
     public Cart findCart(User user) {
-        Cart cart = cartRepository.findByUser(user);
+        Optional<Cart> optionalCart = cartRepository.findByUser(user);
+
+        Cart cart = optionalCart.orElseGet(Cart::new);
+
         return cart;
+    }
+
+    // 매 시간마다 24시간이 지난 Cart를 삭제하는 스케줄러
+    @Scheduled(cron = "0 0 * * * *") // 매 정시에 실행 (매 시간 0분 0초)
+    @Transactional
+    public void deleteOldCarts() {
+        // 24시간 전 시간을 기준으로 삭제할 카트를 찾음
+        LocalDateTime expirateTime = LocalDateTime.now().minusHours(24);
+        List<Cart> oldCarts = cartRepository.findAllByLastUpdatedBefore(expirateTime);
+
+        // 찾은 카트를 삭제
+        cartRepository.deleteAll(oldCarts);
     }
 }
