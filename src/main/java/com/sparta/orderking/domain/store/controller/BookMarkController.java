@@ -16,7 +16,8 @@ public class BookMarkController {
     private final BookmarkService bookmarkService;
 
     @PostMapping("/{storeId}/bookmarkon")
-    public ResponseEntity<BookmarkSaveResponseDto> bookmarkOn(@Auth AuthUser authUser, @PathVariable long storeId) {
+    public ResponseEntity<BookmarkSaveResponseDto> bookmarkOn(@Auth AuthUser authUser,
+                                                              @PathVariable long storeId) {
         return ResponseEntity.ok(bookmarkService.bookmarkOn(authUser, storeId));
     }
 

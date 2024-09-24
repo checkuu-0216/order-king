@@ -149,7 +149,10 @@ public class StoreService {
             }
             if ("daily".equals(type)) {
                 // 고객 수와 매출을 하루 단위로 조회
-               List<MappingEntity> results = orderRepository.countCustomersAndSales(store.getId(), startDate.atStartOfDay(), endDate.atStartOfDay().plusDays(1), orderStatus);
+               List<MappingEntity> results = orderRepository.countCustomersAndSales(store.getId(),
+                       startDate.atStartOfDay(),
+                       endDate.atStartOfDay().plusDays(1),
+                       orderStatus);
                addList(results,responseList,store,dateFormatter,startDate);
                 }
             else if ("monthly".equalsIgnoreCase(type)) {
@@ -157,7 +160,10 @@ public class StoreService {
                 LocalDate monthlyStartDate = startDate.withDayOfMonth(1);
                 LocalDate monthlyEndDate = endDate.withDayOfMonth(1);
 
-                List<MappingEntity> results = orderRepository.countMonthlyCustomersAndSales(store.getId(),monthlyStartDate.atStartOfDay(), monthlyEndDate.plusMonths(1).atStartOfDay(), orderStatus);
+                List<MappingEntity> results = orderRepository.countMonthlyCustomersAndSales(store.getId(),
+                        monthlyStartDate.atStartOfDay(),
+                        monthlyEndDate.plusMonths(1).atStartOfDay(),
+                        orderStatus);
 
                 addListMonth(results,responseList,store,monthFormatter,startDate);
             }

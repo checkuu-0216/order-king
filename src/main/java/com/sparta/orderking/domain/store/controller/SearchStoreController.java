@@ -22,7 +22,6 @@ public class SearchStoreController {
 
     @GetMapping("/stores/search")
     public ResponseEntity<List<StoreSimpleResponseDto>> searchStores(@RequestParam String keyword){
-        //이름으로 찾고 리스트 리턴
         return ResponseEntity.ok(searchStoreService.searchStoreByNameOrMenu(keyword));
     }
 
