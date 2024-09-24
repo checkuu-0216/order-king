@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,7 +127,7 @@ public class StoreControllerTest {
         Long storeId =1L;
         doNothing().when(storeService).storeAd(any(),anyLong());
 
-        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/adon",storeId));
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/ad",storeId));
 
         resultActions.andExpect(status().isOk());
     }
@@ -134,9 +135,15 @@ public class StoreControllerTest {
     @Test
     void checkDaily() throws Exception{
         List<StoreCheckResponseDto> dto = new ArrayList<>();
+        String type = "daily";
+        LocalDate startDate = LocalDate.now().minusDays(1);
+        LocalDate endDate = LocalDate.now();
         given(storeService.checkMyStore(any(),any(),any(),any())).willReturn(dto);
 
-        ResultActions resultActions = mockMvc.perform(get("/api/stores/checkdaily"));
+        ResultActions resultActions = mockMvc.perform(get("/api/stores/mystore")
+                .param("type", type)
+                .param("startDate", startDate.toString())
+                .param("endDate", endDate.toString()));
 
         resultActions.andExpect(status().isOk());
     }

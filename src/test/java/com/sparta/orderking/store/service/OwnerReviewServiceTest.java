@@ -9,9 +9,12 @@ import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.OwnerReviewRepository;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.store.service.OwnerReviewService;
+import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import com.sparta.orderking.domain.user.repository.UserRepository;
+import com.sparta.orderking.domain.user.service.UserService;
+import com.sparta.orderking.exception.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -34,59 +37,21 @@ public class OwnerReviewServiceTest {
     @Mock
     private OwnerReviewRepository ownerReviewRepository;
     @Mock
-    private StoreRepository storeRepository;
+    private StoreService storeService;
     @Mock
-    private UserRepository userRepository;
+    private UserService userService;
     @Mock
     private ReviewRepository reviewRepository;
     @InjectMocks
     private OwnerReviewService ownerReviewService;
 
-    @Test
-    void checkAdmin(){
-        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-            ownerReviewService.checkAdmin(TEST_AUTHUSER2);
-        });
-        assertEquals("owner only",exception.getMessage());
-    }
-    @Test
-    void findStore(){
-        Long storeId=1L;
-        given(storeRepository.findById(storeId)).willReturn(Optional.empty());
 
-        NullPointerException exception = assertThrows(NullPointerException.class, ()->{
-            ownerReviewService.findStore(storeId);
-        });
-        assertEquals("no such store",exception.getMessage());
-    }
-
-    @Test
-    void checkStoreOwner(){
-        Store store = TEST_STORE;
-        User user = TEST_USER2;
-        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-            ownerReviewService.checkStoreOwner(store,user);
-        });
-
-        assertEquals("you are not the owner of the store",exception.getMessage());
-    }
-    @Test
-    void findUser(){
-        Long id = 2L;
-        User user = new User(UserEnum.USER);
-        ReflectionTestUtils.setField(user,"id",1L);
-        NullPointerException exception = assertThrows(NullPointerException.class,()->{
-            ownerReviewService.findUser(id);
-        });
-
-        assertEquals("no such user",exception.getMessage());
-    }
     @Test
     void findReview(){
         Long id =1L;
         given(reviewRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        NullPointerException exception = assertThrows(NullPointerException.class,()->{
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,()->{
             ownerReviewService.findReview(id);
         });
 
@@ -108,7 +73,7 @@ public class OwnerReviewServiceTest {
         Long id =1L;
         given(ownerReviewRepository.findById(anyLong())).willReturn(Optional.empty());
 
-        NullPointerException exception = assertThrows(NullPointerException.class,()->{
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,()->{
             ownerReviewService.findOwnerReview(id);
         });
 
@@ -134,8 +99,8 @@ public class OwnerReviewServiceTest {
         ReflectionTestUtils.setField(TEST_STORE,"user",TEST_USER);
         ReflectionTestUtils.setField(TEST_REVIEW,"store",TEST_STORE);
 
-        given(storeRepository.findById(storeId)).willReturn(Optional.of(TEST_STORE));
-        given(userRepository.findById(TEST_AUTHUSER.getUserId())).willReturn(Optional.of(TEST_USER));
+        given(storeService.findStore(anyLong())).willReturn(TEST_STORE);
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
         given(reviewRepository.findById(reviewId)).willReturn(Optional.of(TEST_REVIEW));
         given(ownerReviewRepository.save(any(OwnerReview.class))).willAnswer(invocation -> invocation.getArgument(0));
 
@@ -150,7 +115,7 @@ public class OwnerReviewServiceTest {
         OwnerReviewRequestDto dto = new OwnerReviewRequestDto("이것은 댓글입니다.");
         OwnerReview ownerReview = new OwnerReview(TEST_REVIEW,TEST_STORE,"1234");
 
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(TEST_USER));
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
         given(ownerReviewRepository.findById(anyLong())).willReturn(Optional.of(ownerReview));
 
         OwnerReviewResponseDto dto1 = ownerReviewService.updateComment(ownerReviewId,TEST_AUTHUSER,dto);
@@ -163,7 +128,7 @@ public class OwnerReviewServiceTest {
         Long ownerReviewId =1L;
         OwnerReview ownerReview = new OwnerReview(TEST_REVIEW,TEST_STORE,"1234");
 
-        given(userRepository.findById(anyLong())).willReturn(Optional.of(TEST_USER));
+        given(userService.findUser(anyLong())).willReturn(TEST_USER);
         given(ownerReviewRepository.findById(anyLong())).willReturn(Optional.of(ownerReview));
         doNothing().when(ownerReviewRepository).delete(any());
 

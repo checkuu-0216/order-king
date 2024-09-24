@@ -111,6 +111,7 @@ public class StoreService {
         User user = userService.findUser(authUser.getUserId());
         userService.checkAdmin(user);
         Store store = storeIsOpen(storeId);
+        checkStoreOwner(store, user);
         store.close();
     }
 
