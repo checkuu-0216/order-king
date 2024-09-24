@@ -87,7 +87,7 @@ public class OrderService {
     public OrderResponseDto getOrder(Long userId, Long orderId) {
         Order order = orderRepository.findByIdWithMenus(orderId);
 
-        if(!order.getUser().getId().equals(userId) || !order.getStore().getUser().getId().equals(userId)) {
+        if(!order.getUser().getId().equals(userId) && !order.getStore().getUser().getId().equals(userId)) {
             throw new IllegalArgumentException("해당 주문을 조회할 권한이 없습니다.");
         }
 
