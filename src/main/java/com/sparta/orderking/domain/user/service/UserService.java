@@ -29,10 +29,10 @@ public class UserService {
             throw new UnauthorizedAccessException("owner only");
         }
     }
+
     public User findUser(long id) {
         return userRepository.findById(id).orElseThrow(() -> new NullPointerException("no such user"));
     }
-
 
     public UserResponseDto getUser(AuthUser authUser) {
         return new UserResponseDto(findUser(authUser.getUserId()));
