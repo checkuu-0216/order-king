@@ -19,4 +19,9 @@ public class CartController {
     public ResponseEntity<CartResponseDto> addMenu(@Auth AuthUser authUser, @PathVariable Long storeId, @RequestBody CartRequestDto requestDto) {
         return ResponseEntity.ok(cartService.addMenu(authUser.getUserId(), storeId, requestDto));
     }
+
+    @GetMapping("/get/cart")
+    public ResponseEntity<CartResponseDto> getCart(@Auth AuthUser authUser) {
+        return ResponseEntity.ok(cartService.getCart(authUser.getUserId()));
+    }
 }

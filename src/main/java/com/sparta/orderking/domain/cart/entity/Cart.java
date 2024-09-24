@@ -9,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,22 +29,27 @@ public class Cart extends BaseEntity {
     private Store store;
 
     @Column
-    private LocalTime lastUpdated;
+    private LocalDateTime lastUpdated;
+
+    @Column
+    private Integer totalPrice = 0;
 
     public Cart(User user, Store store) {
         this.user = user;
         this.store = store;
-        this.lastUpdated = LocalTime.now();
+        this.lastUpdated = LocalDateTime.now();
     }
 
     public void addMenu(Menu menu) {
         this.cartMenuList.add(menu);
-        this.lastUpdated = LocalTime.now();  // 마지막 업데이트 시간 갱신
+        this.totalPrice = this.totalPrice + menu.getMenuPrice();
+        this.lastUpdated = LocalDateTime.now();  // 마지막 업데이트 시간 갱신
     }
 
     public void clear() {
         this.cartMenuList.clear();
         this.store = null;
-        this.lastUpdated = LocalTime.now();
+        this.totalPrice = 0;
+        this.lastUpdated = LocalDateTime.now();
     }
 }

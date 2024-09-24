@@ -13,6 +13,7 @@ import com.sparta.orderking.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,10 +33,12 @@ public class CartService {
         Store store = storeRepository.findById(storeId).orElseThrow();
 
         Cart cart = cartRepository.findByUser(user);
+        LocalDateTime now = LocalDateTime.now();
 
         if(cart != null) {
-            if (!cart.getStore().getId().equals(storeId)) {
-                cart.clear(); // 가게 변경 시 장바구니 초기화
+            // 가게 변경 시 or 카트 24시간 후 장바구니 초기화
+            if (!cart.getStore().getId().equals(storeId) || now.isAfter(cart.getLastUpdated().plusHours(24))) {
+                cart.clear();
             }
         } else {
             cart = new Cart(user, store);
@@ -43,10 +46,24 @@ public class CartService {
 
         for (Long menuId : requestDto.getMenuList()) {
             Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new IllegalArgumentException("Menu not found"));
-            cart.addMenu(menu); // 장바구니에 메뉴 항목 추가
+
+            cart.addMenu(menu);
         }
 
         cartRepository.save(cart);
+
+        return new CartResponseDto(cart);
+    }
+
+    public CartResponseDto getCart(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow();
+        Cart cart = cartRepository.findByUser(user);
+
+        LocalDateTime now = LocalDateTime.now();
+
+        if (now.isAfter(cart.getLastUpdated().plusHours(24))) {
+            cart.clear();
+        }
 
         return new CartResponseDto(cart);
     }
