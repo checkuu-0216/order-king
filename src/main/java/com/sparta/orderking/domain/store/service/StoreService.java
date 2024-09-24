@@ -18,6 +18,7 @@ import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import com.sparta.orderking.domain.user.repository.UserRepository;
+import com.sparta.orderking.domain.user.service.UserService;
 import com.sparta.orderking.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,40 +39,17 @@ public class StoreService {
     private final MenuRepository menuRepository;
     private final UserRepository userRepository;
     private final OrderRepository orderRepository;
+    private final UserService userService;
 
-    public void storeIsOpen(Store store) {
-        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
-            throw new RuntimeException("it is closed store");
-        }
-    }
-
-    public void checkAdmin(AuthUser authUser) {
-        if (!authUser.getUserEnum().equals(UserEnum.OWNER)) {
-            throw new UnauthorizedAccessException("owner only");
-        }
-    }
-
-    public Store findStore(long storeId) {
-        return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
-    }
-
-    public void checkStoreOwner(Store store, User user) {
-        if (!store.getUser().equals(user)) {
-            throw new UnauthorizedAccessException("you are not the owner of the store");
-        }
-    }
-
-    public User findUser(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NullPointerException("no such user"));
-    }
+    //유저찾는거 userservice에 공통으로 만들어쓰기
 
     @Transactional
     public StoreResponseDto saveStore(AuthUser authUser, StoreRequestDto storeRequestDto) {
-        checkAdmin(authUser);
-        User user = findUser(authUser.getUserId());
-        List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
+        User user = userService.findUser(authUser.getUserId());
+        userService.checkAdmin(authUser);//user
+        List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);//count로 가져오게 한번에
         if (storeList.size() >= 3) {
-            throw new RuntimeException("already have 3 stores");
+            throw new RuntimeException("already have 3 stores");//custumException 만들고 (enum)으로
         }
         Store store = new Store(storeRequestDto, user);
         Store savedstore = storeRepository.save(store);
@@ -80,8 +58,8 @@ public class StoreService {
 
     @Transactional
     public StoreResponseDto updateStore(AuthUser authUser, long storeId, StoreRequestDto storeRequestDto) {
-        checkAdmin(authUser);
-        User user = findUser(authUser.getUserId());
+        userService.checkAdmin(authUser);
+        User user = userService.findUser(authUser.getUserId());
         Store store = findStore(storeId);
         checkStoreOwner(store, user);
         store.update(storeRequestDto);
@@ -90,8 +68,8 @@ public class StoreService {
 
     public StoreDetailResponseDto getDetailStore(long storeId) {
         Store store = findStore(storeId);
-        storeIsOpen(store);
-        List<Menu> menuList = menuRepository.findAllByStoreAndMenuPossibleEnumNot(store, MenuPossibleEnum.DELETE);
+        storeIsOpen(store);//열려있는 가게 가져오기 메서드로 합치기
+        List<Menu> menuList = menuRepository.findAllByStoreAndMenuPossibleEnumNot(store, MenuPossibleEnum.DELETE);//sale
         List<MenuResponseDto> menudtoList = new ArrayList<>();
         for (Menu m : menuList) {
             MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
@@ -101,12 +79,12 @@ public class StoreService {
                     m.getMenuPossibleEnum(),
                     m.getMenuCategoryEnum());
             menudtoList.add(dto);
-        }
+        }//stream으로 표현해보기.
         return new StoreDetailResponseDto(store, menudtoList);
     }
 
-    public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {
-        List<Store> storeList = storeRepository.findByNameAndStoreStatus(
+    public List<StoreResponseDto> getStore(StoreSimpleRequestDto storeSimpleRequestDto) {//param으로 받는게 보편적
+        List<Store> storeList = storeRepository.findByNameAndStoreStatus(//@@@@@@@@@@@쿼리문으로 포함되게바꾸기
                 storeSimpleRequestDto.getName(),
                 StoreStatus.OPEN
         );
@@ -128,8 +106,8 @@ public class StoreService {
 
     @Transactional
     public void closeStore(AuthUser authUser, long storeId) {
-        checkAdmin(authUser);
-        User user = findUser(authUser.getUserId());
+        userService.checkAdmin(authUser);
+        User user = userService.findUser(authUser.getUserId());
         Store store = findStore(storeId);
         checkStoreOwner(store, user);
         storeIsOpen(store);
@@ -138,8 +116,8 @@ public class StoreService {
 
     @Transactional
     public void storeAdOn(AuthUser authUser, long storeId) {
-        checkAdmin(authUser);
-        User user = findUser(authUser.getUserId());
+        userService.checkAdmin(authUser);
+        User user = userService.findUser(authUser.getUserId());
         Store store = findStore(storeId);
         storeIsOpen(store);
         checkStoreOwner(store, user);
@@ -151,8 +129,8 @@ public class StoreService {
 
     @Transactional
     public void storeAdOff(AuthUser authUser, long storeId) {
-        checkAdmin(authUser);
-        User user = findUser(authUser.getUserId());
+        userService.checkAdmin(authUser);
+        User user = userService.findUser(authUser.getUserId());
         Store store = findStore(storeId);
         storeIsOpen(store);
         checkStoreOwner(store, user);
@@ -163,8 +141,8 @@ public class StoreService {
     }
 
     public List<StoreCheckDailyResponseDto> checkDailyMyStore(AuthUser authUser) {
-        checkAdmin(authUser);
-        User user = findUser(authUser.getUserId());
+        userService.checkAdmin(authUser);
+        User user = userService.findUser(authUser.getUserId());
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
 
         List<StoreCheckDailyResponseDto> responseList = new ArrayList<>();
@@ -205,7 +183,7 @@ public class StoreService {
                         dailyCustomers,
                         dailySales
                 );
-                responseList.add(dto);
+                responseList.add(dto);//리스트로 받게 쿼리문 만지기
 
                 // 다음 날로 이동
                 startDate = startDate.plusDays(1); // LocalDate로 이동
@@ -215,8 +193,8 @@ public class StoreService {
     }
 
     public List<StoreCheckMonthlyResponseDto> checkMonthlyMyStore(AuthUser authUser) {
-        checkAdmin(authUser);
-        User user = findUser(authUser.getUserId());
+        userService.checkAdmin(authUser);
+        User user = userService.findUser(authUser.getUserId());
         List<Store> storeList = storeRepository.findByUserAndStoreStatus(user, StoreStatus.OPEN);
 
         List<StoreCheckMonthlyResponseDto> responseList = new ArrayList<>();
@@ -260,16 +238,16 @@ public class StoreService {
             }
         }
         return responseList;
-    }
+    }//전략 팩토리 메서드
 
     @Transactional
     public StoreNotificationResponseDto changeNotification(AuthUser authUser, long storeId, StoreNotificationRequestDto storeNotificationRequestDto) {
         if (storeNotificationRequestDto.getNotification() == null ||
                 storeNotificationRequestDto.getNotification().length() > 255) {
             throw new RuntimeException("write notification between 1 to 254");
-        }
-        checkAdmin(authUser);
-        User user = findUser(authUser.getUserId());
+        }//벨리데이션으로 처리
+        userService.checkAdmin(authUser);
+        User user = userService.findUser(authUser.getUserId());
         Store store = findStore(storeId);
         storeIsOpen(store);
         checkStoreOwner(store, user);
@@ -277,5 +255,21 @@ public class StoreService {
         store.updateNotification(storeNotificationRequestDto.getNotification());
         return new StoreNotificationResponseDto(store);
     }
+
+    public void storeIsOpen(Store store) {
+        if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
+            throw new RuntimeException("it is closed store");
+        }
+    }
+    public Store findStore(long storeId) {
+        return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
+    }
+
+    public void checkStoreOwner(Store store, User user) {
+        if (!store.getUser().equals(user)) {//equals 메서드 재정의 하는것!생각해보기
+            throw new UnauthorizedAccessException("you are not the owner of the store");
+        }
+    }
+
 
 }

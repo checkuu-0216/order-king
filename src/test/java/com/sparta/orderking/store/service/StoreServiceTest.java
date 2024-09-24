@@ -1,6 +1,7 @@
 package com.sparta.orderking.store.service;
 
 import com.sparta.orderking.domain.auth.dto.AuthUser;
+import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;

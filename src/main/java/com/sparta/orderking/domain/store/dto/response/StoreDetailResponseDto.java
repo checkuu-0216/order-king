@@ -1,7 +1,6 @@
 package com.sparta.orderking.domain.store.dto.response;
 
 import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
-import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.entity.Store;
 import lombok.Getter;
 

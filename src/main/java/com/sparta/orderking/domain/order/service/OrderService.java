@@ -3,7 +3,6 @@ package com.sparta.orderking.domain.order.service;
 import com.sparta.orderking.domain.cart.entity.Cart;
 import com.sparta.orderking.domain.cart.repository.CartRepository;
 import com.sparta.orderking.domain.menu.entity.Menu;
-import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.order.dto.CreateOrderRequestDto;
 import com.sparta.orderking.domain.order.dto.OrderResponseDto;
 import com.sparta.orderking.domain.order.dto.UpdateOrderStatusRequestDto;
@@ -21,9 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.chrono.ChronoLocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +28,6 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderMenuRepository orderMenuRepository;
     private final StoreRepository storeRepository;
-    private final MenuRepository menuRepository;
     private final UserRepository userRepository;
     private final CartRepository cartRepository;
 
@@ -41,12 +37,13 @@ public class OrderService {
 
         // 가게의 오픈 / 마감 시간 확인
         LocalTime now = LocalTime.now();
+
         // 메서드 따로 빼보기
         if(now.isBefore(store.getOpenTime())) {
             throw new IllegalArgumentException("가게 오픈시간 전입니다.");
         }
 
-        if(now.isAfter(store.getCloseTime())) {
+        if (now.isAfter(store.getCloseTime())) {
             throw new IllegalArgumentException("가게 마감시간 후입니다.");
         }
 
@@ -54,7 +51,7 @@ public class OrderService {
         Cart userCart = cartRepository.findByUser(user); // null 체크 optional
 
         // 가게에서 설정한 최소 주문 금액 만족 여부
-        if(store.getMinPrice() > userCart.getTotalPrice()) {
+        if (store.getMinPrice() > userCart.getTotalPrice()) {
             throw new IllegalArgumentException("최소 주문 금액 보다 적습니다.");
         }
 
@@ -75,11 +72,12 @@ public class OrderService {
         User user = userRepository.findById(userId).orElseThrow();
         Store store = storeRepository.findById(storeId).orElseThrow();
 
-        if(!user.getUserEnum().equals(UserEnum.OWNER) && !store.getUser().getId().equals(userId)) {
+        if (!user.getUserEnum().equals(UserEnum.OWNER) && !store.getUser().getId().equals(userId)) {
             throw new IllegalArgumentException("주문 상태를 변경할 권한이 없습니다.");
         }
 
         Order order = orderRepository.findById(orderId).orElseThrow();
+
 
         // 따로 빼기
         if(!order.getStore().getId().equals(storeId)) {

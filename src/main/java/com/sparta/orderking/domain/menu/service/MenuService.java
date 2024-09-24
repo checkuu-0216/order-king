@@ -29,32 +29,32 @@ public class MenuService {
     @Transactional
     public void saveMenu(AuthUser authUser, Long storeId, MenuRequestDto requestDto) {
         //가게 주인 확인 메서드
-        Store store = validateStoreOwner(authUser,storeId);
+        Store store = validateStoreOwner(authUser, storeId);
         //메뉴 중복 생성 방지
-        if(menuRepository.existsByStoreAndMenuName(store,requestDto.getMenuName())){
+        if (menuRepository.existsByStoreAndMenuName(store, requestDto.getMenuName())) {
             throw new EntityAlreadyExistsException("이미 존재하는 메뉴 입니다.");
         }
         //등록할 메뉴 생성
-        Menu menu = new Menu(requestDto,store);
+        Menu menu = new Menu(requestDto, store);
         //메뉴 저장
         menuRepository.save(menu);
     }
 
     @Transactional
     public void updateMenu(AuthUser authUser, Long storeId, Long menuId, MenuUpdateRequestDto requestDto) {
-        Store store = validateStoreOwner(authUser,storeId);
+        Store store = validateStoreOwner(authUser, storeId);
         //등록되어있는지 메뉴 확인
         Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("해당 메뉴가 존재 하지 않습니다."));
         //업데이트 된 request를 받아서 저장
-        menu.updateMenu(requestDto,store);
+        menu.updateMenu(requestDto, store);
         menuRepository.save(menu);
     }
 
     @Transactional
     public void deleteMenu(AuthUser authUser, Long storeId, Long menuId) {
-        Store store = validateStoreOwner(authUser,storeId);
+        Store store = validateStoreOwner(authUser, storeId);
         //등록되어있는지 메뉴 확인
-        Menu menu = menuRepository.findById(menuId).orElseThrow(()->new NullPointerException("해당 메뉴가 존재 하지 않습니다."));
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new NullPointerException("해당 메뉴가 존재 하지 않습니다."));
         menu.deleteMenu(DELETE);
         //등록되어있는 메뉴 상태 변화
         menuRepository.save(menu);

@@ -99,7 +99,6 @@ public class OrderServiceTest {
         Menu pizza = new Menu();
         ReflectionTestUtils.setField(pizza, "menuPrice", 10000);
 
-
         Cart userCart = new Cart(user, store);
         userCart.addMenu(chicken);
         userCart.addMenu(pizza);
@@ -110,7 +109,7 @@ public class OrderServiceTest {
         given(storeRepository.findById(storeId)).willReturn(Optional.of(store));
         given(menuRepository.findById(1L)).willReturn(Optional.of(chicken));
         given(menuRepository.findById(2L)).willReturn(Optional.of(pizza));
-        given(cartRepository.findByUser(user)).willReturn(Optional.of(userCart));
+//        given(cartRepository.findByUser(user)).willReturn(Optional.of(userCart));
 
         // when
         orderService.createOrder(userId, storeId);
