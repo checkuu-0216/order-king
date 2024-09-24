@@ -24,4 +24,14 @@ public class CartController {
     public ResponseEntity<CartResponseDto> getCart(@Auth AuthUser authUser) {
         return ResponseEntity.ok(cartService.getCart(authUser.getUserId()));
     }
+
+    @GetMapping("/clear")
+    public ResponseEntity<CartResponseDto> clearCart(@Auth AuthUser authUser) {
+        return ResponseEntity.ok(cartService.clearCart(authUser.getUserId()));
+    }
+
+    @GetMapping("/remove/menu/{menuId}")
+    public ResponseEntity<CartResponseDto> removeMenu(@Auth AuthUser authUser, @PathVariable Long menuId) {
+        return ResponseEntity.ok(cartService.removeMenu(authUser.getUserId(), menuId));
+    }
 }

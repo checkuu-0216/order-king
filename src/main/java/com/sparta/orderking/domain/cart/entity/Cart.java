@@ -43,7 +43,7 @@ public class Cart extends BaseEntity {
     public void addMenu(Menu menu) {
         this.cartMenuList.add(menu);
         this.totalPrice = this.totalPrice + menu.getMenuPrice();
-        this.lastUpdated = LocalDateTime.now();  // 마지막 업데이트 시간 갱신
+        this.lastUpdated = LocalDateTime.now();
     }
 
     public void clear() {
@@ -51,5 +51,12 @@ public class Cart extends BaseEntity {
         this.store = null;
         this.totalPrice = 0;
         this.lastUpdated = LocalDateTime.now();
+    }
+
+    public void removeMenu(Menu menu) {
+        if (this.cartMenuList.remove(menu)) {
+            this.totalPrice = this.totalPrice - menu.getMenuPrice();
+            this.lastUpdated = LocalDateTime.now();
+        }
     }
 }
