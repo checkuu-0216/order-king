@@ -1,7 +1,6 @@
 package com.sparta.orderking.domain.store.service;
 
 import com.sparta.orderking.domain.menu.entity.MenuCategoryEnum;
-import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.dto.response.StoreCategoryResponseDto;
 import com.sparta.orderking.domain.store.dto.response.StoreSimpleResponseDto;
 import com.sparta.orderking.domain.store.entity.Store;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchStoreService {
     private final StoreRepository storeRepository;
-    private final MenuRepository menuRepository;
 
     //이름으로 가게 찾기
     public List<StoreSimpleResponseDto> searchStoreByNameOrMenu(String keyword) {

@@ -6,10 +6,8 @@ import com.sparta.orderking.domain.menu.dto.MenuUpdateRequestDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.entity.Store;
-import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.entity.User;
-import com.sparta.orderking.domain.user.repository.UserRepository;
 import com.sparta.orderking.domain.user.service.UserService;
 import com.sparta.orderking.exception.EntityAlreadyExistsException;
 import com.sparta.orderking.exception.EntityNotFoundException;
@@ -25,8 +23,6 @@ import static com.sparta.orderking.domain.menu.entity.MenuPossibleEnum.DELETE;
 public class MenuService {
 
     private final MenuRepository menuRepository;
-    private final StoreRepository storeRepository;
-    private final UserRepository userRepository;
     private final StoreService storeService;
     private final UserService userService;
 
@@ -36,10 +32,9 @@ public class MenuService {
         User user = userService.findUser(authUser.getUserId());
         Store store = storeService.findStore(storeId);
         storeService.checkStoreOwner(store,user);
-//        Store store = validateStoreOwner(authUser,storeId);
         //메뉴 중복 생성 방지
         if(menuRepository.existsByStoreAndMenuName(store,requestDto.getMenuName())){
-            throw new EntityAlreadyExistsException("이미 존재하는 메뉴 입니다."); //커스텀
+            throw new EntityAlreadyExistsException("이미 존재하는 메뉴 입니다.");
         }
         //등록할 메뉴 생성
         Menu menu = new Menu(requestDto,store);
@@ -54,10 +49,9 @@ public class MenuService {
         Store store = storeService.findStore(storeId);
         storeService.checkStoreOwner(store,user);
         //등록되어있는지 메뉴 확인
-        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new EntityNotFoundException("해당 메뉴가 존재 하지 않습니다.")); //커스텀 exception or notfindexection
+        Menu menu = menuRepository.findById(menuId).orElseThrow(() -> new EntityNotFoundException("해당 메뉴가 존재 하지 않습니다."));
         //업데이트 된 request를 받아서 저장
         menu.updateMenu(requestDto,store);
-        menuRepository.save(menu); //transactional 있어서 save 안해도 자동으로 저장된다.
     }
 
     @Transactional
@@ -68,9 +62,8 @@ public class MenuService {
         storeService.checkStoreOwner(store,user);
         //등록되어있는지 메뉴 확인
         Menu menu = menuRepository.findById(menuId).orElseThrow(()->new EntityNotFoundException("해당 메뉴가 존재 하지 않습니다."));
-        menu.deleteMenu(DELETE);
         //등록되어있는 메뉴 상태 변화
-        menuRepository.save(menu);
+        menu.deleteMenu(DELETE);
     }
 }
 

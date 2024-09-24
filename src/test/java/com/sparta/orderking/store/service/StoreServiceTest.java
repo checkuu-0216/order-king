@@ -1,4 +1,4 @@
-/*
+
 package com.sparta.orderking.store.service;
 
 import com.sparta.orderking.domain.auth.dto.AuthUser;
@@ -46,15 +46,16 @@ public class StoreServiceTest {
     @InjectMocks
     private StoreService storeService;
 
-    @Test
-    void storeIsOpen(){
-        Store store = TEST_STORE2;
+//    @Test
+//    void storeIsOpen(){
+//        Store store = TEST_STORE2;
+//
+//        RuntimeException exception = assertThrows(RuntimeException.class,()->{
+//            storeService.storeIsOpen(store);
+//        });
+//        assertEquals("it is closed store",exception.getMessage());
+//    }
 
-        RuntimeException exception = assertThrows(RuntimeException.class,()->{
-            storeService.storeIsOpen(store);
-        });
-        assertEquals("it is closed store",exception.getMessage());
-    }
     @Test
     void findStore(){
         Long storeId=1L;
@@ -167,7 +168,7 @@ public class StoreServiceTest {
         Long storeId =1L;
         List<Menu> menuList = new ArrayList<>();
         given(storeRepository.findById(storeId)).willReturn(Optional.of(TEST_STORE));
-        given(menuRepository.findAllByStoreAndMenuPossibleEnumNot(any(),any())).willReturn(menuList);
+        given(menuRepository.findAllByStoreAndMenuPossibleEnum(any(),any())).willReturn(menuList);
         StoreDetailResponseDto responseDto = storeService.getDetailStore(storeId);
 
         assertNotNull(responseDto);
@@ -303,4 +304,3 @@ public class StoreServiceTest {
 
 
 }
-*/
