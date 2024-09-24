@@ -1,7 +1,6 @@
 package com.sparta.orderking.domain.store.service;
 
 import com.sparta.orderking.domain.menu.entity.MenuCategoryEnum;
-import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.dto.response.StoreCategoryResponseDto;
 import com.sparta.orderking.domain.store.dto.response.StoreSimpleResponseDto;
 import com.sparta.orderking.domain.store.entity.Store;
@@ -16,7 +15,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SearchStoreService {
     private final StoreRepository storeRepository;
-    private final MenuRepository menuRepository;
 
     //이름으로 가게 찾기
     public List<StoreSimpleResponseDto> searchStoreByNameOrMenu(String keyword) {
@@ -28,7 +26,7 @@ public class SearchStoreService {
         for (Store store : storeByNameAndMenu) {
             StoreSimpleResponseDto dto = new StoreSimpleResponseDto(store.getName());
             result.add(dto);
-        }
+        } //stream 이용해 보기
 
         return result;
     }
@@ -41,7 +39,7 @@ public class SearchStoreService {
         for (Store store1 : store) {
             StoreCategoryResponseDto dto = new StoreCategoryResponseDto(store1.getName());
             storeList.add(dto);
-        }
+        }//stream
         return storeList;
     }
 }

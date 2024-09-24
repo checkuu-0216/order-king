@@ -9,6 +9,7 @@ import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
 import com.sparta.orderking.domain.user.repository.UserRepository;
 import com.sparta.orderking.exception.EntityAlreadyExistsException;
+import com.sparta.orderking.exception.EntityNotFoundException;
 import com.sparta.orderking.exception.UnauthorizedAccessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,10 @@ public class UserService {
             throw new UnauthorizedAccessException("owner only");
         }
     }
-    public User findUser(long id) {
-        return userRepository.findById(id).orElseThrow(() -> new NullPointerException("no such user"));
-    }
 
+    public User findUser(long id) {
+        return userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("no such user"));
+    }
 
     public UserResponseDto getUser(AuthUser authUser) {
         return new UserResponseDto(findUser(authUser.getUserId()));

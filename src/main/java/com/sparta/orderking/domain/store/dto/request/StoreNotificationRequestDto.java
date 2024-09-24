@@ -1,5 +1,6 @@
 package com.sparta.orderking.domain.store.dto.request;
 
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StoreNotificationRequestDto {
-    //벨리데이션
     private String notification;
 }

@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -124,39 +125,29 @@ public class StoreControllerTest {
     @Test
     void 광고시작() throws Exception {
         Long storeId =1L;
-        doNothing().when(storeService).storeAdOn(any(),anyLong());
+        doNothing().when(storeService).storeAd(any(),anyLong());
 
-        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/adon",storeId));
-
-        resultActions.andExpect(status().isOk());
-    }
-    @Test
-    void 광고끝() throws Exception {
-        Long storeId =1L;
-        doNothing().when(storeService).storeAdOff(any(),anyLong());
-
-        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/adoff",storeId));
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/ad",storeId));
 
         resultActions.andExpect(status().isOk());
     }
+
     @Test
     void checkDaily() throws Exception{
-        List<StoreCheckDailyResponseDto> dto = new ArrayList<>();
-        given(storeService.checkDailyMyStore(any())).willReturn(dto);
+        List<StoreCheckResponseDto> dto = new ArrayList<>();
+        String type = "daily";
+        LocalDate startDate = LocalDate.now().minusDays(1);
+        LocalDate endDate = LocalDate.now();
+        given(storeService.checkMyStore(any(),any(),any(),any())).willReturn(dto);
 
-        ResultActions resultActions = mockMvc.perform(get("/api/stores/checkdaily"));
-
-        resultActions.andExpect(status().isOk());
-    }
-    @Test
-    void checkMonthly() throws Exception{
-        List<StoreCheckMonthlyResponseDto> dto = new ArrayList<>();
-        given(storeService.checkMonthlyMyStore(any())).willReturn(dto);
-
-        ResultActions resultActions = mockMvc.perform(get("/api/stores/checkmonthly"));
+        ResultActions resultActions = mockMvc.perform(get("/api/stores/mystore")
+                .param("type", type)
+                .param("startDate", startDate.toString())
+                .param("endDate", endDate.toString()));
 
         resultActions.andExpect(status().isOk());
     }
+
     @Test
     void 공지() throws Exception {
         Long storeId =1L;

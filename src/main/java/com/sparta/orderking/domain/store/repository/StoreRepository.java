@@ -11,7 +11,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface StoreRepository extends JpaRepository<Store, Long> {
-    List<Store> findByNameAndStoreStatus(String name, StoreStatus serviceEnum);
+    @Query("SELECT s FROM Store s LEFT JOIN s.menus m WHERE s.name LIKE %:name% AND s.storeStatus = :storeStatus")
+    List<Store> findByNameAndStoreStatus(@Param("name") String name, @Param("storeStatus") StoreStatus storeStatus);
 
     List<Store> findByUserAndStoreStatus(User user, StoreStatus storeStatus);
 
