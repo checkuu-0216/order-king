@@ -38,10 +38,7 @@ public class OrderService {
     @Transactional
     public void createOrder(Long userId, Long storeId, CreateOrderRequestDto requestDto) {
         Store store = storeRepository.findById(storeId).orElseThrow();
-        // 가게에서 설정한 최소 주문 금액 만족 여부
-        if(store.getMinPrice() > requestDto.getPrice()) {
-            throw new IllegalArgumentException("최소 주문 금액 보다 적습니다.");
-        }
+
         // 가게의 오픈 / 마감 시간 확인
         LocalTime now = LocalTime.now();
         if(now.isBefore(store.getOpenTime())) {
@@ -54,7 +51,12 @@ public class OrderService {
 
         User user = userRepository.findById(userId).orElseThrow();
         Cart userCart = cartRepository.findByUser(user);
-        Order order = new Order(user, store, requestDto.getPrice());
+        Order order = new Order(user, store);
+
+        // 가게에서 설정한 최소 주문 금액 만족 여부
+        if(store.getMinPrice() > userCart.getTotalPrice()) {
+            throw new IllegalArgumentException("최소 주문 금액 보다 적습니다.");
+        }
 
         for(Menu menu : userCart.getCartMenuList()) {
 //            Menu menu = menuRepository.findById(menuId).orElseThrow();
@@ -69,9 +71,10 @@ public class OrderService {
     @Transactional
     public void updateOrderStatus(Long userId, Long storeId, Long orderId, UpdateOrderStatusRequestDto requestDto) {
         User user = userRepository.findById(userId).orElseThrow();
+        Store store = storeRepository.findById(storeId).orElseThrow();
 
-        if(!user.getUserEnum().equals(UserEnum.OWNER)) {
-            throw new IllegalArgumentException("주문을 수락할 권한이 없습니다.");
+        if(!user.getUserEnum().equals(UserEnum.OWNER) && !store.getUser().getId().equals(userId)) {
+            throw new IllegalArgumentException("주문 상태를 변경할 권한이 없습니다.");
         }
 
         Order order = orderRepository.findById(orderId).orElseThrow();
