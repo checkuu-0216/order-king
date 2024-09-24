@@ -24,6 +24,4 @@ public interface StoreRepository extends JpaRepository<Store, Long> {
 
     @Query("SELECT s FROM Store s JOIN s.menus m WHERE m.menuCategoryEnum = :category")
     List<Store> findStoresByMenuCategory(@Param("category") MenuCategoryEnum category);
-    @Query("SELECT s FROM Store s LEFT JOIN s.menus m WHERE s.name LIKE %:keyword% OR m.menuName LIKE %:keyword%")
-    List<Store> findStoresByStoreNameOrMenuName(@Param("keyword") String keyword);
 }
