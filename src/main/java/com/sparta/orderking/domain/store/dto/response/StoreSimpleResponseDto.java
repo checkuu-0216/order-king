@@ -8,10 +8,10 @@ import java.util.List;
 @Getter
 public class StoreSimpleResponseDto {
     private final String name;
-    private final List<String> menus;
 
-    public StoreSimpleResponseDto(String name, List<String> menus) {
+
+    public StoreSimpleResponseDto(String name) {
         this.name = name;
-        this.menus = menus;
+
     }
 }
