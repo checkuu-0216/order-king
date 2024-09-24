@@ -3,13 +3,15 @@ package com.sparta.orderking.domain.store.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.math.BigDecimal;
+
 @Getter
 @AllArgsConstructor
-public class StoreCheckDailyResponseDto {
+public class StoreCheckResponseDto {
 
     private Long storeId;
     private String date;
-    private Long dailyCustomers;
-    private Long dailySales;
+    private Long Customers;
+    private BigDecimal Sales;
 
 }

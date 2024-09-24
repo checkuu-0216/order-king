@@ -124,39 +124,23 @@ public class StoreControllerTest {
     @Test
     void 광고시작() throws Exception {
         Long storeId =1L;
-        doNothing().when(storeService).storeAdOn(any(),anyLong());
+        doNothing().when(storeService).storeAd(any(),anyLong());
 
         ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/adon",storeId));
 
         resultActions.andExpect(status().isOk());
     }
-    @Test
-    void 광고끝() throws Exception {
-        Long storeId =1L;
-        doNothing().when(storeService).storeAdOff(any(),anyLong());
 
-        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/adoff",storeId));
-
-        resultActions.andExpect(status().isOk());
-    }
     @Test
     void checkDaily() throws Exception{
-        List<StoreCheckDailyResponseDto> dto = new ArrayList<>();
-        given(storeService.checkDailyMyStore(any())).willReturn(dto);
+        List<StoreCheckResponseDto> dto = new ArrayList<>();
+        given(storeService.checkMyStore(any(),any(),any(),any())).willReturn(dto);
 
         ResultActions resultActions = mockMvc.perform(get("/api/stores/checkdaily"));
 
         resultActions.andExpect(status().isOk());
     }
-    @Test
-    void checkMonthly() throws Exception{
-        List<StoreCheckMonthlyResponseDto> dto = new ArrayList<>();
-        given(storeService.checkMonthlyMyStore(any())).willReturn(dto);
 
-        ResultActions resultActions = mockMvc.perform(get("/api/stores/checkmonthly"));
-
-        resultActions.andExpect(status().isOk());
-    }
     @Test
     void 공지() throws Exception {
         Long storeId =1L;
