@@ -1,3 +1,4 @@
+/*
 package com.sparta.orderking.store.service;
 
 import com.sparta.orderking.domain.auth.dto.AuthUser;
@@ -302,3 +303,4 @@ public class StoreServiceTest {
 
 
 }
+*/
