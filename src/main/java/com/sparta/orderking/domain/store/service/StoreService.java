@@ -248,18 +248,19 @@ public class StoreService {
         }//벨리데이션으로 처리
         userService.checkAdmin(authUser);
         User user = userService.findUser(authUser.getUserId());
-        Store store = findStore(storeId);
-        storeIsOpen(store);
+        Store store = storeIsOpen(storeId);
         checkStoreOwner(store, user);
 
         store.updateNotification(storeNotificationRequestDto.getNotification());
         return new StoreNotificationResponseDto(store);
     }
 
-    public void storeIsOpen(Store store) {
+    public Store storeIsOpen(Long storeId) {
+        Store store = storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));
         if (store.getStoreStatus().equals(StoreStatus.CLOSED)) {
             throw new RuntimeException("it is closed store");
         }
+        return store;
     }
     public Store findStore(long storeId) {
         return storeRepository.findById(storeId).orElseThrow(() -> new NullPointerException("no such store"));

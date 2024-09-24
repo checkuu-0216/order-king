@@ -8,8 +8,10 @@ import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.menu.repository.MenuRepository;
 import com.sparta.orderking.domain.store.entity.Store;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
+import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.repository.UserRepository;
+import com.sparta.orderking.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,11 +25,13 @@ public class CartService {
     private final UserRepository userRepository;
     private final StoreRepository storeRepository;
     private final MenuRepository menuRepository;
+    private final UserService userService;
+    private final StoreService storeService;
 
     @Transactional
     public CartResponseDto addMenu(Long userId, Long storeId, CartRequestDto requestDto) {
-        User user = userRepository.findById(userId).orElseThrow();
-        Store store = storeRepository.findById(storeId).orElseThrow();
+        User user = userService.findUser(userId);
+        Store store = storeService.findStore(storeId);
 
         Cart cart = cartRepository.findByUser(user); // findByUser
         LocalDateTime now = LocalDateTime.now();
@@ -90,5 +94,10 @@ public class CartService {
         cart.removeMenu(menu);
 
         return new CartResponseDto(cart);
+    }
+
+    public Cart findCart(User user) {
+        Cart cart = cartRepository.findByUser(user);
+        return cart;
     }
 }

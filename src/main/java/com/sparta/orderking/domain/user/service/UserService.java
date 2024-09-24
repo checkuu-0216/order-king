@@ -24,8 +24,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void checkAdmin(AuthUser authUser) {
-        if (!authUser.getUserEnum().equals(UserEnum.OWNER)) {
+    public void checkAdmin(User user) {
+        if (!user.getUserEnum().equals(UserEnum.OWNER)) {
             throw new UnauthorizedAccessException("owner only");
         }
     }
