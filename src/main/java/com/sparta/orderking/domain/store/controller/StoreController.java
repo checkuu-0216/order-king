@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -43,31 +44,23 @@ public class StoreController {
     }
 
     @PutMapping("/stores/{storeId}/close")
-    public void closeStore(@Auth AuthUser authUser, @PathVariable long storeId) {
+    public ResponseEntity<String> closeStore(@Auth AuthUser authUser, @PathVariable long storeId) {
         storeService.closeStore(authUser, storeId);
+        return ResponseEntity.ok().body("store is closed successfully");
     }
 
-    //하나로 합치기 광고
-    @PutMapping("/stores/{storeId}/adon")
-    public void storeAdOn(@Auth AuthUser authUser, @PathVariable long storeId) {
-        storeService.storeAdOn(authUser, storeId);
+    @PutMapping("/stores/{storeId}/ad")
+    public ResponseEntity<String> storeAd(@Auth AuthUser authUser, @PathVariable long storeId) {
+        storeService.storeAd(authUser, storeId);
+        return ResponseEntity.ok().body("ad condition changed successfully");
     }
 
-    @PutMapping("/stores/{storeId}/adoff")
-    public void storeAdOff(@Auth AuthUser authUser, @PathVariable long storeId) {
-        storeService.storeAdOff(authUser, storeId);
-    }
-
-    @GetMapping("/stores/checkdaily")
-    public ResponseEntity<List<StoreCheckDailyResponseDto>> checkDailyMyStore(@Auth AuthUser authUser) {
-        return ResponseEntity.ok(storeService.checkDailyMyStore(authUser));
-    }
-    //합쳐서 파라미터로
-    //시작날짜,종료날짜 받기
-    //입력없으면 디폴트로 가게생성~현재날짜
-    @GetMapping("/stores/checkmonthly")
-    public ResponseEntity<List<StoreCheckMonthlyResponseDto>> checkMonthlyMyStore(@Auth AuthUser authUser) {
-        return ResponseEntity.ok(storeService.checkMonthlyMyStore(authUser));
+    @GetMapping("/stores/mystore")
+    public ResponseEntity<List<StoreCheckResponseDto>> checkDailyMyStore(@Auth AuthUser authUser,
+                                                                         @RequestParam String type,
+                                                                         @RequestParam LocalDate startDate,
+                                                                         @RequestParam LocalDate endDate) {
+        return ResponseEntity.ok(storeService.checkMyStore(authUser,type,startDate,endDate));
     }
 
     @PutMapping("/stores/{storeId}/notification")
