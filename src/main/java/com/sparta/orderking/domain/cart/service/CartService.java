@@ -37,7 +37,7 @@ public class CartService {
         List<Menu> menuList = menuRepository.findAllById(requestDto.getMenuList());
 
         for (Menu menu : menuList) {
-            if(menu.getStore().getId().equals(storeId)) {
+            if (menu.getStore().getId().equals(storeId)) {
                 cart.addMenu(menu);
             } else {
                 // 다른 가게의 메뉴 추가 시 장바구니 비운 후 메뉴 추가

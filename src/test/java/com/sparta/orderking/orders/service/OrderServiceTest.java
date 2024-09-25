@@ -1,38 +1,28 @@
 package com.sparta.orderking.orders.service;
 
 import com.sparta.orderking.domain.cart.entity.Cart;
-import com.sparta.orderking.domain.cart.repository.CartRepository;
 import com.sparta.orderking.domain.cart.service.CartService;
 import com.sparta.orderking.domain.menu.entity.Menu;
-import com.sparta.orderking.domain.menu.repository.MenuRepository;
-import com.sparta.orderking.domain.order.dto.CreateOrderRequestDto;
 import com.sparta.orderking.domain.order.dto.UpdateOrderStatusRequestDto;
 import com.sparta.orderking.domain.order.entity.Order;
-import com.sparta.orderking.domain.order.entity.OrderMenu;
 import com.sparta.orderking.domain.order.enums.OrderStatus;
 import com.sparta.orderking.domain.order.repository.OrderMenuRepository;
 import com.sparta.orderking.domain.order.repository.OrderRepository;
 import com.sparta.orderking.domain.order.service.OrderService;
 import com.sparta.orderking.domain.store.entity.Store;
-import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.entity.User;
 import com.sparta.orderking.domain.user.entity.UserEnum;
-import com.sparta.orderking.domain.user.repository.UserRepository;
 import com.sparta.orderking.domain.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +30,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyLong;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -67,6 +58,7 @@ public class OrderServiceTest {
     private Store store;
     private Cart cart;
     private Order order;
+
     @BeforeEach
     void setUp() {
         Long userId = 1L;
@@ -255,7 +247,7 @@ public class OrderServiceTest {
         ReflectionTestUtils.setField(order, "orderStatus", OrderStatus.DELIVERY_COMPLETED);
 
         UpdateOrderStatusRequestDto requestDto = new UpdateOrderStatusRequestDto();
-        ReflectionTestUtils.setField(requestDto, "orderStatus",  OrderStatus.PREPARING);
+        ReflectionTestUtils.setField(requestDto, "orderStatus", OrderStatus.PREPARING);
 
         given(userService.findUser(userId)).willReturn(user);
         given(storeService.findStore(storeId)).willReturn(store);

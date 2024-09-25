@@ -20,7 +20,6 @@ import com.sparta.orderking.domain.store.entity.StoreAdEnum;
 import com.sparta.orderking.domain.store.entity.StoreStatus;
 import com.sparta.orderking.domain.store.repository.StoreRepository;
 import com.sparta.orderking.domain.user.entity.User;
-import com.sparta.orderking.domain.user.repository.UserRepository;
 import com.sparta.orderking.domain.user.service.UserService;
 import com.sparta.orderking.exception.EntityNotFoundException;
 import com.sparta.orderking.exception.UnauthorizedAccessException;
