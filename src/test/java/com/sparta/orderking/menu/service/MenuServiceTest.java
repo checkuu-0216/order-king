@@ -49,13 +49,13 @@ public class MenuServiceTest {
         User user = userService.findUser(1L);
         Store store = storeService.findStore(storeId);
         storeService.checkStoreOwner(store, user);
-        MenuRequestDto requestDto = new MenuRequestDto("a","a",1000,"a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
-        Menu menu = new Menu(requestDto,store);
-        given(menuRepository.existsByStoreAndMenuName(any(),any())).willReturn(true);
+        MenuRequestDto requestDto = new MenuRequestDto("a", "a", 1000, "a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
+        Menu menu = new Menu(requestDto, store);
+        given(menuRepository.existsByStoreAndMenuName(any(), any())).willReturn(true);
         //when
-        EntityAlreadyExistsException exception = assertThrows(EntityAlreadyExistsException.class,()->menuService.saveMenu(authUser,storeId,requestDto));
+        EntityAlreadyExistsException exception = assertThrows(EntityAlreadyExistsException.class, () -> menuService.saveMenu(authUser, storeId, requestDto));
         //then
-        assertEquals("이미 존재하는 메뉴 입니다.",exception.getMessage());
+        assertEquals("이미 존재하는 메뉴 입니다.", exception.getMessage());
     }
 
     @Test
@@ -66,20 +66,20 @@ public class MenuServiceTest {
         User user = userService.findUser(1L);
         Store store = storeService.findStore(storeId);
         storeService.checkStoreOwner(store, user);
-        MenuRequestDto requestDto = new MenuRequestDto("a","a",1000,"a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
-        Menu menu = new Menu(requestDto,store);
+        MenuRequestDto requestDto = new MenuRequestDto("a", "a", 1000, "a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
+        Menu menu = new Menu(requestDto, store);
 
-        given(menuRepository.existsByStoreAndMenuName(any(),any())).willReturn(false);
+        given(menuRepository.existsByStoreAndMenuName(any(), any())).willReturn(false);
         //when
-        menuService.saveMenu(authUser,storeId,requestDto);
+        menuService.saveMenu(authUser, storeId, requestDto);
         //then
         assertNotNull(menu);
-        assertEquals(menu.getMenuName(),requestDto.getMenuName());
-        assertEquals(menu.getMenuInfo(),requestDto.getMenuInfo());
-        assertEquals(menu.getMenuPrice(),requestDto.getMenuPrice());
-        assertEquals(menu.getMenuPrice(),requestDto.getMenuPrice());
-        assertEquals(menu.getMenuPossibleEnum(),requestDto.getMenuPossibleEnum());
-        assertEquals(menu.getMenuCategoryEnum(),requestDto.getMenuCategoryEnum());
+        assertEquals(menu.getMenuName(), requestDto.getMenuName());
+        assertEquals(menu.getMenuInfo(), requestDto.getMenuInfo());
+        assertEquals(menu.getMenuPrice(), requestDto.getMenuPrice());
+        assertEquals(menu.getMenuPrice(), requestDto.getMenuPrice());
+        assertEquals(menu.getMenuPossibleEnum(), requestDto.getMenuPossibleEnum());
+        assertEquals(menu.getMenuCategoryEnum(), requestDto.getMenuCategoryEnum());
     }
 
     @Test
@@ -91,20 +91,20 @@ public class MenuServiceTest {
         Store store = storeService.findStore(storeId);
         storeService.checkStoreOwner(store, user);
         long menuId = 1L;
-        MenuRequestDto requestDto = new MenuRequestDto("b","b",1000,"a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
-        MenuUpdateRequestDto requestDto1 = new MenuUpdateRequestDto("a","a",1000,"a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
-        Menu menu = new Menu(requestDto,store);
+        MenuRequestDto requestDto = new MenuRequestDto("b", "b", 1000, "a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
+        MenuUpdateRequestDto requestDto1 = new MenuUpdateRequestDto("a", "a", 1000, "a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
+        Menu menu = new Menu(requestDto, store);
         given(menuRepository.findById(anyLong())).willReturn(Optional.of(menu));
         //when
-        menuService.updateMenu(authUser,storeId,menuId,requestDto1);
+        menuService.updateMenu(authUser, storeId, menuId, requestDto1);
         //then
         assertNotNull(menu);
-        assertEquals(menu.getMenuName(),requestDto1.getMenuName());
-        assertEquals(menu.getMenuInfo(),requestDto1.getMenuInfo());
-        assertEquals(menu.getMenuPrice(),requestDto1.getMenuPrice());
-        assertEquals(menu.getMenuPrice(),requestDto1.getMenuPrice());
-        assertEquals(menu.getMenuPossibleEnum(),requestDto1.getMenuPossibleEnum());
-        assertEquals(menu.getMenuCategoryEnum(),requestDto1.getMenuCategoryEnum());
+        assertEquals(menu.getMenuName(), requestDto1.getMenuName());
+        assertEquals(menu.getMenuInfo(), requestDto1.getMenuInfo());
+        assertEquals(menu.getMenuPrice(), requestDto1.getMenuPrice());
+        assertEquals(menu.getMenuPrice(), requestDto1.getMenuPrice());
+        assertEquals(menu.getMenuPossibleEnum(), requestDto1.getMenuPossibleEnum());
+        assertEquals(menu.getMenuCategoryEnum(), requestDto1.getMenuCategoryEnum());
     }
 
     @Test
@@ -116,19 +116,19 @@ public class MenuServiceTest {
         Store store = storeService.findStore(storeId);
         storeService.checkStoreOwner(store, user);
         long menuId = 1L;
-        MenuRequestDto requestDto = new MenuRequestDto("b","b",1000,"a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
-        Menu menu = new Menu(requestDto,store);
+        MenuRequestDto requestDto = new MenuRequestDto("b", "b", 1000, "a", MenuPossibleEnum.SALE, MenuCategoryEnum.KOREAN);
+        Menu menu = new Menu(requestDto, store);
         given(menuRepository.findById(anyLong())).willReturn(Optional.of(menu));
         menu.deleteMenu(MenuPossibleEnum.DELETE);
         //when
-        menuService.deleteMenu(authUser,storeId,menuId);
+        menuService.deleteMenu(authUser, storeId, menuId);
         //then
         assertNotNull(menu);
-        assertEquals(menu.getMenuName(),requestDto.getMenuName());
-        assertEquals(menu.getMenuInfo(),requestDto.getMenuInfo());
-        assertEquals(menu.getMenuPrice(),requestDto.getMenuPrice());
-        assertEquals(menu.getMenuPrice(),requestDto.getMenuPrice());
-        assertEquals(menu.getMenuPossibleEnum(),MenuPossibleEnum.DELETE);
-        assertEquals(menu.getMenuCategoryEnum(),requestDto.getMenuCategoryEnum());
+        assertEquals(menu.getMenuName(), requestDto.getMenuName());
+        assertEquals(menu.getMenuInfo(), requestDto.getMenuInfo());
+        assertEquals(menu.getMenuPrice(), requestDto.getMenuPrice());
+        assertEquals(menu.getMenuPrice(), requestDto.getMenuPrice());
+        assertEquals(menu.getMenuPossibleEnum(), MenuPossibleEnum.DELETE);
+        assertEquals(menu.getMenuCategoryEnum(), requestDto.getMenuCategoryEnum());
     }
 }

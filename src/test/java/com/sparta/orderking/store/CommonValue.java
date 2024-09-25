@@ -2,6 +2,7 @@ package com.sparta.orderking.store;
 
 import com.sparta.orderking.domain.auth.dto.AuthUser;
 import com.sparta.orderking.domain.order.entity.Order;
+import com.sparta.orderking.domain.order.enums.OrderStatus;
 import com.sparta.orderking.domain.review.entity.Review;
 import com.sparta.orderking.domain.store.dto.request.StoreRequestDto;
 import com.sparta.orderking.domain.store.dto.response.StoreResponseDto;
@@ -26,6 +27,7 @@ public class CommonValue {
     public final static AuthUser TEST_AUTHUSER2 = new AuthUser(1L, UserEnum.USER);
     public final static AuthUser TEST_AUTHUSER = new AuthUser(1L, UserEnum.OWNER);
     public final static Order TEST_ORDER = new Order(TEST_USER,TEST_STORE);
+    public final static Order TEST_ORDER2 = new Order(TEST_USER,TEST_STORE, OrderStatus.DELIVERY_COMPLETED);
     public final static Review TEST_REVIEW = new Review(TEST_USER,TEST_ORDER,TEST_STORE,"content",100000);
     public final static Bookmark TEST_BOOKMARK = new Bookmark(TEST_USER,TEST_STORE);
 }

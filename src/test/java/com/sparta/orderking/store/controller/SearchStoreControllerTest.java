@@ -36,9 +36,6 @@ public class SearchStoreControllerTest {
     @MockBean
     private SearchStoreService searchStoreService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Mock
     private AuthUserArgumentResolver resolver;
 
@@ -50,17 +47,18 @@ public class SearchStoreControllerTest {
     }
 
     @Test
-    void searchStores() throws Exception{
-        String keyword ="1";
+    void searchStores() throws Exception {
+        String keyword = "1";
         List<StoreSimpleResponseDto> dtoList = new ArrayList<>();
         given(searchStoreService.searchStoreByNameOrMenu(anyString())).willReturn(dtoList);
 
-        ResultActions resultActions = mockMvc.perform(get("/api/stores/search").param("keyword",keyword));
+        ResultActions resultActions = mockMvc.perform(get("/api/stores/search").param("keyword", keyword));
 
         resultActions.andExpect(status().isOk());
     }
+
     @Test
-    void searchCategory() throws Exception{
+    void searchCategory() throws Exception {
         MenuCategoryEnum menuCategoryEnum = MenuCategoryEnum.CHICKEN;
         List<StoreCategoryResponseDto> dtoList = new ArrayList<>();
         given(searchStoreService.searchStoresByCategory(any())).willReturn(dtoList);

@@ -8,4 +8,9 @@ public class LoginRequestDto {
     @Email(message = "이메일 형식이 아닙니다.")
     private String email;
     private String password;
+
+    public LoginRequestDto(String testUser, String testPassword) {
+        this.email=testUser;
+        this.password=testPassword;
+    }
 }
