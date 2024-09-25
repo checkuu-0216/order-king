@@ -2,13 +2,9 @@ package com.sparta.orderking.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.orderking.config.AuthUserArgumentResolver;
-import com.sparta.orderking.domain.store.controller.StoreController;
-import com.sparta.orderking.domain.store.service.StoreService;
 import com.sparta.orderking.domain.user.controller.UserController;
 import com.sparta.orderking.domain.user.dto.request.DeleteUserRequestDto;
-import com.sparta.orderking.domain.user.dto.request.UpdateProfileRequestDto;
 import com.sparta.orderking.domain.user.dto.response.UserResponseDto;
-import com.sparta.orderking.domain.user.repository.UserRepository;
 import com.sparta.orderking.domain.user.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +22,8 @@ import static com.sparta.orderking.store.CommonValue.TEST_AUTHUSER;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @MockBean(JpaMetamodelMappingContext.class)
@@ -52,7 +49,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void getUserProfile() throws Exception{
+    void getUserProfile() throws Exception {
         UserResponseDto dto = new UserResponseDto();
         given(userService.getUser(TEST_AUTHUSER)).willReturn(dto);
 
@@ -63,9 +60,9 @@ public class UserControllerTest {
 
 
     @Test
-    void deleteUser() throws Exception{
+    void deleteUser() throws Exception {
         DeleteUserRequestDto dto = new DeleteUserRequestDto();
-        doNothing().when(userService).deleteUser(any(),any());
+        doNothing().when(userService).deleteUser(any(), any());
 
         ResultActions resultActions = mockMvc.perform(delete("/api/users")
                 .contentType(MediaType.APPLICATION_JSON)

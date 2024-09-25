@@ -24,6 +24,12 @@ public class SignupRequestDto {
 
     private UserEnum userEnum;
 
+    public SignupRequestDto(String testUser,String email, String testPassword) {
+        this.username = testUser;
+        this.email =email;
+        this.password=testPassword;
+    }
+
     public void encodedPassword(String password) {
         this.password = password;
     }
