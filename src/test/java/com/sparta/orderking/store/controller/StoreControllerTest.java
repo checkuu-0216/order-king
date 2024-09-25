@@ -6,7 +6,10 @@ import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
 import com.sparta.orderking.domain.menu.entity.Menu;
 import com.sparta.orderking.domain.store.controller.StoreController;
 import com.sparta.orderking.domain.store.dto.request.StoreNotificationRequestDto;
-import com.sparta.orderking.domain.store.dto.response.*;
+import com.sparta.orderking.domain.store.dto.response.StoreCheckResponseDto;
+import com.sparta.orderking.domain.store.dto.response.StoreDetailResponseDto;
+import com.sparta.orderking.domain.store.dto.response.StoreNotificationResponseDto;
+import com.sparta.orderking.domain.store.dto.response.StoreResponseDto;
 import com.sparta.orderking.domain.store.service.StoreService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -84,7 +87,7 @@ public class StoreControllerTest {
         Long storeId = 1L;
         List<Menu> menuList = new ArrayList<>();
         List<MenuResponseDto> menudtoList = new ArrayList<>();
-        for(Menu m : menuList){
+        for (Menu m : menuList) {
             MenuResponseDto dto = new MenuResponseDto(m.getMenuName(),
                     m.getMenuInfo(),
                     m.getMenuPrice(),
@@ -122,23 +125,24 @@ public class StoreControllerTest {
 
         resultActions.andExpect(status().isOk());
     }
+
     @Test
     void 광고시작() throws Exception {
-        Long storeId =1L;
-        doNothing().when(storeService).storeAd(any(),anyLong());
+        Long storeId = 1L;
+        doNothing().when(storeService).storeAd(any(), anyLong());
 
-        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/ad",storeId));
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/ad", storeId));
 
         resultActions.andExpect(status().isOk());
     }
 
     @Test
-    void checkDaily() throws Exception{
+    void checkDaily() throws Exception {
         List<StoreCheckResponseDto> dto = new ArrayList<>();
         String type = "daily";
         LocalDate startDate = LocalDate.now().minusDays(1);
         LocalDate endDate = LocalDate.now();
-        given(storeService.checkMyStore(any(),any(),any(),any())).willReturn(dto);
+        given(storeService.checkMyStore(any(), any(), any(), any())).willReturn(dto);
 
         ResultActions resultActions = mockMvc.perform(get("/api/stores/mystore")
                 .param("type", type)
@@ -150,12 +154,12 @@ public class StoreControllerTest {
 
     @Test
     void 공지() throws Exception {
-        Long storeId =1L;
+        Long storeId = 1L;
         StoreNotificationResponseDto dto = new StoreNotificationResponseDto(TEST_STORE3);
         StoreNotificationRequestDto requestDto = new StoreNotificationRequestDto("notification");
-        given(storeService.changeNotification(any(),anyLong(),any())).willReturn(dto);
+        given(storeService.changeNotification(any(), anyLong(), any())).willReturn(dto);
 
-        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/notification",storeId)
+        ResultActions resultActions = mockMvc.perform(put("/api/stores/{storeId}/notification", storeId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)));
 

@@ -28,8 +28,8 @@ public class SearchStoreServiceTest {
     private SearchStoreService searchStoreService;
 
     @Test
-    void searchStoreByNameOrMenu(){
-        String keyword="1";
+    void searchStoreByNameOrMenu() {
+        String keyword = "1";
         List<Store> storeList = new ArrayList<>();
         given(storeRepository.findStoresByStoreNameOrMenuName(anyString())).willReturn(storeList);
 
@@ -37,13 +37,14 @@ public class SearchStoreServiceTest {
 
         assertNotNull(result);
     }
+
     @Test
-    void searchStoresByCategory(){
+    void searchStoresByCategory() {
         MenuCategoryEnum menuCategoryEnum = MenuCategoryEnum.CHICKEN;
         List<Store> storeList = new ArrayList<>();
         given(storeRepository.findStoresByMenuCategory(any())).willReturn(storeList);
 
-        List<StoreCategoryResponseDto> responseDtos =  searchStoreService.searchStoresByCategory(menuCategoryEnum);
+        List<StoreCategoryResponseDto> responseDtos = searchStoreService.searchStoresByCategory(menuCategoryEnum);
 
         assertNotNull(responseDtos);
     }

@@ -2,12 +2,13 @@ package com.sparta.orderking.domain.cart.dto;
 
 import com.sparta.orderking.domain.cart.entity.Cart;
 import com.sparta.orderking.domain.menu.dto.MenuResponseDto;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@AllArgsConstructor
 @Getter
 public class CartResponseDto {
     private Long userId;

@@ -21,7 +21,7 @@ public class UserController {
     // 유저 프로필 조회
     @GetMapping("")
     public ResponseEntity<UserResponseDto> getUserProfile(@Auth AuthUser authUser) {
-        return new ResponseEntity<>(userService.getUser(authUser), HttpStatus.OK);
+        return ResponseEntity.ok(userService.getUser(authUser));
     }
 
     // 유저 프로필 업데이트
@@ -29,14 +29,14 @@ public class UserController {
     public ResponseEntity<String> updateUserProfile(@Auth AuthUser authUser,
                                                     @Valid @RequestBody UpdateProfileRequestDto requestDto) {
         userService.updateUserProfile(authUser, requestDto);
-        return new ResponseEntity<>("업데이트가 완료되었습니다.", HttpStatus.OK);
+        return ResponseEntity.ok().body("업데이트가 완료되었습니다.");
     }
 
     // 유저 탈퇴
-    @PostMapping("")
+    @DeleteMapping("")
     public ResponseEntity<String> deleteUser(@Auth AuthUser authUser, @Valid @RequestBody DeleteUserRequestDto requestDto) {
         userService.deleteUser(authUser, requestDto);
-        return new ResponseEntity<>("유저가 탈퇴 되었습니다.", HttpStatus.OK);
+        return ResponseEntity.ok().body("유저가 탈퇴 되었습니다.");
     }
 
 }
