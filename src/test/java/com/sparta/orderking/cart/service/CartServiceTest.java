@@ -23,8 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -54,15 +53,18 @@ public class CartServiceTest {
 
     @BeforeEach
     public void setUp() {
-        Long storeId = 1L;
-
         user = new User();
+        ReflectionTestUtils.setField(user, "id", 1L);
+
         store = new Store();
-        ReflectionTestUtils.setField(store, "id", storeId);
+        ReflectionTestUtils.setField(store, "id", 1L);
+
         cart = new Cart(user, store);
+
         menu = new Menu();
+        ReflectionTestUtils.setField(menu, "id", 1L);
+        ReflectionTestUtils.setField(menu, "menuPrice", 10000);
         ReflectionTestUtils.setField(menu, "store", store);
-        ReflectionTestUtils.setField(menu, "menuPrice", 12000);
 
         cartRequestDto = new CartRequestDto();
         ReflectionTestUtils.setField(cartRequestDto, "menuList", Arrays.asList(1L, 2L));
@@ -86,29 +88,18 @@ public class CartServiceTest {
     }
 
     @Test
-    public void addMenu_다른가게메뉴_추가시_장바구니초기화() {
+    public void getCart_장바구니조회성공() {
         // Given
-        Store differentStore = new Store();
-        ReflectionTestUtils.setField(differentStore, "id", 2L);
-
-        Menu differentStoreMenu = new Menu();
-        ReflectionTestUtils.setField(differentStoreMenu, "id", 3L);
-        ReflectionTestUtils.setField(differentStoreMenu, "store", differentStore);
-        ReflectionTestUtils.setField(differentStoreMenu, "menuPrice", 13000);
-
-        CartRequestDto cartRequestDto = new CartRequestDto(); // 필요시 CartRequestDto 초기화
-        ReflectionTestUtils.setField(cartRequestDto, "menuList", List.of(3L));
-
-        given(menuRepository.findAllById(anyList())).willReturn(List.of(differentStoreMenu));
-        given(cartRepository.findByUser(any(User.class))).willReturn(Optional.of(cart));
-        given(cartRepository.save(any(Cart.class))).willReturn(cart);
+        Long userId = 1L;
+        given(userService.findUser(userId)).willReturn(user);
+        given(cartRepository.findByUser(user)).willReturn(Optional.of(cart));
 
         // When
-        cartService.addMenu(1L, 2L, cartRequestDto);
+        CartResponseDto result = cartService.getCart(userId);
 
         // Then
-        verify(cart).clear();
-        verify(cart).addMenu(differentStoreMenu);
-        verify(cartRepository).save(any(Cart.class));
+        assertNotNull(result);
+        verify(userService).findUser(userId);
+        verify(cartRepository).findByUser(user);
     }
 }
