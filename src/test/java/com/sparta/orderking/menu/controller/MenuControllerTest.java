@@ -45,7 +45,9 @@ public class MenuControllerTest {
     public void setUp() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(menuController).build();
     }
-
+    
+    //저장된 테스트코드
+    //feat 선용좌
     @Test
     public void 메뉴_저장_컨트롤러() throws Exception {
         //given
